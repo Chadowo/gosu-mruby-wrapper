@@ -26,6 +26,7 @@ jobs:
         mkdir build
         cd build
         cmake ..
+        make
         mv libgosu.so ../lib64
         mv ffi/libgosu-ffi.so ../lib64
         cd ..
