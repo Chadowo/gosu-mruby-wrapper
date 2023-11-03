@@ -7,6 +7,7 @@ MRuby::Build.new do |conf|
 
   # C compiler settings
   conf.cc.defines = %w(MRB_USE_DEBUG_HOOK MRB_INT64)
+  conf.cc.flags << '-fpermissive' # Needed for mruby-require
 
   conf.enable_debug
   conf.enable_cxx_abi
