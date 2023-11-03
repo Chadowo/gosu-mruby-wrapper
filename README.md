@@ -17,7 +17,7 @@ a simple executable that can run Gosu games easily on desktop platforms.
 ## Caveats
 
 - Since this wrapper uses MRuby, not all features of Ruby (or CRuby) are available, this can be a dealbreaker on games that make use of any other gems
-  other than Gosu (e.g. [Nokogiri](https://nokogiri.org/index.html)). However provided you bundle the source code of a Ruby game made in *pure ruby*
+  other than Gosu (e.g. [Nokogiri](https://nokogiri.org/index.html)). However provided you bundle the source code of a Ruby gem made in *pure ruby*
   it could technically work, that's it, if the gem itselfs doesn't use any ruby features not present on MRuby.
 - MRuby intends to be a lightweight implementation of Ruby, more so it targets primarily embedded systems, so the features of MRuby have limitations
   compared to CRuby, please see [MRuby limitations](https://github.com/mruby/mruby/blob/master/doc/limitations.md).
