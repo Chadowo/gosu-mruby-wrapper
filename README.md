@@ -24,4 +24,4 @@ a simple executable that can run Gosu games easily on desktop platforms.
 
 ## License
 
-This project is licensed under the [MIT license](https://github.com/Chadowo/gosu-mruby-wrapper/blob/main/LICENSE)
+This project is licensed under the [MIT license](https://github.com/Chadowo/gosu-mruby-wrapper/blob/main/LICENSE).
