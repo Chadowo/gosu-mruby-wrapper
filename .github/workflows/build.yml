@@ -46,7 +46,7 @@ jobs:
       run: |
         mkdir gosu-mruby-wrapper/vendor/gosu
         cp gosu/lib64/libgosu.so gosu-mruby-wrapper/vendor/gosu/libgosu.so
-        cp gosu/lib64/libgosu-fii.so gosu-mruby-wrapper/vendor/gosu/libgosu-ffi.so
+        cp gosu/lib64/libgosu-ffi.so gosu-mruby-wrapper/vendor/gosu/libgosu-ffi.so
         cp mruby-3.2.0/build/host/lib/libmruby.a gosu-mruby-wrapper/vendor/mruby/libmruby.a
         cd gosu-mruby-wrapper
         mkdir build
