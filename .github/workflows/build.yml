@@ -22,7 +22,8 @@ jobs:
       run: |
         wget https://github.com/gosu/gosu/archive/refs/tags/v1.4.3.tar.gz
         tar -xf v1.4.3.tar.gz
-        cd gosu-1.4.3
+        mv gosu-1.4.3 gosu
+        cd gosu
         mkdir build
         cd build
         cmake ..
@@ -44,8 +45,8 @@ jobs:
     - name: Compile wrapper
       run: |
         mkdir gosu-mruby-wrapper/vendor/gosu
-        cp gosu-1.4.3/lib64/libgosu.so gosu-mruby-wrapper/vendor/gosu/libgosu.so
-        cp gosu-1.4.3/lib64/libgosu-fii.so gosu-mruby-wrapper/vendor/gosu/libgosu-ffi.so
+        cp gosu/lib64/libgosu.so gosu-mruby-wrapper/vendor/gosu/libgosu.so
+        cp gosu/lib64/libgosu-fii.so gosu-mruby-wrapper/vendor/gosu/libgosu-ffi.so
         cp mruby-3.2.0/build/host/lib/libmruby.a gosu-mruby-wrapper/vendor/mruby/libmruby.a
         cd gosu-mruby-wrapper
         mkdir build
