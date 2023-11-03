@@ -1,0 +1,64 @@
+name: Build and Deploy
+
+on: [push]
+
+permissions:
+  contents: read
+
+# FIXME: Automatically get the version, and really don't hardcode everything
+jobs:
+  Linux:
+    runs-on: ubuntu-22.04
+
+    env:
+      MRUBY_CONFIG: ../gosu-mruby-wrapper/scripts/mruby/linux.rb
+    steps:
+    - uses: actions/checkout@v3
+
+    - name: Install requirements of Gosu
+      run: sudo apt install build-essential libsdl2-dev libgl1-mesa-dev libgmp-dev libfontconfig1-dev
+
+    - name: Compile Gosu
+      run: |
+        wget https://github.com/gosu/gosu/archive/refs/tags/v1.4.3.tar.gz
+        tar -xf v1.4.3.tar.gz
+        cd gosu-1.4.3
+        mkdir build
+        cd build
+        cmake ..
+        mv libgosu.so ../lib64
+        mv ffi/libgosu-ffi.so ../lib64
+        cd ..
+        cd ..
+
+    - name: Compile MRuby
+      run: |
+        git clone https://github.com/Chadowo/gosu-mruby-wrapper.git
+        wget https://github.com/mruby/mruby/archive/refs/tags/3.2.0.tar.gz
+        tar -xf 3.2.0.tar.gz
+        cd mruby-3.2.0
+        rake
+        cd ..
+
+    - name: Compile wrapper
+      run: |
+        mkdir gosu-mruby-wrapper/vendor/gosu
+        cp gosu-1.4.3/lib64/libgosu.so gosu-mruby-wrapper/vendor/gosu/libgosu.so
+        cp gosu-1.4.3/lib64/libgosu-fii.so gosu-mruby-wrapper/vendor/gosu/libgosu-ffi.so
+        cp mruby-3.2.0/build/host/lib/libmruby.a gosu-mruby-wrapper/vendor/mruby/libmruby.a
+        cd gosu-mruby-wrapper
+        mkdir build
+        cd build
+        cmake ..
+        make
+        mkdir gosu-mruby-wrapper-1.0.0
+        mv GosuMRuby gosu-mruby-wrapper-1.0.0/
+        mv ../vendor/gosu/libgosu.so gosu-mruby-wrapper-1.0.0/
+        mv ../vendor/gosu/libgosu-ffi.so gosu-mruby-wrapper-1.0.0/
+
+    - name: Generate final artifact
+      uses: actions/upload-artifact@v3
+      with:
+        name: gosu-mruby-wrapper-linux64
+        path: gosu-mruby-wrapper/build/gosu-mruby-wrapper-1.0.0
+
