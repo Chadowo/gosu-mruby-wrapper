@@ -3,5 +3,6 @@ MRuby::GemBox.new do |conf|
   conf.gembox 'default'
 
   conf.gem github: 'chadowo/mruby-gosu'
+  conf.gem github: 'mattn/mruby-onig-regexp'
   conf.gem github: 'mattn/mruby-require'
 end
