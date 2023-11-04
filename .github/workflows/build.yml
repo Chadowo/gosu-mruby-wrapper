@@ -32,8 +32,8 @@ jobs:
     - name: Compile Gosu
       run: |
         C:\msys64\usr\bin\wget.exe https://github.com/gosu/gosu/archive/refs/tags/v1.4.3.tar.gz
-        C:\msys64\usr\bin\tar.exe -xf v1.4.6.tar.gz
-        ren gosu-1.4.6 gosu
+        C:\msys64\usr\bin\tar.exe -xf v1.4.3.tar.gz
+        ren gosu-1.4.3 gosu
         msbuild gosu\windows\Gosu.sln /p:Configuration=Release
         ren D:\a\gosu-mruby-wrapper\gosu\lib64\Gosu.lib D:\a\gosu-mruby-wrapper\gosu-mruby-wrapper\gosu\lib64\gosu.lib
         move D:\a\gosu-mruby-wrapper\gosu-mruby-wrapper\gosu\lib64\gosu-ffi.dll D:\a\gosu-mruby-wrapper\gosu-mruby-wrapper\gosu # Don't leave the dll in this dir
