@@ -59,15 +59,15 @@ static void loadGame(mrb_state* mrb, char* path, int argc, char* argv[]) {
                 fclose(inputFile);
                 mrbc_context_free(mrb, cxt);
             }
-          } else {
-              printf("Usage: %s [rubyfile]\n", path);
-              return;
-          }
+        } else {
+            printf("Usage: %s [rubyfile]\n", path);
+            return;
+        }
     }
 }
 
 int main(int argc, char* argv[]) {
-	  mrb_state* mrb = mrb_open();
+    mrb_state* mrb = mrb_open();
 
     // Get the path to the executable
     size_t length = wai_getExecutablePath(NULL, 0, NULL);
@@ -83,6 +83,6 @@ int main(int argc, char* argv[]) {
 	  }
 
     PHYSFS_deinit();
-	  mrb_close(mrb);
+	mrb_close(mrb);
     return 0;
 }
