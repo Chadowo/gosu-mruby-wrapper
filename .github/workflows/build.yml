@@ -43,6 +43,7 @@ jobs:
       shell: msys2 {0}
       run: |
         git clone https://github.com/Chadowo/gosu-mruby-wrapper.git
+        wget https://github.com/mruby/mruby/archive/refs/tags/3.2.0.tar.gz
         tar -xf 3.2.0.tar.gz
         mv mruby-3.2.0/ mruby/
         cd mruby/
