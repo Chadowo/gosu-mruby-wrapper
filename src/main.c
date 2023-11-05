@@ -38,7 +38,7 @@ static void loadGame(mrb_state* mrb, char* path, int argc, char* argv[]) {
         }
 
         PHYSFS_file* rubyCode = PHYSFS_openRead("main.rb");
-        char contents[PHYSFS_fileLength(rubyCode)];
+        char* contents = (char *)malloc(PHYSFS_fileLength(rubyCode) * sizeof(char));
         size_t lengthRead = PHYSFS_readBytes(rubyCode, contents, PHYSFS_fileLength(rubyCode));
 
         mrb_load_nstring(mrb, contents, lengthRead);
