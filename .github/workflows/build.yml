@@ -29,6 +29,10 @@ jobs:
     - name: Add MSBuild to PATH
       uses: microsoft/setup-msbuild@v1.1
 
+    - name: Check where is libstdc++-6.dll
+      run: |
+        where libstdc++-6.dll  
+
     - name: Compile Gosu
       run: |
         C:\msys64\usr\bin\wget.exe https://github.com/gosu/gosu/archive/refs/tags/v1.4.3.tar.gz
