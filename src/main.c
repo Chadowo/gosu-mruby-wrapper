@@ -68,6 +68,10 @@ static void loadGame(mrb_state* mrb, char* path, int argc, char* argv[]) {
 
 int main(int argc, char* argv[]) {
     mrb_state* mrb = mrb_open();
+    if(!mrb) {
+        fprintf(stderr, "Couldn't initialize MRuby!\n");
+        return 1;
+    }
 
     // Get the path to the executable
     size_t length = wai_getExecutablePath(NULL, 0, NULL);
@@ -79,8 +83,8 @@ int main(int argc, char* argv[]) {
     loadGame(mrb, path, argc, argv);
 
     if(mrb->exc) {
-		    mrb_print_error(mrb);
-	  }
+        mrb_print_error(mrb);
+	}
 
     PHYSFS_deinit();
 	mrb_close(mrb);
