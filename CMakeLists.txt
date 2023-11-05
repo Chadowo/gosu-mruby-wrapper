@@ -1,7 +1,18 @@
 cmake_minimum_required(VERSION 3.22.1...3.26.1 FATAL_ERROR)
 
-project(GosuMRuby VERSION 1.0.0)
+project(GosuMRuby
+        VERSION 0.1.0
+        LANGUAGES C)
 
+set(CMAKE_CXX_STANDARD 20)
+set(CMAKE_CXX_STANDARD_REQUIRED ON)
+
+
+if(UNIX)
+  set(CMAKE_EXE_LINKER_FLAGS "${CMAKE_EXE_LINKER_FLAGS} -Wl,-rpath='$ORIGIN'")
+endif()
+
+# Source files
 set(SOURCE src/main.c)
 set(WHEREAMI_SOURCE vendor/whereami/src/whereami.c)
 file(GLOB PHYSFS_SOURCE vendor/physfs/src/*.c)
@@ -11,22 +22,24 @@ set_source_files_properties(${PHYSFS_SOURCE}
                             PROPERTIES
                             COMPILE_FLAGS "-x c -w")
 
-add_compile_options(-x c++ -std=gnu++03 -g -O0 -DMRB_INT64
-                    -DMRB_USE_CXX_EXCEPTION -DMRB_USE_CXX_ABI -DMRB_DEBUG
-                    -DMRB_USE_RATIONAL -DMRB_USE_COMPLEX -DMRB_USE_BIGINT)
+set(WARNINGS -g -pedantic -Wall -Wextra -Wshadow -Wpointer-arith
+             -Wcast-qual -Wno-unused-parameter)
+set(DEFINES -DMRB_INT64 -DMRB_USE_CXX_EXCEPTION -DMRB_USE_CXX_ABI
+            -DMRB_DEBUG -DMRB_USE_RATIONAL
+            -DMRB_USE_COMPLEX -DMRB_USE_BIGINT)
 
-if(UNIX)
-  set(CMAKE_EXE_LINKER_FLAGS "${CMAKE_EXE_LINKER_FLAGS} -Wl,-rpath='$ORIGIN'")
-endif()
-
-include_directories(vendor/mruby/include/)
-include_directories(vendor/whereami/include/)
-include_directories(vendor/physfs/src/)
-
-link_directories(vendor/gosu/)
-link_directories(vendor/mruby/)
-
+# The main executable
 add_executable(GosuMRuby ${SOURCE} ${WHEREAMI_SOURCE} ${PHYSFS_SOURCE})
+
+target_compile_definitions(GosuMRuby PUBLIC ${DEFINES})
+target_compile_options(GosuMRuby PUBLIC -x c++ -O3 ${WARNINGS})
+
+target_include_directories(GosuMRuby SYSTEM PUBLIC vendor/mruby/include/)
+target_include_directories(GosuMRuby SYSTEM PUBLIC vendor/whereami/include/)
+target_include_directories(GosuMRuby SYSTEM PUBLIC vendor/physfs/src/)
+
+target_link_directories(GosuMRuby PUBLIC vendor/gosu/)
+target_link_directories(GosuMRuby PUBLIC vendor/mruby/)
 
 # TODO: specify Linux
 if(UNIX)
