@@ -29,10 +29,6 @@ jobs:
     - name: Add MSBuild to PATH
       uses: microsoft/setup-msbuild@v1.1
 
-    - name: Check where is libstdc++-6.dll
-      run: |
-        where libstdc++-6.dll  
-
     - name: Compile Gosu
       run: |
         C:\msys64\usr\bin\wget.exe https://github.com/gosu/gosu/archive/refs/tags/v1.4.3.tar.gz
@@ -70,6 +66,8 @@ jobs:
         mv GosuMRuby.exe gosu-mruby-wrapper-1.0.0/
         mv D:/a/gosu-mruby-wrapper/gosu-mruby-wrapper/gosu/gosu-ffi.dll gosu-mruby-wrapper-1.0.0/
         mv D:/a/gosu-mruby-wrapper/gosu-mruby-wrapper/gosu/lib64/SDL2.dll gosu-mruby-wrapper-1.0.0/
+        mv C:/msys64/ucrt64/lib/libstdc++-6.dll gosu-mruby-wrapper-1.0.0/
+        mv C:/msys64/ucrt64/lib/libgcc_s_seh-1.dll gosu-mruby-wrapper-1.0.0/
 
     - name: Generate final artifact
       uses: actions/upload-artifact@v3
