@@ -35,9 +35,9 @@ jobs:
 
     - name: Compile Gosu
       run: |
-        C:\msys64\usr\bin\wget.exe https://github.com/gosu/gosu/archive/refs/tags/v$GOSU_VERSION.tar.gz
-        C:\msys64\usr\bin\tar.exe -xf v$GOSU_VERSION.tar.gz
-        ren gosu-$GOSU_VERSION\ gosu\
+        C:\msys64\usr\bin\wget.exe https://github.com/gosu/gosu/archive/refs/tags/v$env:GOSU_VERSION.tar.gz
+        C:\msys64\usr\bin\tar.exe -xf v$env:GOSU_VERSION.tar.gz
+        ren gosu-$env:GOSU_VERSION\ gosu\
         msbuild gosu\windows\Gosu.sln /p:Configuration=Release
         ren D:\a\gosu-mruby-wrapper\gosu-mruby-wrapper\gosu\lib64\Gosu.lib D:\a\gosu-mruby-wrapper\gosu-mruby-wrapper\gosu\lib64\gosu.lib
         move D:\a\gosu-mruby-wrapper\gosu-mruby-wrapper\gosu\lib64\gosu-ffi.dll D:\a\gosu-mruby-wrapper\gosu-mruby-wrapper\gosu # Don't leave the dll in this dir
@@ -47,9 +47,9 @@ jobs:
       shell: msys2 {0}
       run: |
         git clone https://github.com/Chadowo/gosu-mruby-wrapper.git
-        wget https://github.com/mruby/mruby/archive/refs/tags/$MRUBY_VERSION.tar.gz
-        tar -xf $MRUBY_VERSION.tar.gz
-        mv mruby-$MRUBY_VERSION/ mruby/
+        wget https://github.com/mruby/mruby/archive/refs/tags/$env:MRUBY_VERSION.tar.gz
+        tar -xf $env:MRUBY_VERSION.tar.gz
+        mv mruby-$env:MRUBY_VERSION/ mruby/
         cd mruby/
         rake
         cd ..
