@@ -10,6 +10,8 @@
 
 #include <physfs.h>
 
+#include <config.h>
+
 static bool isFused(char* executablePath) {
     return(PHYSFS_mount(executablePath, NULL, 1));
 }
@@ -21,7 +23,7 @@ static void loadGame(mrb_state* mrb, char* path, int argc, char* argv[]) {
     //        mounting the executable as it is, however the zip file at the
     //        end will be correctly mounted, I'm not sure why that's it
     //        but also not knowledgeable enough to find a solution, I think
-    //        manually writing a PhysFS_IO that points to the zip at the end
+    //        manually writing a PhysFS_Io that points to the zip at the end
     //        should work, see https://icculus.org/physfs/docs/html/structPHYSFS__Io.html
     //
     //PHYSFS_ErrorCode err = PHYSFS_getLastErrorCode();
@@ -60,6 +62,7 @@ static void loadGame(mrb_state* mrb, char* path, int argc, char* argv[]) {
                 mrbc_context_free(mrb, cxt);
             }
         } else {
+            printf("Version: %d.%d.%d\n", VERSION_MAJOR, VERSION_MINOR, VERSION_PATCH);
             printf("Usage: %s [rubyfile]\n", path);
             return;
         }
@@ -78,7 +81,14 @@ int main(int argc, char* argv[]) {
     char* path = (char *)malloc(length + 1);
     wai_getExecutablePath(path, length, NULL);
 
-    PHYSFS_init(argv[0]);
+    // FIXME: Calling PHYSFS_init before we get the path to the executable
+    //        will add some garbage at the end of the path, thus rendering
+    //        the loading of a zip file in the executable useless, I'm
+    //        stumped really
+    if(!PHYSFS_init(argv[0])) {
+        fprintf(stderr, "Couldn't initialize PhysFS: %s\n",
+                PHYSFS_getErrorByCode(PHYSFS_getLastErrorCode()));
+    }
 
     loadGame(mrb, path, argc, argv);
 
