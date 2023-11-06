@@ -26,7 +26,7 @@ things (Windows, I'm looking at you) is somewhat hard. I think the most
 hard part of all the project was initially getting all the components to build
 correctly.
 
-### Embedding Files
+## Embedding Files
 
 **WARNING:** *really* experimental.
 
