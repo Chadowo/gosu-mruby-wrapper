@@ -1,9 +1,12 @@
 #include <stdio.h>
 #include <stdbool.h>
+#include <string.h>
 #include <stdlib.h>
 #include <unistd.h>
 
 #include <mruby.h>
+#include <mruby/irep.h>
+#include <mruby/dump.h>
 #include <mruby/compile.h>
 
 #include <whereami.h>
@@ -51,19 +54,28 @@ static void loadGame(mrb_state* mrb, char* path, int argc, char* argv[]) {
             if(inputFile == NULL) {
                 printf("Path %s is not valid!\n", argv[1]);
                 return;
-            } else {
-                // Run the file
-                mrbc_context* cxt = mrbc_context_new(mrb);
-                mrbc_filename(mrb, cxt, argv[1]);
-
-                mrb_load_file_cxt(mrb, inputFile, cxt);
-
-                fclose(inputFile);
-                mrbc_context_free(mrb, cxt);
             }
+
+            mrbc_context* cxt = mrbc_context_new(mrb);
+
+            // Check if the file is bytecode
+            char* ext = strchr(argv[1], '.');
+            if(strcmp(ext, ".mrb") == 0) {
+                mrbc_filename(mrb, cxt, argv[1]);
+                mrb_load_irep_file_cxt(mrb, inputFile, cxt);
+            } else {
+                mrbc_filename(mrb, cxt, argv[1]);
+                mrb_load_file_cxt(mrb, inputFile, cxt);
+            }
+
+            // Cleaning up
+            mrbc_context_free(mrb, cxt);
+            fclose(inputFile);
         } else {
             printf("Version: %d.%d.%d\n", VERSION_MAJOR, VERSION_MINOR, VERSION_PATCH);
-            printf("Usage: %s [rubyfile]\n", path);
+            printf("Usage: %s [inputfile]\n", path);
+            printf("\n");
+            printf("[inputfile]\tEither a .rb or .mrb file\n");
             return;
         }
     }
