@@ -65,15 +65,15 @@ far, the hard part is implementing `require` correctly.
 
 ## Limitations
 
-- No 32bit builds, Gosu does support it though, so it's on the planned things
+- No 32bit builds, Gosu does support it though, so it's on the planned things.
 - Since this wrapper uses MRuby, not all features of Ruby (also called CRuby)
   are available, this can be a dealbreaker on games that make use of any other gems
   other than Gosu (e.g. [Nokogiri](https://nokogiri.org/index.html)). However gems
   made in *pure ruby* could technically work, provided you bundle the source code
   of the gem with your own, that's it, if the gem itself doesn't use any
-  ruby features not present on MRuby. please see [MRuby limitations](https://github.com/mruby/mruby/blob/master/doc/limitations.md)
+  ruby features not present on MRuby. please see [MRuby limitations](https://github.com/mruby/mruby/blob/master/doc/limitations.md).
 - Porting a Gosu game to work on MRuby could be difficult in a
-  case-by-case basis, unless the game is made primarily with MRuby in mind
+  case-by-case basis, unless the game is made primarily with MRuby in mind.
 
 ## License
 
@@ -81,8 +81,9 @@ This project is licensed under the [MIT license](https://github.com/Chadowo/gosu
 
 ## Credits
 
-Libraries:
-Gosu - [MIT license](https://github.com/gosu/gosu/blob/master/COPYING)
-MRuby - [MIT license](https://github.com/mruby/mruby/blob/master/LICENSE)
-Whereami - [MIT license](https://github.com/gpakosz/whereami/blob/master/LICENSE.MIT) and [WTFPLv2 license](https://github.com/gpakosz/whereami/blob/master/LICENSE.WTFPLv2)
+Libraries:  
+Gosu - [MIT license](https://github.com/gosu/gosu/blob/master/COPYING)  
+MRuby - [MIT license](https://github.com/mruby/mruby/blob/master/LICENSE)  
+Whereami - [MIT license](https://github.com/gpakosz/whereami/blob/master/LICENSE.MIT) and [WTFPLv2 license](https://github.com/gpakosz/whereami/blob/master/LICENSE.WTFPLv2)  
 PhysFS - [zlib license](https://github.com/icculus/physfs/blob/main/LICENSE.txt)
+
