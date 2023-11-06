@@ -2,6 +2,10 @@ name: Build and Deploy
 
 on: [push]
 
+env:
+  GOSU_VERSION: 1.4.3
+  MRUBY_VERSION: 3.2.0
+
 permissions:
   contents: read
 
@@ -31,9 +35,9 @@ jobs:
 
     - name: Compile Gosu
       run: |
-        C:\msys64\usr\bin\wget.exe https://github.com/gosu/gosu/archive/refs/tags/v1.4.3.tar.gz
-        C:\msys64\usr\bin\tar.exe -xf v1.4.3.tar.gz
-        ren gosu-1.4.3 gosu
+        C:\msys64\usr\bin\wget.exe https://github.com/gosu/gosu/archive/refs/tags/v$GOSU_VERSION.tar.gz
+        C:\msys64\usr\bin\tar.exe -xf v$GOSU_VERSION.tar.gz
+        ren gosu-$GOSU_VERSION\ gosu\
         msbuild gosu\windows\Gosu.sln /p:Configuration=Release
         ren D:\a\gosu-mruby-wrapper\gosu-mruby-wrapper\gosu\lib64\Gosu.lib D:\a\gosu-mruby-wrapper\gosu-mruby-wrapper\gosu\lib64\gosu.lib
         move D:\a\gosu-mruby-wrapper\gosu-mruby-wrapper\gosu\lib64\gosu-ffi.dll D:\a\gosu-mruby-wrapper\gosu-mruby-wrapper\gosu # Don't leave the dll in this dir
@@ -43,9 +47,9 @@ jobs:
       shell: msys2 {0}
       run: |
         git clone https://github.com/Chadowo/gosu-mruby-wrapper.git
-        wget https://github.com/mruby/mruby/archive/refs/tags/3.2.0.tar.gz
-        tar -xf 3.2.0.tar.gz
-        mv mruby-3.2.0/ mruby/
+        wget https://github.com/mruby/mruby/archive/refs/tags/$MRUBY_VERSION.tar.gz
+        tar -xf $MRUBY_VERSION.tar.gz
+        mv mruby-$MRUBY_VERSION/ mruby/
         cd mruby/
         rake
         cd ..
@@ -62,19 +66,19 @@ jobs:
         cd build/
         cmake ..
         make
-        mkdir gosu-mruby-wrapper-1.0.0
-        mv GosuMRuby.exe gosu-mruby-wrapper-1.0.0/
-        mv D:/a/gosu-mruby-wrapper/gosu-mruby-wrapper/gosu/gosu-ffi.dll gosu-mruby-wrapper-1.0.0/
-        mv D:/a/gosu-mruby-wrapper/gosu-mruby-wrapper/gosu/lib64/SDL2.dll gosu-mruby-wrapper-1.0.0/
-        mv /ucrt64/bin/libstdc++-6.dll gosu-mruby-wrapper-1.0.0/
-        mv /ucrt64/bin/libgcc_s_seh-1.dll gosu-mruby-wrapper-1.0.0/
-        mv /ucrt64/bin/libwinpthread-1.dll gosu-mruby-wrapper-1.0.0/
+        mkdir bundle
+        mv GosuMRuby.exe bundle/
+        mv D:/a/gosu-mruby-wrapper/gosu-mruby-wrapper/gosu/gosu-ffi.dll bundle/
+        mv D:/a/gosu-mruby-wrapper/gosu-mruby-wrapper/gosu/lib64/SDL2.dll bundle/
+        mv /ucrt64/bin/libstdc++-6.dll bundle/
+        mv /ucrt64/bin/libgcc_s_seh-1.dll bundle/
+        mv /ucrt64/bin/libwinpthread-1.dll bundle/
 
     - name: Generate final artifact
       uses: actions/upload-artifact@v3
       with:
-        name: gosu-mruby-wrapper-win64
-        path: gosu-mruby-wrapper/build/gosu-mruby-wrapper-1.0.0
+        name: build-win64
+        path: gosu-mruby-wrapper/build/bundle
 
   Linux:
     runs-on: ubuntu-22.04
@@ -89,12 +93,12 @@ jobs:
 
     - name: Compile Gosu
       run: |
-        wget https://github.com/gosu/gosu/archive/refs/tags/v1.4.3.tar.gz
-        tar -xf v1.4.3.tar.gz
-        mv gosu-1.4.3 gosu
-        cd gosu
+        wget https://github.com/gosu/gosu/archive/refs/tags/v$GOSU_VERSION.tar.gz
+        tar -xf v$GOSU_VERSION.tar.gz
+        mv gosu-$GOSU_VERSION gosu
+        cd gosu/
         mkdir build
-        cd build
+        cd build/
         cmake ..
         make
         mv libgosu.so ../lib64
@@ -105,9 +109,10 @@ jobs:
     - name: Compile MRuby
       run: |
         git clone https://github.com/Chadowo/gosu-mruby-wrapper.git
-        wget https://github.com/mruby/mruby/archive/refs/tags/3.2.0.tar.gz
-        tar -xf 3.2.0.tar.gz
-        cd mruby-3.2.0
+        wget https://github.com/mruby/mruby/archive/refs/tags/$MRUBY_VERSION.tar.gz
+        tar -xf $MRUBY_VERSION.tar.gz
+        mv mruby-$MRUBY_VERSION/ mruby/
+        cd mruby/
         rake
         cd ..
 
@@ -116,19 +121,19 @@ jobs:
         mkdir gosu-mruby-wrapper/vendor/gosu
         cp gosu/lib64/libgosu.so gosu-mruby-wrapper/vendor/gosu/libgosu.so
         cp gosu/lib64/libgosu-ffi.so gosu-mruby-wrapper/vendor/gosu/libgosu-ffi.so
-        cp mruby-3.2.0/build/host/lib/libmruby.a gosu-mruby-wrapper/vendor/mruby/libmruby.a
+        cp mruby/build/host/lib/libmruby.a gosu-mruby-wrapper/vendor/mruby/libmruby.a
         cd gosu-mruby-wrapper
         mkdir build
         cd build
         cmake ..
         make
-        mkdir gosu-mruby-wrapper-1.0.0
-        mv GosuMRuby gosu-mruby-wrapper-1.0.0/
-        mv ../vendor/gosu/libgosu.so gosu-mruby-wrapper-1.0.0/
-        mv ../vendor/gosu/libgosu-ffi.so gosu-mruby-wrapper-1.0.0/
+        mkdir bundle
+        mv GosuMRuby bundle/
+        mv ../vendor/gosu/libgosu.so bundle/
+        mv ../vendor/gosu/libgosu-ffi.so bundle/
 
     - name: Generate final artifact
       uses: actions/upload-artifact@v3
       with:
-        name: gosu-mruby-wrapper-linux64
-        path: gosu-mruby-wrapper/build/gosu-mruby-wrapper-1.0.0
+        name: build-linux64
+        path: gosu-mruby-wrapper/build/bundle
