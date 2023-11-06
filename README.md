@@ -1,5 +1,7 @@
 # Gosu MRuby Wrapper
 
+![GitHub Workflow Status (with event)](https://img.shields.io/github/actions/workflow/status/chadowo/gosu-mruby-wrapper/build.yml?style=flat-square&logo=github)
+
 Wrapper around [Gosu](https://www.libgosu.org/) and [mruby-gosu](https://github.com/cyberarm/mruby-gosu) to run Gosu games natively.
 
 **NOTE:** This project is really **experimental** and the person behind it (me) isn't
@@ -79,8 +81,8 @@ This project is licensed under the [MIT license](https://github.com/Chadowo/gosu
 
 ## Credits
 
-Libraries:  
-Gosu - [MIT license](https://github.com/gosu/gosu/blob/master/COPYING)  
-MRuby - [MIT license](https://github.com/mruby/mruby/blob/master/LICENSE)  
-Whereami - [MIT license](https://github.com/gpakosz/whereami/blob/master/LICENSE.MIT) and [WTFPLv2 license](https://github.com/gpakosz/whereami/blob/master/LICENSE.WTFPLv2)  
-PhysFS - [zlib license](https://github.com/icculus/physfs/blob/main/LICENSE.txt)  
+Libraries:
+Gosu - [MIT license](https://github.com/gosu/gosu/blob/master/COPYING)
+MRuby - [MIT license](https://github.com/mruby/mruby/blob/master/LICENSE)
+Whereami - [MIT license](https://github.com/gpakosz/whereami/blob/master/LICENSE.MIT) and [WTFPLv2 license](https://github.com/gpakosz/whereami/blob/master/LICENSE.WTFPLv2)
+PhysFS - [zlib license](https://github.com/icculus/physfs/blob/main/LICENSE.txt)
