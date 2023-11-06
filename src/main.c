@@ -81,14 +81,16 @@ int main(int argc, char* argv[]) {
     char* path = (char *)malloc(length + 1);
     wai_getExecutablePath(path, length, NULL);
 
+    PHYSFS_init(argv[0]);
+
     // FIXME: Calling PHYSFS_init before we get the path to the executable
     //        will add some garbage at the end of the path, thus rendering
     //        the loading of a zip file in the executable useless, I'm
     //        stumped really
-    if(!PHYSFS_init(argv[0])) {
-        fprintf(stderr, "Couldn't initialize PhysFS: %s\n",
-                PHYSFS_getErrorByCode(PHYSFS_getLastErrorCode()));
-    }
+    // if(!PHYSFS_init(argv[0])) {
+    //     fprintf(stderr, "Couldn't initialize PhysFS: %s\n",
+    //             PHYSFS_getErrorByCode(PHYSFS_getLastErrorCode()));
+    // }
 
     loadGame(mrb, path, argc, argv);
 
