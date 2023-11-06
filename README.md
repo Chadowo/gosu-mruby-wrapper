@@ -53,7 +53,6 @@ far, the hard part is implementing `require` correctly.
 
 - Targets desktop platforms, like Windows, and Linux. MacOS support could
   definitely be added but I don't have a machine nor the knowledge of
-  
   developing a C project on MacOS to do that. Contribution would be highly appreciated.  
   **NOTE**: The Windows binary's MRuby is linked with [UCRT](https://devblogs.microsoft.com/cppblog/introducing-the-universal-crt/) (Universal C Runtime),
             the which is bundled by default only on Windows 10 and higher, for older systems
