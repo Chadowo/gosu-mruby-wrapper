@@ -82,6 +82,6 @@ This project is licensed under the [MIT license](https://github.com/Chadowo/gosu
 Libraries:
 
 Gosu - [MIT license](https://github.com/gosu/gosu/blob/master/COPYING)
-MRuby -  [MIT license](https://github.com/mruby/mruby/blob/master/LICENSE)
+MRuby - [MIT license](https://github.com/mruby/mruby/blob/master/LICENSE)
 Whereami - [MIT license](https://github.com/gpakosz/whereami/blob/master/LICENSE.MIT) and [WTFPLv2 license](https://github.com/gpakosz/whereami/blob/master/LICENSE.WTFPLv2)
 PhysFS - [zlib license](https://github.com/icculus/physfs/blob/main/LICENSE.txt)
