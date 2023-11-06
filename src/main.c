@@ -10,7 +10,7 @@
 
 #include <physfs.h>
 
-#include <config.h>
+//#include <config.h>
 
 static bool isFused(char* executablePath) {
     return(PHYSFS_mount(executablePath, NULL, 1));
@@ -62,7 +62,7 @@ static void loadGame(mrb_state* mrb, char* path, int argc, char* argv[]) {
                 mrbc_context_free(mrb, cxt);
             }
         } else {
-            printf("Version: %d.%d.%d\n", VERSION_MAJOR, VERSION_MINOR, VERSION_PATCH);
+            //printf("Version: %d.%d.%d\n", VERSION_MAJOR, VERSION_MINOR, VERSION_PATCH);
             printf("Usage: %s [rubyfile]\n", path);
             return;
         }

@@ -3,7 +3,7 @@ cmake_minimum_required(VERSION 3.22.1...3.26.1 FATAL_ERROR)
 project(GosuMRuby
         VERSION 0.1.0
         LANGUAGES C)
-configure_file(include/config.h.in config.h)
+#configure_file(include/config.h.in config.h)
 
 set(CMAKE_CXX_STANDARD 20)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
@@ -34,7 +34,7 @@ add_executable(GosuMRuby ${SOURCE} ${WHEREAMI_SOURCE} ${PHYSFS_SOURCE})
 target_compile_definitions(GosuMRuby PUBLIC ${DEFINES})
 target_compile_options(GosuMRuby PUBLIC -x c++ -O3 ${WARNINGS})
 
-target_include_directories(GosuMRuby PUBLIC "${PROJECT_BINARY_DIR}")
+#target_include_directories(GosuMRuby PUBLIC "${PROJECT_BINARY_DIR}")
 
 target_include_directories(GosuMRuby SYSTEM PUBLIC vendor/mruby/include/)
 target_include_directories(GosuMRuby SYSTEM PUBLIC vendor/whereami/include/)
