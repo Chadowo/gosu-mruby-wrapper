@@ -1,7 +1,7 @@
 cmake_minimum_required(VERSION 3.22.1...3.26.1 FATAL_ERROR)
 
 project(GosuMRuby
-        VERSION 0.1.0
+        VERSION 0.0.1
         LANGUAGES C)
 configure_file(include/config.h.in config.h)
 
