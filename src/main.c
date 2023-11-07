@@ -47,6 +47,8 @@ static void loadGame(mrb_state* mrb, char* path, int argc, char* argv[]) {
         size_t lengthRead = PHYSFS_readBytes(rubyCode, contents, PHYSFS_fileLength(rubyCode));
 
         mrb_load_nstring(mrb, contents, lengthRead);
+
+        free(contents);
     } else {
         // Fallback to command line input
         if(argc > 1) {
