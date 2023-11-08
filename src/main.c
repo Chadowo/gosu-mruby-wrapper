@@ -3,8 +3,10 @@
 #include <string.h>
 #include <stdlib.h>
 #include <unistd.h>
+#include <limits.h>
 
 #include <mruby.h>
+#include <mruby/variable.h>
 #include <mruby/irep.h>
 #include <mruby/dump.h>
 #include <mruby/compile.h>
@@ -17,6 +19,33 @@
 
 static bool isFused(char* executablePath) {
     return(PHYSFS_mount(executablePath, NULL, 1));
+}
+
+static void loadFusedGame(mrb_state* mrb) {
+    PHYSFS_file* rubyCode = PHYSFS_openRead("main.rb");
+    char* contents = (char *)malloc(PHYSFS_fileLength(rubyCode) * sizeof(char));
+    size_t lengthRead = PHYSFS_readBytes(rubyCode, contents, PHYSFS_fileLength(rubyCode));
+
+    mrb_load_nstring(mrb, contents, lengthRead);
+
+    free(contents);
+}
+
+static void loadRubyFile(mrb_state* mrb, char* fileName, FILE* fp) {
+    mrbc_context* cxt = mrbc_context_new(mrb);
+
+    // Check if the file is bytecode
+    char* ext = strchr(fileName, '.');
+    if(strcmp(ext, ".mrb") == 0) {
+        mrbc_filename(mrb, cxt, fileName);
+        mrb_load_irep_file_cxt(mrb, fp, cxt);
+    } else {
+        mrbc_filename(mrb, cxt, fileName);
+        mrb_load_file_cxt(mrb, fp, cxt);
+    }
+
+    // Cleaning up
+    mrbc_context_free(mrb, cxt);
 }
 
 static void loadGame(mrb_state* mrb, char* path, int argc, char* argv[]) {
@@ -37,18 +66,13 @@ static void loadGame(mrb_state* mrb, char* path, int argc, char* argv[]) {
 
     if(fused) {
         // Load the Ruby code with PhysFS
+
         if(!PHYSFS_exists("main.rb")) {
             printf("There's no main.rb file in the fused files!\n");
             return;
         }
 
-        PHYSFS_file* rubyCode = PHYSFS_openRead("main.rb");
-        char* contents = (char *)malloc(PHYSFS_fileLength(rubyCode) * sizeof(char));
-        size_t lengthRead = PHYSFS_readBytes(rubyCode, contents, PHYSFS_fileLength(rubyCode));
-
-        mrb_load_nstring(mrb, contents, lengthRead);
-
-        free(contents);
+        loadFusedGame(mrb);
     } else {
         // Fallback to command line input
         if(argc > 1) {
@@ -58,27 +82,27 @@ static void loadGame(mrb_state* mrb, char* path, int argc, char* argv[]) {
                 return;
             }
 
-            mrbc_context* cxt = mrbc_context_new(mrb);
+            loadRubyFile(mrb, argv[0], inputFile);
 
-            // Check if the file is bytecode
-            char* ext = strchr(argv[1], '.');
-            if(strcmp(ext, ".mrb") == 0) {
-                mrbc_filename(mrb, cxt, argv[1]);
-                mrb_load_irep_file_cxt(mrb, inputFile, cxt);
-            } else {
-                mrbc_filename(mrb, cxt, argv[1]);
-                mrb_load_file_cxt(mrb, inputFile, cxt);
-            }
-
-            // Cleaning up
-            mrbc_context_free(mrb, cxt);
             fclose(inputFile);
         } else {
-            printf("Version: %d.%d.%d\n", VERSION_MAJOR, VERSION_MINOR, VERSION_PATCH);
-            printf("Usage: %s [inputfile]\n", path);
-            printf("\n");
-            printf("[inputfile]\tEither a .rb or .mrb file\n");
-            return;
+            // Load entrypoint file in the current directory
+            char cwd[PATH_MAX];
+            char fileName[] = "entrypoint.rb";
+
+            if(getcwd(cwd, sizeof(cwd)) != NULL) {
+                // Try to open and executing the file
+                FILE* entryPoint = fopen(strcat(cwd, "/entrypoint.rb"), "r");
+                if(entryPoint != NULL) {
+                    loadRubyFile(mrb, fileName, entryPoint);
+                } else {
+                    // Print info and usage
+                    printf("Version: %d.%d.%d\n", VERSION_MAJOR, VERSION_MINOR, VERSION_PATCH);
+                    printf("Usage: %s [inputfile]\n", path);
+                    printf("\n");
+                    printf("[inputfile]\tEither a .rb or .mrb file\n");
+                }
+            }
         }
     }
 }
