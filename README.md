@@ -1,6 +1,7 @@
 # Gosu MRuby Wrapper
 
-![GitHub Workflow Status (with event)](https://img.shields.io/github/actions/workflow/status/chadowo/gosu-mruby-wrapper/build.yml?style=flat-square&logo=github)
+![GitHub release (with filter)](https://img.shields.io/github/v/release/chadowo/gosu-mruby-wrapper?style=flat-square) ![GitHub Workflow Status (with event)](https://img.shields.io/github/actions/workflow/status/chadowo/gosu-mruby-wrapper/build.yml?style=flat-square&logo=github) ![GitHub](https://img.shields.io/github/license/chadowo/gosu-mruby-wrapper?style=flat-square)
+
 
 Wrapper around [Gosu](https://www.libgosu.org/) and [mruby-gosu](https://github.com/cyberarm/mruby-gosu) to run Gosu games natively.
 
