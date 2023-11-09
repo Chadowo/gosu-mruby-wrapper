@@ -82,7 +82,7 @@ static void loadGame(mrb_state* mrb, char* path, int argc, char* argv[]) {
                 return;
             }
 
-            loadRubyFile(mrb, argv[0], inputFile);
+            loadRubyFile(mrb, argv[1], inputFile);
 
             fclose(inputFile);
         } else {
