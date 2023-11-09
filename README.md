@@ -2,7 +2,6 @@
 
 ![GitHub release (with filter)](https://img.shields.io/github/v/release/chadowo/gosu-mruby-wrapper?style=flat-square) ![GitHub Workflow Status (with event)](https://img.shields.io/github/actions/workflow/status/chadowo/gosu-mruby-wrapper/build.yml?style=flat-square&logo=github) ![GitHub](https://img.shields.io/github/license/chadowo/gosu-mruby-wrapper?style=flat-square)
 
-
 Wrapper around [Gosu](https://www.libgosu.org/) and [mruby-gosu](https://github.com/cyberarm/mruby-gosu) to run Gosu games natively.
 
 **NOTE:** This project is really **experimental** and the person behind it (me) isn't
@@ -88,4 +87,3 @@ Libraries:
 - mruby-gosu mrbgem - Cyberarm
 - Whereami - [MIT license](https://github.com/gpakosz/whereami/blob/master/LICENSE.MIT) and [WTFPLv2 license](https://github.com/gpakosz/whereami/blob/master/LICENSE.WTFPLv2) 
 - PhysFS - [zlib license](https://github.com/icculus/physfs/blob/main/LICENSE.txt)
-
