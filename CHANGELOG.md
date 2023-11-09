@@ -7,6 +7,11 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+### Changed
+
+- Now on runtime the current working directory will be changed to the current directory of the executable as to 
+  make relative paths correctly in case the executable is called from another directory
+
 ## [0.0.1] - 2023-11-7
 
 Initial release (9ed4323).
