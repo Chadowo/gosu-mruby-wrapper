@@ -17,6 +17,12 @@
 
 #include <config.h>
 
+#ifdef _WIN32
+    #define FILE_SEPARATOR '\\'
+#else
+    #define FILE_SEPARATOR '/'
+#endif
+
 static bool isFused(char* executablePath) {
     return(PHYSFS_mount(executablePath, NULL, 1));
 }
@@ -107,6 +113,15 @@ static void loadGame(mrb_state* mrb, char* path, int argc, char* argv[]) {
     }
 }
 
+/* Remove the executable from the absolute path */
+static char* executableDirectory(char* path) {
+    char* pathWithoutExecutable = strdup(path);
+    char* ptr = strrchr(pathWithoutExecutable, FILE_SEPARATOR);
+    *ptr = '\0';
+
+    return pathWithoutExecutable;
+}
+
 int main(int argc, char* argv[]) {
     mrb_state* mrb = mrb_open();
     if(!mrb) {
@@ -118,6 +133,12 @@ int main(int argc, char* argv[]) {
     size_t length = wai_getExecutablePath(NULL, 0, NULL);
     char* path = (char *)malloc(length + 1);
     wai_getExecutablePath(path, length, NULL);
+
+    // Change the current working directory to the one where the executable is
+    char* dirPath = executableDirectory(path);
+    if (chdir(dirPath) != 0) {
+        mrb_warn(mrb, "Couldn't change working directory to %s", dirPath);
+    }
 
     PHYSFS_init(argv[0]);
 
