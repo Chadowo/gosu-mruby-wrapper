@@ -11,7 +11,7 @@ permissions:
 
 # FIXME: Automatically get the version, and really don't hardcode everything
 jobs:
-  Windows:
+  windows:
     runs-on: windows-2022
 
     env:
@@ -80,7 +80,7 @@ jobs:
         name: build-win64
         path: gosu-mruby-wrapper/build/bundle
 
-  Linux:
+  linux:
     runs-on: ubuntu-22.04
 
     env:
