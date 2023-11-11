@@ -10,7 +10,7 @@ to try it out, and report any problems or things that should be nice to have.
 
 ## Summary
 
-This wrapper makes use of [MRuby](https://mruby.org/) and the mruby-gosu mgem to create
+This wrapper makes use of [MRuby](https://mruby.org/) and the mruby-gosu mrbgem to create
 a simple executable that can run Gosu games easily on desktop platforms.
 
 ## Internals
@@ -65,7 +65,7 @@ far, the hard part is implementing `require` correctly.
 
 ## Limitations
 
-- No 32bit builds, Gosu does support it though, so it's on the planned things.
+- No 32bit builds, Gosu does support it though, so it's on the planned list of things.
 - Since this wrapper uses MRuby, not all features of Ruby (also called CRuby)
   are available, this can be a dealbreaker on games that make use of any other gems
   other than Gosu (e.g. [Nokogiri](https://nokogiri.org/index.html)). However gems
