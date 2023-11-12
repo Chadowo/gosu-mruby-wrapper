@@ -4,7 +4,7 @@
 
 Wrapper around [Gosu](https://www.libgosu.org/) and [mruby-gosu](https://github.com/cyberarm/mruby-gosu) to run Gosu games natively.
 
-**NOTE:** This project is really **experimental** and the person behind it (me) isn't
+**NOTE**: This project is really **experimental** and the person behind it (me) isn't
 all that great in C, so don't expect that much. having said that feel free
 to try it out, and report any problems or things that should be nice to have.
 
@@ -30,7 +30,7 @@ correctly.
 
 ## Embedding Files
 
-**WARNING:** *really* experimental.
+**WARNING**: really, *really* experimental.
 
 As a proof of concept, you can embed a ZIP file into the executable (by tacking it
 onto the end), and the executable should be able to read that and act accordingly
@@ -56,7 +56,7 @@ far, the hard part is implementing `require` correctly.
 - Targets desktop platforms, like Windows, and Linux. MacOS support could
   definitely be added but I don't have a machine nor the knowledge of
   developing a C project on MacOS to do that. Contribution would be highly appreciated.  
-  **NOTE**: The Windows binary's MRuby is linked with [UCRT](https://devblogs.microsoft.com/cppblog/introducing-the-universal-crt/) (Universal C Runtime),
+  **NOTE**: The Windows binary's MRuby is linked with the [UCRT](https://devblogs.microsoft.com/cppblog/introducing-the-universal-crt/) (Universal C Runtime),
             the which is bundled by default only on Windows 10 and higher, for older systems
             it eithers needs to be installed or provided with the executable.
 - Exporting a game should be as easily as bundling the assets and nothing
