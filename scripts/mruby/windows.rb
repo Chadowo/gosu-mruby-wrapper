@@ -5,7 +5,9 @@ MRuby::Build.new do |conf|
   # Include gems
   conf.gembox File.expand_path('gosu', File.dirname(__FILE__))
 
+  # C compiler settings
   conf.cc.defines << 'MRB_INT64'
+  conf.cc_defines << '__STDC_LIMIT_MACROS'
   conf.cc.flags << '-fpermissive' # Needed for mruby-require
 
   linker.libraries.push('ws2_32')
