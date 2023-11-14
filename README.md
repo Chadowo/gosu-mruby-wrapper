@@ -15,8 +15,7 @@ a simple executable that can run Gosu games easily on desktop platforms.
 
 ## Building
 
-[Linux](https://github.com/Chadowo/gosu-mruby-wrapper/wiki/Compiling-On-Linux).
-[Windows](https://github.com/Chadowo/gosu-mruby-wrapper/wiki/Compiling-On-Windows).
+See instructions for [Windows](https://github.com/Chadowo/gosu-mruby-wrapper/wiki/Compiling-On-Windows) and [Linux](https://github.com/Chadowo/gosu-mruby-wrapper/wiki/Compiling-On-Linux) on the wiki.
 
 ## Usage
 
