@@ -33,7 +33,7 @@ Something I came up with that may or not may be a good idea, if a file named
 `entrypoint.rb` is present in the same directory as the executable it will 
 load it automatically. The idea is for your entrypoint to start the game/app:
 
-```console
+```ruby
 $: << 'my_source/' # Add my_source directory to load path
 
 require 'main'
