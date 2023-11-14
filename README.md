@@ -11,7 +11,7 @@ to try it out, and report any problems or things that should be nice to have.
 ## Summary
 
 This wrapper makes use of [MRuby](https://mruby.org/) and the mruby-gosu mrbgem to create
-a simple executable that can run Gosu games easily on desktop platforms.
+a simple executable that can run Gosu games/apps easily on desktop platforms.
 
 ## Building
 
