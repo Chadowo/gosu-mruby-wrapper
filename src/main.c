@@ -135,7 +135,7 @@ int main(int argc, char* argv[]) {
 
     // Change the current working directory to the one where the executable is
     char* dirPath = executableDirectory(path);
-    if (chdir(dirPath) != 0) {
+    if(chdir(dirPath) != 0) {
         mrb_warn(mrb, "Couldn't change working directory to %s", dirPath);
     }
 
