@@ -64,7 +64,7 @@ jobs:
         cd gosu-mruby-wrapper/
         mkdir build
         cd build/
-        cmake ..
+        cmake -G "MinGW Makefiles"
         make
         mkdir bundle
         mv GosuMRuby.exe bundle/
