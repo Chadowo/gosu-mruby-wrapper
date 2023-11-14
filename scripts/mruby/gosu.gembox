@@ -5,7 +5,6 @@ MRuby::GemBox.new do |conf|
   conf.gem github: 'chadowo/mruby-gosu'
   conf.gem github: 'katzer/mruby-logger'
   conf.gem github: 'iij/mruby-env'
-  conf.gem github: 'mattn/mruby-json'
   # FIXME: Fails to compile on Windows, I assume it's got to do with this line
   # line in the mgem spec https://github.com/iij/mruby-regexp-pcre/blob/master/mrbgem.rake#L31C3-L31C69
   # maybe the fact that we're using MSYS2 may not set the correct platform when compiling.
