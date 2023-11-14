@@ -7,6 +7,7 @@ MRuby::Build.new do |conf|
 
   # C compiler settings
   conf.cc.defines << 'MRB_INT64'
+  conf.cc.defines << 'MRB_USE_FLOAT32'
   conf.cc.defines << '_WIN64'
   conf.cc.flags << '-fpermissive' # Needed for mruby-require
 
