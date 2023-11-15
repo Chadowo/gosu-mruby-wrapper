@@ -1,4 +1,3 @@
-
 MRuby::Build.new do |conf|
   conf.toolchain :gcc
 
