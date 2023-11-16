@@ -2,7 +2,7 @@
 
 ![GitHub release (with filter)](https://img.shields.io/github/v/release/chadowo/gosu-mruby-wrapper?style=flat-square) ![GitHub Workflow Status (with event)](https://img.shields.io/github/actions/workflow/status/chadowo/gosu-mruby-wrapper/build.yml?style=flat-square&logo=github) ![GitHub](https://img.shields.io/github/license/chadowo/gosu-mruby-wrapper?style=flat-square)
 
-Wrapper around [Gosu](https://www.libgosu.org/) and [mruby-gosu](https://github.com/cyberarm/mruby-gosu) to run Gosu games/apps natively on desktop platforms.
+Wrapper around [Gosu](https://www.libgosu.org/) and [mruby-gosu](https://github.com/cyberarm/mruby-gosu) to run Gosu games natively on desktop platforms.
 
 **NOTE**: This project is really **experimental** and the person behind it (me) isn't
 all that great in C, so don't expect that much. having said that feel free
@@ -11,7 +11,7 @@ to try it out, and report any problems or things that should be nice to have.
 ## Summary
 
 This wrapper makes use of [MRuby](https://mruby.org/) and the mruby-gosu mrbgem to create
-a simple executable that can run Gosu games/apps easily on desktop platforms.
+a simple executable that can run Gosu games easily on desktop platforms.
 
 ## Building
 
@@ -31,7 +31,7 @@ Call the executable with a Ruby file as argument:
 
 Something I came up with that may or not may be a good idea, if a file named 
 `entrypoint.rb` is present in the same directory as the executable it will 
-load it automatically. The idea is for your entrypoint to start the game/app:
+load it automatically. The idea is for your entrypoint to start the game:
 
 ```ruby
 $: << 'my_source/' # Add my_source directory to load path
@@ -40,7 +40,7 @@ require 'main'
 ```
 
 It will work out-of-the-box so your users don't have to open a terminal. The 
-only con is that your source code has to be bundled with your game/app, a 
+only con is that your source code has to be bundled with your game, a 
 possible workaround if you don't want your source code to be seen is to 
 [compile your Ruby files to bytecode](https://mruby.org/docs/articles/executing-ruby-code-with-mruby.html#bytecode-mrb), you can `require` bytecode files from plain Ruby files 
 so the statement `require 'main'` will work the same as before.
@@ -69,7 +69,7 @@ is to redefine `require` to load directly from the ZIP, thing that I managed thu
 far, the hard part is implementing `require` correctly.
 
 This method both works out-of-the-box for your users and doesn't require you to
-bundle your source code with your game/app (not at least, in a way that's easily
+bundle your source code with your game (not at least, in a way that's easily
 opened).
 
 ## Features
