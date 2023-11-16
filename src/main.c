@@ -100,6 +100,7 @@ static void loadGame(mrb_state* mrb, char* path, int argc, char* argv[]) {
                 FILE* entryPoint = fopen(strcat(cwd, "/entrypoint.rb"), "r");
                 if(entryPoint != NULL) {
                     loadRubyFile(mrb, fileName, entryPoint);
+                    fclose(entryPoint);
                 } else {
                     // Print info and usage
                     printf("Version: %d.%d.%d\n", VERSION_MAJOR, VERSION_MINOR, VERSION_PATCH);
