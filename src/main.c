@@ -155,9 +155,9 @@ int main(int argc, char* argv[]) {
 
     if(mrb->exc) {
         mrb_print_error(mrb);
-	}
+    }
 
     PHYSFS_deinit();
-	mrb_close(mrb);
+    mrb_close(mrb);
     return 0;
 }

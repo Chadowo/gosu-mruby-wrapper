@@ -22,7 +22,7 @@ set(WARNINGS -g -pedantic -Wall -Wextra -Wshadow -Wpointer-arith
              -Wcast-qual -Wno-unused-parameter)
 set(DEFINES -DMRB_INT64 -DMRB_USE_CXX_EXCEPTION -DMRB_USE_CXX_ABI
             -DMRB_DEBUG -DMRB_USE_RATIONAL -DMRB_USE_COMPLEX
-	          -DMRB_USE_BIGINT)
+            -DMRB_USE_BIGINT)
 
 # The main executable
 add_executable(GosuMRuby ${SOURCE} ${WHEREAMI_SOURCE} ${PHYSFS_SOURCE})
