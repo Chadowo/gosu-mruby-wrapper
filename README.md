@@ -1,3 +1,7 @@
+<p align="center">
+  <img src="assets/logo.png" width=249 height=241 alt="Project logo">
+</p>
+
 # Gosu MRuby Wrapper
 
 ![GitHub release (with filter)](https://img.shields.io/github/v/release/chadowo/gosu-mruby-wrapper?style=flat-square) ![GitHub Workflow Status (with event)](https://img.shields.io/github/actions/workflow/status/chadowo/gosu-mruby-wrapper/build.yml?style=flat-square&logo=github) ![GitHub](https://img.shields.io/github/license/chadowo/gosu-mruby-wrapper?style=flat-square)
