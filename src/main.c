@@ -133,14 +133,6 @@ int main(int argc, char* argv[]) {
     char* path = (char *)malloc(length + 1);
     wai_getExecutablePath(path, length, NULL);
 
-    // Change the current working directory to the one where the executable is
-    char* dirPath = executableDirectory(path);
-    if(chdir(dirPath) != 0) {
-        mrb_warn(mrb, "Couldn't change working directory to %s", dirPath);
-    }
-
-    PHYSFS_init(argv[0]);
-
     // FIXME: Calling PHYSFS_init before we get the path to the executable
     //        will add some garbage at the end of the path, thus rendering
     //        the loading of a zip file in the executable useless, I'm
@@ -150,6 +142,13 @@ int main(int argc, char* argv[]) {
     //     fprintf(stderr, "Couldn't initialize PhysFS: %s\n",
     //             PHYSFS_getErrorByCode(PHYSFS_getLastErrorCode()));
     // }
+    PHYSFS_init(argv[0]);
+
+    // Change the current working directory to the one where the executable is
+    char* dirPath = executableDirectory(path);
+    if(chdir(dirPath) != 0) {
+        mrb_warn(mrb, "Couldn't change working directory to %s", dirPath);
+    }
 
     loadGame(mrb, path, argc, argv);
 
