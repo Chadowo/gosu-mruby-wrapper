@@ -30,8 +30,8 @@ static mrb_value mrb_fused_require(mrb_state* mrb, mrb_value self) {
 
     // Remove extension (if any) to check the path
     char* ext = strchr(file, '.');
-    if(strcmp(ext, ".rb") == 0) {
-        *ext = '\0';
+    if(ext != NULL) {
+        if(strcmp(ext, ".rb") == 0) *ext = '\0';
     }
 
     // both "." and ".." are invalid in PhysFS, so it's better to error out
