@@ -9,7 +9,7 @@ set(CMAKE_CXX_STANDARD 20)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
 
 # Source files
-set(SOURCE src/main.c)
+set(SOURCE src/main.c src/fused.c)
 set(WHEREAMI_SOURCE vendor/whereami/src/whereami.c)
 file(GLOB PHYSFS_SOURCE vendor/physfs/src/*.c)
 
@@ -30,6 +30,7 @@ add_executable(GosuMRuby ${SOURCE} ${WHEREAMI_SOURCE} ${PHYSFS_SOURCE})
 target_compile_definitions(GosuMRuby PUBLIC ${DEFINES})
 target_compile_options(GosuMRuby PUBLIC -x c++ -O3 ${WARNINGS})
 
+target_include_directories(GosuMRuby PUBLIC include/)
 target_include_directories(GosuMRuby PUBLIC "${PROJECT_BINARY_DIR}")
 
 target_include_directories(GosuMRuby SYSTEM PUBLIC vendor/mruby/include/)

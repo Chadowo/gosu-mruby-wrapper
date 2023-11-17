@@ -79,6 +79,7 @@ static void loadGame(mrb_state* mrb, char* path, int argc, char* argv[]) {
             return;
         }
 
+        initFused(mrb);
         loadFusedGame(mrb);
     } else {
         // Fallback to command line input
