@@ -22,8 +22,6 @@ static bool checkValidPath(char* path) {
     }
 }
 
-/* TODO: Add a custom warning if the filepath contains ./ or ../ since
- *       it doesn't exist on the virtual filesystem of PhysFS, use break */
 static mrb_value mrb_fused_require(mrb_state* mrb, mrb_value self) {
     char* file;
     mrb_get_args(mrb, "z", &file);
@@ -81,7 +79,7 @@ static mrb_value mrb_fused_require(mrb_state* mrb, mrb_value self) {
 
             mrb_load_nstring_cxt(mrb, contents, length, cxt);
 
-            //free(rubyCode);
+            free(contents);
             PHYSFS_close(fp);
 
             mrb_gc_arena_restore(mrb, ai);
@@ -138,7 +136,7 @@ static mrb_value mrb_fused_load(mrb_state* mrb, mrb_value self) {
 
             mrb_load_nstring_cxt(mrb, contents, length, cxt);
 
-            //free(rubyCode);
+            free(contents);
             PHYSFS_close(fp);
 
             mrb_gc_arena_restore(mrb, ai);
