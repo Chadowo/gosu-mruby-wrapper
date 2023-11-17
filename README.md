@@ -66,11 +66,7 @@ like:
    ```
 3. Run the executable and look at how it executes your code!
 
-Of course it's not that simple though, there's one limitation, and that's the fact
-that `require` will not work correctly, that means that embedding multiple
-files, and for them to work correctly in conjuction is hard. The solution
-is to redefine `require` to load directly from the ZIP, thing that I managed thus
-far, the hard part is implementing `require` correctly.
+You can `require` and `load` files with some caveats and limitations, take a look into the [wiki page](https://github.com/Chadowo/gosu-mruby-wrapper/wiki/Fused-Mode).
 
 This method both works out-of-the-box for your users and doesn't require you to
 bundle your source code with your game (not at least, in a way that's easily
