@@ -9,6 +9,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [0.0.2] - 2023-11-09
 
+### Added
+
+- A new way to load a game, an entrypoint file.
+
 ### Changed
 
 - Now on runtime the current working directory will be changed to the current directory of the executable as to 
