@@ -15,6 +15,7 @@
 
 #include <physfs.h>
 
+#include <fused.h>
 #include <config.h>
 
 #ifdef _WIN32
@@ -35,6 +36,7 @@ static void loadFusedGame(mrb_state* mrb) {
     mrb_load_nstring(mrb, contents, lengthRead);
 
     free(contents);
+    PHYSFS_close(rubyCode);
 }
 
 static void loadRubyFile(mrb_state* mrb, char* fileName, FILE* fp) {
