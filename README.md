@@ -66,7 +66,7 @@ like:
    cat game.zip >> GosuMRuby
    ```
 
-You can `require` and `load` files with some caveats and limitations. For more details about this functionality please take a 
+You can `require` and `load` files with some caveats. For more details about this functionality please take a 
 look in the [wiki page](https://github.com/Chadowo/gosu-mruby-wrapper/wiki/Fused-Mode).
 
 ## Features
