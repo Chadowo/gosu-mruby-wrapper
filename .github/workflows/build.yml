@@ -17,7 +17,7 @@ jobs:
     env:
       MRUBY_CONFIG: ../gosu-mruby-wrapper/scripts/mruby/windows.rb
     steps:
-    - uses: actions/checkout@v3
+    - uses: actions/checkout@v4
     - uses: ilammy/msvc-dev-cmd@v1
     - uses: msys2/setup-msys2@v2
       with:
@@ -33,43 +33,18 @@ jobs:
     - name: Add MSBuild to PATH
       uses: microsoft/setup-msbuild@v1.1
 
-    - name: Compile Gosu
-      run: |
-        C:\msys64\usr\bin\wget.exe https://github.com/gosu/gosu/archive/refs/tags/v$env:GOSU_VERSION.tar.gz
-        C:\msys64\usr\bin\tar.exe -xf v$env:GOSU_VERSION.tar.gz
-        ren gosu-$env:GOSU_VERSION\ gosu
-        msbuild gosu\windows\Gosu.sln /p:Configuration=Release
-        ren D:\a\gosu-mruby-wrapper\gosu-mruby-wrapper\gosu\lib64\Gosu.lib D:\a\gosu-mruby-wrapper\gosu-mruby-wrapper\gosu\lib64\gosu.lib
-        move D:\a\gosu-mruby-wrapper\gosu-mruby-wrapper\gosu\lib64\gosu-ffi.dll D:\a\gosu-mruby-wrapper\gosu-mruby-wrapper\gosu # Don't leave the dll in this dir
-        move D:\a\gosu-mruby-wrapper\gosu-mruby-wrapper\gosu\windows\x64\Release\gosu-ffi.lib D:\a\gosu-mruby-wrapper\gosu-mruby-wrapper\gosu\lib64
-
-    - name: Compile MRuby
-      shell: msys2 {0}
-      run: |
-        git clone https://github.com/Chadowo/gosu-mruby-wrapper.git
-        wget https://github.com/mruby/mruby/archive/refs/tags/$MRUBY_VERSION.tar.gz
-        tar -xf $MRUBY_VERSION.tar.gz
-        mv mruby-$MRUBY_VERSION/ mruby/
-        cd mruby/
-        rake
-        cd ..
-
     - name: Compile wrapper
       shell: msys2 {0}
       run: |
-        mkdir D:/a/gosu-mruby-wrapper/gosu-mruby-wrapper/gosu-mruby-wrapper/vendor/gosu
-        cp D:/a/gosu-mruby-wrapper/gosu-mruby-wrapper/gosu/lib64/gosu.lib D:/a/gosu-mruby-wrapper/gosu-mruby-wrapper/gosu-mruby-wrapper/vendor/gosu/libgosu.lib
-        cp D:/a/gosu-mruby-wrapper/gosu-mruby-wrapper/gosu/lib64/gosu-ffi.lib D:/a/gosu-mruby-wrapper/gosu-mruby-wrapper/gosu-mruby-wrapper/vendor/gosu/libgosu-ffi.lib
-        cp D:/a/gosu-mruby-wrapper/gosu-mruby-wrapper/mruby/build/host/lib/libmruby.a D:/a/gosu-mruby-wrapper/gosu-mruby-wrapper/gosu-mruby-wrapper/vendor/mruby/libmruby.a
-        cd gosu-mruby-wrapper/
+        cd $GITHUB_WORKSPACE
         mkdir build
         cd build/
         cmake ..
         make
         mkdir bundle
-        mv GosuMRuby.exe bundle/
-        mv D:/a/gosu-mruby-wrapper/gosu-mruby-wrapper/gosu/gosu-ffi.dll bundle/
-        mv D:/a/gosu-mruby-wrapper/gosu-mruby-wrapper/gosu/lib64/SDL2.dll bundle/
+        mv gosu-mruby.exe bundle/
+        mv ../vendor/gosu/lib64/gosu-ffi.dll bundle/
+        mv ../vendor/gosu/lib64/SDL2.dlll bundle/
         mv /ucrt64/bin/libstdc++-6.dll bundle/
         mv /ucrt64/bin/libgcc_s_seh-1.dll bundle/
         mv /ucrt64/bin/libwinpthread-1.dll bundle/
@@ -78,7 +53,7 @@ jobs:
       uses: actions/upload-artifact@v3
       with:
         name: build-win64
-        path: gosu-mruby-wrapper/build/bundle
+        path: $GITHUB_WORKSPACE/build/bundle
 
   linux:
     runs-on: ubuntu-latest

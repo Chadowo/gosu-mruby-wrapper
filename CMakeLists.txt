@@ -27,25 +27,45 @@ set(DEFINES -DMRB_INT64 -DMRB_USE_CXX_EXCEPTION -DMRB_USE_CXX_ABI
 
 # Building Gosu
 set(GOSU_DIR ${CMAKE_SOURCE_DIR}/vendor/gosu)
-set(GOSU_LIB ${GOSU_DIR}/lib64/libgosu.so ${GOSU_DIR}/lib64/libgosu-ffi.so)
-ExternalProject_Add(gosu
-                    GIT_REPOSITORY https://github.com/gosu/gosu.git
-                    GIT_TAG v1.4.6
-                    SOURCE_DIR ${GOSU_DIR}
-                    CONFIGURE_COMMAND ""
-                    BUILD_IN_SOURCE TRUE
-                    BUILD_COMMAND
-                      COMMAND cmake -S . -B build -DCMAKE_BUILD_TYPE=Debug
-                      COMMAND cmake --build build
-                      COMMAND mv build/libgosu.so lib64/
-                      COMMAND mv build/ffi/libgosu-ffi.so lib64/
-                    INSTALL_COMMAND ""
-                    BUILD_BYPRODUCTS ${GOSU_LIB})
+if(UNIX)
+  set(GOSU_LIB ${GOSU_DIR}/lib64/libgosu.so ${GOSU_DIR}/lib64/libgosu-ffi.so)
+  ExternalProject_Add(gosu
+                      GIT_REPOSITORY https://github.com/gosu/gosu.git
+                      GIT_TAG v1.4.6
+                      SOURCE_DIR ${GOSU_DIR}
+                      CONFIGURE_COMMAND ""
+                      BUILD_IN_SOURCE TRUE
+                      BUILD_COMMAND
+                        COMMAND cmake -S . -B build -DCMAKE_BUILD_TYPE=Debug
+                        COMMAND cmake --build build
+                        COMMAND mv build/libgosu.so lib64/
+                        COMMAND mv build/ffi/libgosu-ffi.so lib64/
+                      INSTALL_COMMAND ""
+                      BUILD_BYPRODUCTS ${GOSU_LIB})
+else()
+  set(GOSU_LIB ${GOSU_DIR}/lib64/gosu.lib ${GOSU_DIR}/lib64/gosu-ffi.lib)
+  ExternalProject_Add(gosu
+                      GIT_REPOSITORY https://github.com/gosu/gosu.git
+                      GIT_TAG v1.4.6
+                      SOURCE_DIR ${GOSU_DIR}
+                      CONFIGURE_COMMAND ""
+                      BUILD_IN_SOURCE TRUE
+                      BUILD_COMMAND
+                        COMMAND msbuild windows/Gosu.sln
+                        COMMAND mv lib64/Gosu.lib lib64/gosu.lib
+                        COMMAND mv windows\x64\Debug\gosu-ffi.lib lib64/gosu-ffi.lib
+                      INSTALL_COMMAND ""
+                      BUILD_BYPRODUCTS ${GOSU_LIB})
+endif()
 
 # Bulding MRuby
 set(MRUBY_DIR ${CMAKE_SOURCE_DIR}/vendor/mruby)
 set(MRUBY_LIB ${MRUBY_DIR}/build/host/lib/libmruby.a)
-set(MRUBY_CONFIG ${CMAKE_SOURCE_DIR}/scripts/mruby/linux.rb)
+if(UNIX)
+  set(MRUBY_CONFIG ${CMAKE_SOURCE_DIR}/scripts/mruby/linux.rb)
+else()
+  set(MRUBY_CONFIG ${CMAKE_SOURCE_DIR}/scripts/mruby/windows.rb)
+endif()
 ExternalProject_Add(mruby
                     GIT_REPOSITORY https://github.com/mruby/mruby.git
                     GIT_TAG 3.2.0
