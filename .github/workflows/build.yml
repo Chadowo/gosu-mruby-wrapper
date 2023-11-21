@@ -82,55 +82,23 @@ jobs:
 
   linux:
     runs-on: ubuntu-22.04
-
-    env:
-      MRUBY_CONFIG: ../gosu-mruby-wrapper/scripts/mruby/linux.rb
     steps:
     - uses: actions/checkout@v3
 
     - name: Install requirements of Gosu
       run: sudo apt install build-essential libsdl2-dev libgl1-mesa-dev libgmp-dev libfontconfig1-dev
 
-    - name: Compile Gosu
-      run: |
-        wget https://github.com/gosu/gosu/archive/refs/tags/v$GOSU_VERSION.tar.gz
-        tar -xf v$GOSU_VERSION.tar.gz
-        mv gosu-$GOSU_VERSION gosu
-        cd gosu/
-        mkdir build
-        cd build/
-        cmake ..
-        make
-        mv libgosu.so ../lib64
-        mv ffi/libgosu-ffi.so ../lib64
-        cd ..
-        cd ..
-
-    - name: Compile MRuby
-      run: |
-        git clone https://github.com/Chadowo/gosu-mruby-wrapper.git
-        wget https://github.com/mruby/mruby/archive/refs/tags/$MRUBY_VERSION.tar.gz
-        tar -xf $MRUBY_VERSION.tar.gz
-        mv mruby-$MRUBY_VERSION/ mruby/
-        cd mruby/
-        rake
-        cd ..
-
     - name: Compile wrapper
       run: |
-        mkdir gosu-mruby-wrapper/vendor/gosu
-        cp gosu/lib64/libgosu.so gosu-mruby-wrapper/vendor/gosu/libgosu.so
-        cp gosu/lib64/libgosu-ffi.so gosu-mruby-wrapper/vendor/gosu/libgosu-ffi.so
-        cp mruby/build/host/lib/libmruby.a gosu-mruby-wrapper/vendor/mruby/libmruby.a
         cd gosu-mruby-wrapper
         mkdir build
         cd build
         cmake ..
         make
         mkdir bundle
-        mv GosuMRuby bundle/
-        mv ../vendor/gosu/libgosu.so bundle/
-        mv ../vendor/gosu/libgosu-ffi.so bundle/
+        mv gosu-mruby bundle/
+        mv ../vendor/gosu/lib64/libgosu.so bundle/
+        mv ../vendor/gosu/lib64/libgosu-ffi.so bundle/
 
     - name: Generate final artifact
       uses: actions/upload-artifact@v3

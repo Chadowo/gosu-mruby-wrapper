@@ -43,11 +43,27 @@ ExternalProject_Add(gosu
                     INSTALL_COMMAND ""
                     BUILD_BYPRODUCTS ${GOSU_LIB})
 
+# Bulding MRuby
+set(MRUBY_DIR ${CMAKE_SOURCE_DIR}/vendor/mruby)
+set(MRUBY_LIB ${MRUBY_DIR}/build/host/lib/libmruby.a)
+set(MRUBY_CONFIG ${CMAKE_SOURCE_DIR}/scripts/mruby/linux.rb)
+ExternalProject_Add(mruby
+                    GIT_REPOSITORY https://github.com/mruby/mruby.git
+                    GIT_TAG 3.2.0
+                    SOURCE_DIR ${MRUBY_DIR}
+                    CONFIGURE_COMMAND ""
+                    BUILD_IN_SOURCE TRUE
+                    BUILD_COMMAND
+                      COMMAND rake MRUBY_CONFIG=${MRUBY_CONFIG}
+                    INSTALL_COMMAND ""
+                    BUILD_BYPRODUCTS ${GOSU_LIB})
+
 # The main executable
 add_executable(GosuMRuby ${SOURCE} ${WHEREAMI_SOURCE} ${PHYSFS_SOURCE})
 set_target_properties(${PROJECT_NAME} PROPERTIES OUTPUT_NAME "gosu-mruby")
 
 add_dependencies(GosuMRuby gosu)
+add_dependencies(GosuMRuby mruby)
 
 target_compile_definitions(GosuMRuby PUBLIC ${DEFINES})
 target_compile_options(GosuMRuby PUBLIC -x c++ -O3 ${WARNINGS})
@@ -59,8 +75,8 @@ target_include_directories(GosuMRuby SYSTEM PUBLIC vendor/mruby/include/)
 target_include_directories(GosuMRuby SYSTEM PUBLIC vendor/whereami/include/)
 target_include_directories(GosuMRuby SYSTEM PUBLIC vendor/physfs/src/)
 
-target_link_directories(GosuMRuby PUBLIC vendor/gosu/)
-target_link_directories(GosuMRuby PUBLIC vendor/mruby/)
+target_link_directories(GosuMRuby PUBLIC vendor/gosu/lib64)
+target_link_directories(GosuMRuby PUBLIC vendor/mruby/build/host/lib)
 
 # TODO: specify Linux
 if(UNIX)
