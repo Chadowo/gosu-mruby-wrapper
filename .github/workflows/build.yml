@@ -92,7 +92,7 @@ jobs:
 
     - name: Compile wrapper
       run: |
-        cd gosu-mruby-wrapper
+        cd $GITHUB_WORKSPACE
         mkdir build
         cd build
         cmake ..
