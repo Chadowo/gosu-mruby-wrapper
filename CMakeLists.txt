@@ -51,7 +51,7 @@ else()
                       CONFIGURE_COMMAND ""
                       BUILD_IN_SOURCE TRUE
                       BUILD_COMMAND
-                        COMMAND msbuild windows/Gosu.sln
+                        COMMAND cmd -c "msbuild windows/Gosu.sln"
                         COMMAND mv lib64/Gosu.lib lib64/gosu.lib
                         COMMAND mv windows/x64/Debug/gosu-ffi.lib lib64/gosu-ffi.lib
                       INSTALL_COMMAND ""
