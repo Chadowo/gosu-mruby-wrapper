@@ -35,9 +35,8 @@ ExternalProject_Add(gosu
                     CONFIGURE_COMMAND ""
                     BUILD_IN_SOURCE TRUE
                     BUILD_COMMAND
-                      COMMAND mkdir -p build
-                      COMMAND cd build && cmake ..
-                      COMMAND cd build && make
+                      COMMAND cmake -S . -B build -DCMAKE_BUILD_TYPE=Debug
+                      COMMAND cmake --build build
                       COMMAND mv build/libgosu.so lib64/
                       COMMAND mv build/ffi/libgosu-ffi.so lib64/
                     INSTALL_COMMAND ""
