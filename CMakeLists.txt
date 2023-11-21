@@ -1,4 +1,5 @@
 cmake_minimum_required(VERSION 3.22.1)
+include(ExternalProject)
 
 project(GosuMRuby
         VERSION 0.0.2
@@ -24,8 +25,29 @@ set(DEFINES -DMRB_INT64 -DMRB_USE_CXX_EXCEPTION -DMRB_USE_CXX_ABI
             -DMRB_DEBUG -DMRB_USE_RATIONAL -DMRB_USE_COMPLEX
             -DMRB_USE_BIGINT)
 
+# Building Gosu
+set(GOSU_DIR ${CMAKE_SOURCE_DIR}/vendor/gosu)
+set(GOSU_LIB ${GOSU_DIR}/lib64/libgosu.so ${GOSU_DIR}/lib64/libgosu-ffi.so)
+ExternalProject_Add(gosu
+                    GIT_REPOSITORY https://github.com/gosu/gosu.git
+                    GIT_TAG v1.4.6
+                    SOURCE_DIR ${GOSU_DIR}
+                    CONFIGURE_COMMAND ""
+                    BUILD_IN_SOURCE TRUE
+                    BUILD_COMMAND
+                      COMMAND mkdir -p build
+                      COMMAND cd build && cmake ..
+                      COMMAND cd build && make
+                      COMMAND mv build/libgosu.so lib64/
+                      COMMAND mv build/ffi/libgosu-ffi.so lib64/
+                    INSTALL_COMMAND ""
+                    BUILD_BYPRODUCTS ${GOSU_LIB})
+
 # The main executable
 add_executable(GosuMRuby ${SOURCE} ${WHEREAMI_SOURCE} ${PHYSFS_SOURCE})
+set_target_properties(${PROJECT_NAME} PROPERTIES OUTPUT_NAME "gosu-mruby")
+
+add_dependencies(GosuMRuby gosu)
 
 target_compile_definitions(GosuMRuby PUBLIC ${DEFINES})
 target_compile_options(GosuMRuby PUBLIC -x c++ -O3 ${WARNINGS})
