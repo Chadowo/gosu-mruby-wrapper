@@ -90,6 +90,7 @@ jobs:
 
     - name: Compile wrapper
       run: |
+        git clone https://github.com/Chadowo/gosu-mruby-wrapper.git
         cd gosu-mruby-wrapper
         mkdir build
         cd build
