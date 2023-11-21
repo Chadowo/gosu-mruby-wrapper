@@ -83,13 +83,14 @@ jobs:
   linux:
     runs-on: ubuntu-latest
     steps:
+    - uses: actions/checkout@v4
+      with:
+        ref: simplify-build
+
     - name: Install requirements of Gosu
       run: sudo apt install build-essential libsdl2-dev libgl1-mesa-dev libgmp-dev libfontconfig1-dev
 
     - name: Compile wrapper
-      uses: actions/checkout@v4
-      with:
-        ref: my-branch
       run: |
         git clone https://github.com/Chadowo/gosu-mruby-wrapper.git
         cd gosu-mruby-wrapper
