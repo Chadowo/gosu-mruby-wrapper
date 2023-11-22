@@ -51,7 +51,7 @@ else()
                       CONFIGURE_COMMAND ""
                       BUILD_IN_SOURCE TRUE
                       BUILD_COMMAND
-                        COMMAND C:/Program\ Files/PowerShell/7/pwsh.exe -c "msbuild windows\\Gosu.sln /p:Configuration=Release"
+                        COMMAND cmd -c "msbuild windows\\Gosu.sln /p:Configuration=Release"
                       INSTALL_COMMAND ""
                       BUILD_BYPRODUCTS ${GOSU_LIB})
 endif()

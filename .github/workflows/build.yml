@@ -18,6 +18,8 @@ jobs:
       MRUBY_CONFIG: ../gosu-mruby-wrapper/scripts/mruby/windows.rb
     steps:
     - uses: actions/checkout@v4
+      with:
+        ref: simplify-build
     - uses: ilammy/msvc-dev-cmd@v1
     - uses: msys2/setup-msys2@v2
       with:
