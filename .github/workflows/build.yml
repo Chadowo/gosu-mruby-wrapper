@@ -26,7 +26,7 @@ jobs:
       uses: microsoft/setup-msbuild@v1.1
 
     - name: Setup MSYS2
-    - uses: msys2/setup-msys2@v2
+      uses: msys2/setup-msys2@v2
       with:
         path-type: inherit
         msystem: UCRT64
