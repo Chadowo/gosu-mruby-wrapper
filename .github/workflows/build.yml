@@ -21,6 +21,11 @@ jobs:
       with:
         ref: simplify-build
     - uses: ilammy/msvc-dev-cmd@v1
+
+    - name: Add MSBuild to PATH
+      uses: microsoft/setup-msbuild@v1.1
+
+    - name: Setup MSYS2
     - uses: msys2/setup-msys2@v2
       with:
         path-type: inherit
@@ -32,9 +37,6 @@ jobs:
           cmake
           mingw-w64-ucrt-x86_64-gcc
           mingw-w64-ucrt-x86_64-dlfcn
-
-    - name: Add MSBuild to PATH
-      uses: microsoft/setup-msbuild@v1.1
 
     - name: Compile wrapper
       shell: msys2 {0}
