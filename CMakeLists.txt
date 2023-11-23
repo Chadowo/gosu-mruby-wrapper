@@ -51,7 +51,7 @@ else()
                       CONFIGURE_COMMAND ""
                       BUILD_IN_SOURCE TRUE
                       BUILD_COMMAND
-                        COMMAND msbuild /p:Configuration=Release
+                        COMMAND msbuild.exe /p:Configuration=Release
 		      INSTALL_COMMAND ""
                       BUILD_BYPRODUCTS ${GOSU_LIB})
 endif()
