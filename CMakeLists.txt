@@ -51,8 +51,8 @@ else()
                       CONFIGURE_COMMAND ""
                       BUILD_IN_SOURCE TRUE
                       BUILD_COMMAND
-                        COMMAND "C:/Program Files/Microsoft Visual Studio/2022/Enterprise/MSBuild/Current/Bin/msbuild.exe windows/Gosu.sln"
-                      INSTALL_COMMAND ""
+                        COMMAND msbuild /p:Configuration=Release
+		      INSTALL_COMMAND ""
                       BUILD_BYPRODUCTS ${GOSU_LIB})
 endif()
 
