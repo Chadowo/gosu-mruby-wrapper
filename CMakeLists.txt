@@ -50,8 +50,7 @@ else()
                       SOURCE_DIR ${GOSU_DIR}
                       CONFIGURE_COMMAND ""
                       BUILD_IN_SOURCE TRUE
-                      BUILD_COMMAND
-                        COMMAND cmd -c "msbuild windows/Gosu.sln ms/p:Configuration=Release"
+                      BUILD_COMMAND cmd -c "msbuild windows/Gosu.sln ms/p:Configuration=Release"
 		      INSTALL_COMMAND ""
                       BUILD_BYPRODUCTS ${GOSU_LIB})
 endif()
