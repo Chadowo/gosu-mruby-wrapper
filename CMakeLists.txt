@@ -1,6 +1,6 @@
 cmake_minimum_required(VERSION 3.22.1)
 
-project(GosuMRuby
+project(GosuMRubyWrapper
         VERSION 0.0.2
         LANGUAGES C)
 configure_file(include/config.h.in config.h)
