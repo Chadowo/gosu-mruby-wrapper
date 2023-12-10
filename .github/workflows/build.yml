@@ -99,7 +99,7 @@ jobs:
         cd gosu/
         mkdir build
         cd build/
-        cmake ..
+        cmake -DCMAKE_BUILD_TYPE=Release ..
         make
         mv libgosu.so ../lib64
         mv ffi/libgosu-ffi.so ../lib64
@@ -125,7 +125,7 @@ jobs:
         cd gosu-mruby-wrapper
         mkdir build
         cd build
-        cmake ..
+        cmake -DCMAKE_BUILD_TYPE=Release ..
         make
         mkdir bundle
         mv GosuMRuby bundle/
