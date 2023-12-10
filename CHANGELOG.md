@@ -15,6 +15,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Changed
 
+- The name of the executable is now in `kebab-case` (`gosu-mruby`) instead of `PascalCase`
+  (`GosuMRuby`), since this seems to be convention for command line utilities.
 - The name for the file used as entry is now "boot" instead of "entrypoint", I find
   it more fitting and less verbose.
 

@@ -3,12 +3,7 @@ cmake_minimum_required(VERSION 3.22.1)
 project(GosuMRubyWrapper
         VERSION 0.0.2
         LANGUAGES C)
-
-set(CMAKE_CXX_STANDARD 20)
-set(CMAKE_CXX_STANDARD_REQUIRED ON)
-
-# Get the Git hash of the last commit
-# and save it
+# Get the Git hash of the last commit and save it
 set(GIT_HASH "unknown")
 find_package(Git QUIET)
 if(GIT_FOUND)
@@ -17,8 +12,10 @@ if(GIT_FOUND)
                     OUTPUT_STRIP_TRAILING_WHITESPACE
                     ERROR_QUIET)
 endif()
-
 configure_file(include/config.h.in config.h)
+
+set(CMAKE_CXX_STANDARD 20)
+set(CMAKE_CXX_STANDARD_REQUIRED ON)
 
 # Source files
 set(SOURCE src/main.c src/fused.c)
@@ -38,9 +35,10 @@ set(DEFINES -DMRB_INT64 -DMRB_USE_CXX_EXCEPTION -DMRB_USE_CXX_ABI
 
 # The main executable
 add_executable(GosuMRuby ${SOURCE} ${WHEREAMI_SOURCE} ${PHYSFS_SOURCE})
+set_target_properties(GosuMRuby PROPERTIES OUTPUT_NAME "gosu-mruby")
 
 target_compile_definitions(GosuMRuby PUBLIC ${DEFINES})
-target_compile_options(GosuMRuby PUBLIC -x c++ -O3 ${WARNINGS})
+target_compile_options(GosuMRuby PUBLIC -x c++ ${WARNINGS})
 
 target_include_directories(GosuMRuby PUBLIC include/)
 target_include_directories(GosuMRuby PUBLIC "${PROJECT_BINARY_DIR}")
@@ -55,7 +53,6 @@ target_link_directories(GosuMRuby PUBLIC vendor/mruby/)
 # TODO: specify Linux
 if(UNIX)
   set(CMAKE_EXE_LINKER_FLAGS "${CMAKE_EXE_LINKER_FLAGS} -Wl,-rpath='$ORIGIN'")
-
   target_link_libraries(GosuMRuby -lmruby)
   target_link_libraries(GosuMRuby -lm)
   target_link_libraries(GosuMRuby -lgosu-ffi)
