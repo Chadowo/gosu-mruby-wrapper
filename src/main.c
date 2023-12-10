@@ -106,7 +106,9 @@ static void loadGame(mrb_state* mrb, char* path, int argc, char* argv[]) {
                     fclose(entryPoint);
                 } else {
                     // Print info and usage
-                    printf("Version: %d.%d.%d\n", VERSION_MAJOR, VERSION_MINOR, VERSION_PATCH);
+                    printf("Version: %d.%d.%d (%s)\n",
+                           VERSION_MAJOR, VERSION_MINOR, VERSION_PATCH,
+                           GIT_HASH);
                     printf("Usage: %s [inputfile]\n", path);
                     printf("\n");
                     printf("[inputfile]\tEither a .rb or .mrb file\n");
