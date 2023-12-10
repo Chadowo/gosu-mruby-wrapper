@@ -1,3 +1,5 @@
+#pragma once
+
 #define VERSION_MAJOR @GosuMRubyWrapper_VERSION_MAJOR@
 #define VERSION_MINOR @GosuMRubyWrapper_VERSION_MINOR@
 #define VERSION_PATCH @GosuMRubyWrapper_VERSION_PATCH@
