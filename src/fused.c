@@ -12,6 +12,8 @@
 
 #include <physfs.h>
 
+#define NOTFOUND_ERROR_MESSAGE "cannot load such file -- %s"
+#define INVALIDPATH_ERROR_MESSAGE "path cannot have \".\" or \"..\" when in fused mode"
 #define E_LOAD_ERROR (mrb_class_get(mrb, "LoadError"))
 
 bool fileAlreadyLoaded(mrb_state* mrb, mrb_value path, mrb_value loadedFeatures);
@@ -36,7 +38,7 @@ static mrb_value mrb_fused_require(mrb_state* mrb, mrb_value self) {
     //
     // https://icculus.org/physfs/docs/html/
     if(!checkValidPath(file)) {
-        mrb_raise(mrb, E_LOAD_ERROR, "path cannot have \".\" or \"..\" when in fused mode");
+        mrb_raise(mrb, E_LOAD_ERROR, INVALIDPATH_ERROR_MESSAGE);
     }
 
     // Assemble extensions array
@@ -94,7 +96,7 @@ static mrb_value mrb_fused_require(mrb_state* mrb, mrb_value self) {
         }
     }
 
-    mrb_raisef(mrb, E_LOAD_ERROR, "cannot load such file -- %s", file);
+    mrb_raisef(mrb, E_LOAD_ERROR, NOTFOUND_ERROR_MESSAGE, file);
 
     return mrb_undef_value();
 }
@@ -104,7 +106,7 @@ static mrb_value mrb_fused_load(mrb_state* mrb, mrb_value self) {
     mrb_get_args(mrb, "z", &file);
 
     if(!checkValidPath(file)) {
-        mrb_raise(mrb, E_LOAD_ERROR, "path cannot have \".\" or \"..\" when in fused mode");
+        mrb_raise(mrb, E_LOAD_ERROR, INVALIDPATH_ERROR_MESSAGE);
     }
 
     char* ext = strchr(file, '.');
@@ -150,7 +152,7 @@ static mrb_value mrb_fused_load(mrb_state* mrb, mrb_value self) {
         }
     }
 
-    mrb_raisef(mrb, E_LOAD_ERROR, "cannot load such file -- %s", file);
+    mrb_raisef(mrb, E_LOAD_ERROR, NOTFOUND_ERROR_MESSAGE, file);
 
     return mrb_undef_value();
 }
