@@ -67,7 +67,7 @@ jobs:
         cmake ..
         make
         mkdir bundle
-        mv GosuMRuby.exe bundle/
+        mv gosu-mruby.exe bundle/
         mv D:/a/gosu-mruby-wrapper/gosu-mruby-wrapper/gosu/gosu-ffi.dll bundle/
         mv D:/a/gosu-mruby-wrapper/gosu-mruby-wrapper/gosu/lib64/SDL2.dll bundle/
         mv /ucrt64/bin/libstdc++-6.dll bundle/
@@ -128,7 +128,7 @@ jobs:
         cmake -DCMAKE_BUILD_TYPE=Release ..
         make
         mkdir bundle
-        mv GosuMRuby bundle/
+        mv gosu-mruby bundle/
         mv ../vendor/gosu/libgosu.so bundle/
         mv ../vendor/gosu/libgosu-ffi.so bundle/
 
