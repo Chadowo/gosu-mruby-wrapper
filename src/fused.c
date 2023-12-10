@@ -14,6 +14,10 @@
 
 #define E_LOAD_ERROR (mrb_class_get(mrb, "LoadError"))
 
+bool fileAlreadyLoaded(mrb_state* mrb, mrb_value path, mrb_value loadedFeatures);
+void loadFusedRubyFile(mrb_state* mrb, mrb_value path, bool bytecode);
+void initFused(mrb_state* mrb);
+
 static bool checkValidPath(char* path) {
     // TODO: check the whole path, not only the beginning
     if(*path == '.') {
@@ -35,8 +39,11 @@ static mrb_value mrb_fused_require(mrb_state* mrb, mrb_value self) {
         mrb_raise(mrb, E_LOAD_ERROR, "path cannot have \".\" or \"..\" when in fused mode");
     }
 
+    // Assemble extensions array
     char* ext = strchr(file, '.');
     mrb_value exts = mrb_ary_new(mrb);
+    // TODO: This if chain logic is kinda sloppy, the nil value
+    //       isn't used anywhere else
     if(ext == NULL) {
         mrb_ary_push(mrb, exts, mrb_str_new_cstr(mrb, ".rb"));
         mrb_ary_push(mrb, exts, mrb_str_new_cstr(mrb, ".mrb"));
@@ -54,59 +61,34 @@ static mrb_value mrb_fused_require(mrb_state* mrb, mrb_value self) {
     for(int i = 0; i < RARRAY_LEN(loadPath); i++) {
         for(int j = 0; j < RARRAY_LEN(exts); j++) {
             // Construct the valid path
-            mrb_value absolutePath, fileType;
+            mrb_value absolutePath;
 
+            // Append the file to the current entry in the load path
             absolutePath = mrb_str_dup(mrb, mrb_ary_entry(loadPath, i));
             mrb_str_cat_cstr(mrb, absolutePath, "/");
             mrb_str_cat_cstr(mrb, absolutePath, file);
 
-            // If the path contains no extension, then we'll check every one,
-            // if not use the extension provided
+            // Append the current extensions if the path has none
             if(ext == NULL) {
-                fileType = mrb_ary_entry(exts, j);
-                mrb_str_cat_str(mrb, absolutePath, fileType);
-            } else {
-                fileType = mrb_str_new_cstr(mrb, ext);
+                mrb_str_cat_str(mrb, absolutePath, mrb_ary_entry(exts, j));
             }
 
             if(PHYSFS_exists(mrb_str_to_cstr(mrb, absolutePath))) {
-                // Check if the file was already loaded
-                for(int k = 0; k < RARRAY_LEN(loadedFeatures); k++) {
-                    mrb_value e = mrb_ary_entry(loadedFeatures, k);
-                    if(mrb_str_cmp(mrb, e, absolutePath) == 0) {
-                        return mrb_false_value();
-                    }
+                // Check if the file was already loaded, and
+                // return if so
+                if(fileAlreadyLoaded(mrb, absolutePath, loadedFeatures)) {
+                    return mrb_false_value();
                 }
 
-                // Proceed to load the file
-                mrbc_context* cxt = mrbc_context_new(mrb);
-                mrbc_filename(mrb, cxt, file);
-                int ai = mrb_gc_arena_save(mrb);
-
-                PHYSFS_file* fp = PHYSFS_openRead(mrb_str_to_cstr(mrb, absolutePath));
-                if(fp == NULL) {
-                    PHYSFS_ErrorCode err = PHYSFS_getLastErrorCode();
-                    mrb_raise(mrb, E_RUNTIME_ERROR, PHYSFS_getErrorByCode(err));
+                // If the file has no initial extension and the current extension
+                // is .mrb then assume it's bytecode
+                bool bytecode = false;
+                if(ext == NULL && mrb_str_cmp(mrb, mrb_ary_entry(exts, j), mrb_str_new_cstr(mrb, ".mrb")) == 0) {
+                    bytecode = true;
                 }
 
-                char* contents = (char *)malloc(PHYSFS_fileLength(fp) * sizeof(char));
-                size_t length = PHYSFS_readBytes(fp, contents, PHYSFS_fileLength(fp));
-
-                // If the file is bytecode, load it as so
-                if(mrb_str_cmp(mrb, fileType, mrb_str_new_cstr(mrb, ".mrb")) == 0) {
-                    mrb_load_irep_buf_cxt(mrb, contents, length, cxt);
-                } else {
-                    mrb_load_nstring_cxt(mrb, contents, length, cxt);
-                }
-
-                free(contents);
-                PHYSFS_close(fp);
-
-                mrbc_context_free(mrb, cxt);
-                mrb_gc_arena_restore(mrb, ai);
-
+                loadFusedRubyFile(mrb, absolutePath, bytecode);
                 mrb_ary_push(mrb, loadedFeatures, absolutePath);
-
                 return mrb_true_value();
             }
         }
@@ -117,9 +99,6 @@ static mrb_value mrb_fused_require(mrb_state* mrb, mrb_value self) {
     return mrb_undef_value();
 }
 
-/* TODO: Almost the same as require above, except we don't check for loaded
- *       features, I should add some common methods for loading files on PhysFS so
- *       I don't have to repeat code */
 static mrb_value mrb_fused_load(mrb_state* mrb, mrb_value self) {
     char* file;
     mrb_get_args(mrb, "z", &file);
@@ -147,49 +126,25 @@ static mrb_value mrb_fused_load(mrb_state* mrb, mrb_value self) {
     for(int i = 0; i < RARRAY_LEN(loadPath); i++) {
         for(int j = 0; j < RARRAY_LEN(exts); j++) {
             // Construct the valid path
-            mrb_value absolutePath, fileType;
+            mrb_value absolutePath;
 
+            // Append the file to the current entry in the load path
             absolutePath = mrb_str_dup(mrb, mrb_ary_entry(loadPath, i));
             mrb_str_cat_cstr(mrb, absolutePath, "/");
             mrb_str_cat_cstr(mrb, absolutePath, file);
 
+            // Append the current extensions if the path has none
             if(ext == NULL) {
-                fileType = mrb_ary_entry(exts, j);
-                mrb_str_cat_str(mrb, absolutePath, fileType);
-            } else {
-                fileType = mrb_str_new_cstr(mrb, ext);
+                mrb_str_cat_str(mrb, absolutePath, mrb_ary_entry(exts, j));
             }
 
             if(PHYSFS_exists(mrb_str_to_cstr(mrb, absolutePath))) {
-                // Proceed to load the file
-                mrbc_context* cxt = mrbc_context_new(mrb);
-                mrbc_filename(mrb, cxt, file);
-                int ai = mrb_gc_arena_save(mrb);
-
-                PHYSFS_file* fp = PHYSFS_openRead(mrb_str_to_cstr(mrb, absolutePath));
-                if(fp == NULL) {
-                    PHYSFS_ErrorCode err = PHYSFS_getLastErrorCode();
-                    mrb_raise(mrb, E_RUNTIME_ERROR, PHYSFS_getErrorByCode(err));
+                bool bytecode = false;
+                if(ext == NULL && mrb_str_cmp(mrb, mrb_ary_entry(exts, j), mrb_str_new_cstr(mrb, ".mrb")) == 0) {
+                    bytecode = true;
                 }
 
-                char* contents = (char *)malloc(PHYSFS_fileLength(fp) * sizeof(char));
-                size_t length = PHYSFS_readBytes(fp, contents, PHYSFS_fileLength(fp));
-
-                // If the file is bytecode, load it as so
-                if(mrb_str_cmp(mrb, fileType, mrb_str_new_cstr(mrb, ".mrb")) == 0) {
-                    mrb_load_irep_buf_cxt(mrb, contents, length, cxt);
-                } else {
-                    mrb_load_nstring_cxt(mrb, contents, length, cxt);
-                }
-
-                free(contents);
-                PHYSFS_close(fp);
-
-                mrbc_context_free(mrb, cxt);
-                mrb_gc_arena_restore(mrb, ai);
-
-                mrb_ary_push(mrb, loadedFeatures, absolutePath);
-
+                loadFusedRubyFile(mrb, absolutePath, bytecode);
                 return mrb_true_value();
             }
         }
@@ -198,6 +153,57 @@ static mrb_value mrb_fused_load(mrb_state* mrb, mrb_value self) {
     mrb_raisef(mrb, E_LOAD_ERROR, "cannot load such file -- %s", file);
 
     return mrb_undef_value();
+}
+
+bool fileAlreadyLoaded(mrb_state* mrb, mrb_value path, mrb_value loadedFeatures) {
+    for(int i = 0; i < RARRAY_LEN(loadedFeatures); i++) {
+        mrb_value e = mrb_ary_entry(loadedFeatures, i);
+        if(mrb_str_cmp(mrb, e, path) == 0) {
+            return true;
+        }
+    }
+
+    // No file was found
+    return false;
+}
+
+void loadFusedRubyFile(mrb_state* mrb, mrb_value path, bool bytecode) {
+    // First, we'll assemble a file name in the form of
+    // FILE.ext for mrbc_filename()
+    char* filename = strchr(mrb_str_to_cstr(mrb, path), '/');
+    if(filename != NULL) filename++; // To remove the first /
+
+    // Proceed to load the file
+    mrbc_context* cxt = mrbc_context_new(mrb);
+    if(filename) {
+        mrbc_filename(mrb, cxt, filename);
+    } else {
+        mrbc_filename(mrb, cxt, mrb_str_to_cstr(mrb, path));
+    }
+
+    int ai = mrb_gc_arena_save(mrb);
+
+    PHYSFS_file* fp = PHYSFS_openRead(mrb_str_to_cstr(mrb, path));
+    if(fp == NULL) {
+        PHYSFS_ErrorCode err = PHYSFS_getLastErrorCode();
+        mrb_raise(mrb, E_RUNTIME_ERROR, PHYSFS_getErrorByCode(err));
+    }
+
+    char* contents = (char *)malloc(PHYSFS_fileLength(fp) * sizeof(char));
+    size_t length = PHYSFS_readBytes(fp, contents, PHYSFS_fileLength(fp));
+
+    // If the file is bytecode, load it as so
+    if(bytecode) {
+        mrb_load_irep_buf_cxt(mrb, contents, length, cxt);
+    } else {
+        mrb_load_nstring_cxt(mrb, contents, length, cxt);
+    }
+
+    free(contents);
+    PHYSFS_close(fp);
+
+    mrbc_context_free(mrb, cxt);
+    mrb_gc_arena_restore(mrb, ai);
 }
 
 void initFused(mrb_state* mrb) {

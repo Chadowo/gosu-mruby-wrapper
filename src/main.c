@@ -28,21 +28,6 @@ static bool isFused(char* executablePath) {
     return(PHYSFS_mount(executablePath, NULL, 1));
 }
 
-static void loadFusedGame(mrb_state* mrb) {
-    PHYSFS_file* rubyCode = PHYSFS_openRead("main.rb");
-    char* contents = (char *)malloc(PHYSFS_fileLength(rubyCode) * sizeof(char));
-    size_t lengthRead = PHYSFS_readBytes(rubyCode, contents, PHYSFS_fileLength(rubyCode));
-
-    mrbc_context* cxt = mrbc_context_new(mrb);
-    mrbc_filename(mrb, cxt, "main");
-
-    mrb_load_nstring_cxt(mrb, contents, lengthRead, cxt);
-
-    free(contents);
-    PHYSFS_close(rubyCode);
-    mrbc_context_free(mrb, cxt);
-}
-
 static void loadRubyFile(mrb_state* mrb, char* fileName, FILE* fp) {
     mrbc_context* cxt = mrbc_context_new(mrb);
 
@@ -84,7 +69,7 @@ static void loadGame(mrb_state* mrb, char* path, int argc, char* argv[]) {
         }
 
         initFused(mrb);
-        loadFusedGame(mrb);
+        loadFusedRubyFile(mrb, mrb_str_new_cstr(mrb, "main.rb"), false);
     } else {
         // Fallback to command line input
         if(argc > 1) {
