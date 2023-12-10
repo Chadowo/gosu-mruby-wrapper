@@ -1,7 +1,7 @@
 cmake_minimum_required(VERSION 3.22.1)
 
 project(GosuMRubyWrapper
-        VERSION 0.0.2
+        VERSION 0.0.3
         LANGUAGES C)
 # Get the Git hash of the last commit and save it
 set(GIT_HASH "unknown")
