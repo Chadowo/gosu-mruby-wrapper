@@ -79,8 +79,9 @@ static mrb_value mrb_fused_require(mrb_state* mrb, mrb_value self) {
                 }
 
                 // Proceed to load the file
-                int ai = mrb_gc_arena_save(mrb);
                 mrbc_context* cxt = mrbc_context_new(mrb);
+                mrbc_filename(mrb, cxt, file);
+                int ai = mrb_gc_arena_save(mrb);
 
                 PHYSFS_file* fp = PHYSFS_openRead(mrb_str_to_cstr(mrb, absolutePath));
                 if(fp == NULL) {
@@ -101,8 +102,8 @@ static mrb_value mrb_fused_require(mrb_state* mrb, mrb_value self) {
                 free(contents);
                 PHYSFS_close(fp);
 
-                mrb_gc_arena_restore(mrb, ai);
                 mrbc_context_free(mrb, cxt);
+                mrb_gc_arena_restore(mrb, ai);
 
                 mrb_ary_push(mrb, loadedFeatures, absolutePath);
 
@@ -161,8 +162,9 @@ static mrb_value mrb_fused_load(mrb_state* mrb, mrb_value self) {
 
             if(PHYSFS_exists(mrb_str_to_cstr(mrb, absolutePath))) {
                 // Proceed to load the file
-                int ai = mrb_gc_arena_save(mrb);
                 mrbc_context* cxt = mrbc_context_new(mrb);
+                mrbc_filename(mrb, cxt, file);
+                int ai = mrb_gc_arena_save(mrb);
 
                 PHYSFS_file* fp = PHYSFS_openRead(mrb_str_to_cstr(mrb, absolutePath));
                 if(fp == NULL) {
@@ -183,8 +185,8 @@ static mrb_value mrb_fused_load(mrb_state* mrb, mrb_value self) {
                 free(contents);
                 PHYSFS_close(fp);
 
-                mrb_gc_arena_restore(mrb, ai);
                 mrbc_context_free(mrb, cxt);
+                mrb_gc_arena_restore(mrb, ai);
 
                 mrb_ary_push(mrb, loadedFeatures, absolutePath);
 

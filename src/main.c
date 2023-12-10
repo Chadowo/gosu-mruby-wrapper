@@ -33,10 +33,14 @@ static void loadFusedGame(mrb_state* mrb) {
     char* contents = (char *)malloc(PHYSFS_fileLength(rubyCode) * sizeof(char));
     size_t lengthRead = PHYSFS_readBytes(rubyCode, contents, PHYSFS_fileLength(rubyCode));
 
-    mrb_load_nstring(mrb, contents, lengthRead);
+    mrbc_context* cxt = mrbc_context_new(mrb);
+    mrbc_filename(mrb, cxt, "main");
+
+    mrb_load_nstring_cxt(mrb, contents, lengthRead, cxt);
 
     free(contents);
     PHYSFS_close(rubyCode);
+    mrbc_context_free(mrb, cxt);
 }
 
 static void loadRubyFile(mrb_state* mrb, char* fileName, FILE* fp) {
