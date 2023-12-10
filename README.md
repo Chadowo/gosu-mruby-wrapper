@@ -23,50 +23,8 @@ See instructions for [Windows](https://github.com/Chadowo/gosu-mruby-wrapper/wik
 
 ## Usage
 
-### Command Line
-
-Call the executable with a Ruby file as argument:
-
-```console
-./GosuMRuby my_script.rb
-```
-
-### Entrypoint File
-
-Something I came up with that may or not may be a good idea, if a file named 
-`entrypoint.rb` is present in the same directory as the executable it will 
-load it automatically. The idea is for your entrypoint to start the game:
-
-```ruby
-$: << 'my_source/' # Add my_source directory to load path
-
-require 'main'
-```
-
-It will work out-of-the-box so your users don't have to open a terminal. The 
-only con is that your source code has to be bundled with your game. 
-
-A possible workaround if you don't want your source code to be seen is to 
-[compile your Ruby files to bytecode](https://mruby.org/docs/articles/executing-ruby-code-with-mruby.html#bytecode-mrb).
-
-### Embedding Files
-
-**WARNING**: really, *really* experimental.
-
-As a proof of concept, you can embed a ZIP file into the executable (by tacking it
-onto the end), and the executable should be able to read that and act accordingly
-(by loading a Ruby file inside it named `main.rb`), so the process would be something
-like:
-
-1. Package a Ruby file named `main.rb` into an ZIP, let's say the ZIP's named
-   "game"
-2. Tack the ZIP onto the end of the GosuMRuby executable (using `cat`):
-   ```console
-   cat game.zip >> GosuMRuby
-   ```
-
-You can `require` and `load` files with some caveats. For more details about this functionality please take a 
-look in the [wiki page](https://github.com/Chadowo/gosu-mruby-wrapper/wiki/Fused-Mode).
+Currently there are 3 ways to use this utility, please take a look at the [Getting Started](https://github.com/Chadowo/gosu-mruby-wrapper/wiki/Getting-Started)
+wiki page.
 
 ## Features
 
@@ -81,8 +39,8 @@ look in the [wiki page](https://github.com/Chadowo/gosu-mruby-wrapper/wiki/Fused
 
 - No MacOS builds, this could *definitively* be added, it's just that I don't have a MacOS machine to develop it.
   Contributions would be highly appreciated!
-- No 32bit builds, Gosu does support it though, so it's planned.
-- No gems, this means that if your game uses some CRuby gem it *will not work*.
+- No 32 bit builds, Gosu does support it though, so it's planned.
+- No gems, this means that if your game uses CRuby gems it **will not work**.
   However you can use gems made in plain Ruby by bundling them with your source code,
   like how Love2D libraries are used.
 
@@ -92,7 +50,7 @@ This project is licensed under the [MIT license](https://github.com/Chadowo/gosu
 
 ## Credits
 
-This project was possible thanks to the following libraries
+This project was possible thanks to the following libraries.
 
 - Gosu - [MIT license](https://github.com/gosu/gosu/blob/master/COPYING)  
 - MRuby - [MIT license](https://github.com/mruby/mruby/blob/master/LICENSE)  
