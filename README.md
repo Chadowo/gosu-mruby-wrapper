@@ -39,10 +39,10 @@ wiki page.
 
 - No MacOS builds, this could *definitively* be added, it's just that I don't have a MacOS machine to develop it.
   Contributions would be highly appreciated!
-- No 32 bit builds, Gosu does support it though, so it's planned.
+- No 32 bit builds, Gosu does support it though, so it's possible.
 - No gems, this means that if your game uses CRuby gems it **will not work**.
   However you can use gems made in plain Ruby by bundling them with your source code,
-  like how Love2D libraries are used.
+  similar to how Love2D libraries are used.
 
 ## License
 
