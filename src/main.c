@@ -96,11 +96,11 @@ static void loadGame(mrb_state* mrb, char* path, int argc, char* argv[]) {
         } else {
             // Load entrypoint file in the current directory
             char cwd[PATH_MAX];
-            char fileName[] = "entrypoint.rb";
+            char fileName[] = "boot.rb";
 
             if(getcwd(cwd, sizeof(cwd)) != NULL) {
                 // Try to open and execute the file
-                FILE* entryPoint = fopen(strcat(cwd, "/entrypoint.rb"), "r");
+                FILE* entryPoint = fopen(strcat(cwd, "/boot.rb"), "r");
                 if(entryPoint != NULL) {
                     loadRubyFile(mrb, fileName, entryPoint);
                     fclose(entryPoint);
@@ -130,7 +130,7 @@ static char* executableDirectory(char* path) {
 int main(int argc, char* argv[]) {
     mrb_state* mrb = mrb_open();
     if(!mrb) {
-        fprintf(stderr, "Couldn't initialize MRuby!\n");
+        fprintf(stderr, "Couldn't initialize MRuby VM!\n");
         return 1;
     }
 
