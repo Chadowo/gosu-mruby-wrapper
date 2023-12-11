@@ -5,12 +5,12 @@ project(GosuMRubyWrapper
         LANGUAGES C)
 # Get the Git hash of the last commit and save it
 set(GIT_HASH "unknown")
-find_package(Git QUIET)
+find_package(Git)
 if(GIT_FOUND)
-    execute_process(COMMAND git log -1 --pretty=format:%h
-                    OUTPUT_VARIABLE GIT_HASH
-                    OUTPUT_STRIP_TRAILING_WHITESPACE
-                    ERROR_QUIET)
+  execute_process(COMMAND git log -1 --pretty=format:%h
+                  OUTPUT_VARIABLE GIT_HASH
+                  OUTPUT_STRIP_TRAILING_WHITESPACE
+                  ERROR_QUIET)
 endif()
 configure_file(include/config.h.in config.h)
 
