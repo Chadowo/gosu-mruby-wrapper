@@ -24,6 +24,8 @@
     #define FILE_SEPARATOR '/'
 #endif
 
+#define BOOT_FILENAME "boot.rb"
+
 static bool isFused(char* executablePath) {
     return(PHYSFS_mount(executablePath, NULL, 1));
 }
@@ -89,7 +91,11 @@ static void loadGame(mrb_state* mrb, char* path, int argc, char* argv[]) {
 
             if(getcwd(cwd, sizeof(cwd)) != NULL) {
                 // Try to open and execute the file
-                FILE* entryPoint = fopen(strcat(cwd, "/boot.rb"), "r");
+                char fileSeparator[2] = {FILE_SEPARATOR, '\0'}; // Make a string out of the char
+                strncat(cwd, fileSeparator, 1);
+                strncat(cwd, fileName, sizeof(cwd) - strlen(cwd) - 1);
+                FILE* entryPoint = fopen(cwd, "r");
+                printf("%s\n", cwd);
                 if(entryPoint != NULL) {
                     loadRubyFile(mrb, fileName, entryPoint);
                     fclose(entryPoint);
@@ -151,6 +157,8 @@ int main(int argc, char* argv[]) {
         mrb_print_error(mrb);
     }
 
+    free(dirPath);
+    free(path);
     PHYSFS_deinit();
     mrb_close(mrb);
     return 0;

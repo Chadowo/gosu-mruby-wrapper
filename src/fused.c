@@ -20,13 +20,9 @@ bool fileAlreadyLoaded(mrb_state* mrb, mrb_value path, mrb_value loadedFeatures)
 void loadFusedRubyFile(mrb_state* mrb, mrb_value path, bool bytecode);
 void initFused(mrb_state* mrb);
 
-static bool checkValidPath(char* path) {
+static bool checkValidPath(const char* path) {
     // TODO: check the whole path, not only the beginning
-    if(*path == '.') {
-        return false;
-    } else {
-        return true;
-    }
+    return(*path == '.');
 }
 
 static mrb_value mrb_fused_require(mrb_state* mrb, mrb_value self) {
@@ -177,7 +173,7 @@ void loadFusedRubyFile(mrb_state* mrb, mrb_value path, bool bytecode) {
 
     // Proceed to load the file
     mrbc_context* cxt = mrbc_context_new(mrb);
-    if(filename) {
+    if(filename != NULL) {
         mrbc_filename(mrb, cxt, filename);
     } else {
         mrbc_filename(mrb, cxt, mrb_str_to_cstr(mrb, path));
