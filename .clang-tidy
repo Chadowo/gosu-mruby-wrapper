@@ -17,5 +17,3 @@ CheckOptions:
     value: true
   - key: readability-implicit-bool-conversion.AllowPointerConditions
     value: true
-
-HeaderFilterRegex: ''
