@@ -1,3 +1,6 @@
-#define VERSION_MAJOR @GosuMRuby_VERSION_MAJOR@
-#define VERSION_MINOR @GosuMRuby_VERSION_MINOR@
-#define VERSION_PATCH @GosuMRuby_VERSION_PATCH@
+#pragma once
+
+#define VERSION_MAJOR @GosuMRubyWrapper_VERSION_MAJOR@
+#define VERSION_MINOR @GosuMRubyWrapper_VERSION_MINOR@
+#define VERSION_PATCH @GosuMRubyWrapper_VERSION_PATCH@
+#define GIT_HASH "@GIT_HASH@"

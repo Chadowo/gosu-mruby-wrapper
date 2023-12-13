@@ -1,9 +1,18 @@
 cmake_minimum_required(VERSION 3.22.1)
 include(ExternalProject)
 
-project(GosuMRuby
-        VERSION 0.0.2
+project(GosuMRubyWrapper
+        VERSION 0.0.3
         LANGUAGES C)
+# Get the Git hash of the last commit and save it
+set(GIT_HASH "unknown")
+find_package(Git)
+if(GIT_FOUND)
+  execute_process(COMMAND git log -1 --pretty=format:%h
+                  OUTPUT_VARIABLE GIT_HASH
+                  OUTPUT_STRIP_TRAILING_WHITESPACE
+                  ERROR_QUIET)
+endif()
 configure_file(include/config.h.in config.h)
 
 set(CMAKE_CXX_STANDARD 20)
@@ -50,10 +59,10 @@ ExternalProject_Add(mruby
 add_executable(GosuMRuby ${SOURCE} ${WHEREAMI_SOURCE} ${PHYSFS_SOURCE})
 add_dependencies(GosuMRuby mruby)
 
-set_target_properties(${PROJECT_NAME} PROPERTIES OUTPUT_NAME "gosu-mruby")
+set_target_properties(GosuMRuby PROPERTIES OUTPUT_NAME "gosu-mruby")
 
 target_compile_definitions(GosuMRuby PUBLIC ${DEFINES})
-target_compile_options(GosuMRuby PUBLIC -x c++ -O3 ${WARNINGS})
+target_compile_options(GosuMRuby PUBLIC -x c++ ${WARNINGS})
 
 target_include_directories(GosuMRuby PUBLIC include/)
 target_include_directories(GosuMRuby PUBLIC "${PROJECT_BINARY_DIR}")

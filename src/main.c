@@ -6,6 +6,7 @@
 #include <limits.h>
 
 #include <mruby.h>
+#include <mruby/array.h>
 #include <mruby/variable.h>
 #include <mruby/irep.h>
 #include <mruby/dump.h>
@@ -24,19 +25,21 @@
     #define FILE_SEPARATOR '/'
 #endif
 
+#define BOOT_FILENAME "boot.rb"
+
 static bool isFused(char* executablePath) {
     return(PHYSFS_mount(executablePath, NULL, 1));
 }
 
-static void loadFusedGame(mrb_state* mrb) {
-    PHYSFS_file* rubyCode = PHYSFS_openRead("main.rb");
-    char* contents = (char *)malloc(PHYSFS_fileLength(rubyCode) * sizeof(char));
-    size_t lengthRead = PHYSFS_readBytes(rubyCode, contents, PHYSFS_fileLength(rubyCode));
+static void forwardArguments(mrb_state* mrb, int argc, char** argv, int offset) {
+    mrb_value ARGV = mrb_ary_new_capa(mrb, argc);
 
-    mrb_load_nstring(mrb, contents, lengthRead);
+    for(int i = 1 + offset; i < argc; i++) {
+        mrb_ary_push(mrb, ARGV, mrb_str_new_cstr(mrb, argv[i]));
 
-    free(contents);
-    PHYSFS_close(rubyCode);
+    }
+
+    mrb_define_global_const(mrb, "ARGV", ARGV);
 }
 
 static void loadRubyFile(mrb_state* mrb, char* fileName, FILE* fp) {
@@ -75,41 +78,50 @@ static void loadGame(mrb_state* mrb, char* path, int argc, char* argv[]) {
     if(fused) {
         // Load the Ruby code with PhysFS
         if(!PHYSFS_exists("main.rb")) {
-            printf("There's no main.rb file in the fused files!\n");
+            printf("There's no main.rb in the fused files!\n");
             return;
         }
 
+        forwardArguments(mrb, argc, argv, 0);
         initFused(mrb);
-        loadFusedGame(mrb);
+        loadFusedRubyFile(mrb, mrb_str_new_cstr(mrb, "main.rb"), false);
     } else {
-        // Fallback to command line input
-        if(argc > 1) {
-            FILE* inputFile = fopen(argv[1], "r");
-            if(inputFile == NULL) {
-                printf("Path %s is not valid!\n", argv[1]);
-                return;
-            }
+        // Load entrypoint file in the current directory
+        char cwd[PATH_MAX];
+        char fileName[] = "boot.rb";
+        if(getcwd(cwd, sizeof(cwd)) != NULL) {
+            // Try to open and execute the file
+            char fileSeparator[2] = {FILE_SEPARATOR, '\0'}; // Make a string out of the char
+            strncat(cwd, fileSeparator, 1);
+            strncat(cwd, fileName, sizeof(cwd) - strlen(cwd) - 1);
 
-            loadRubyFile(mrb, argv[1], inputFile);
+            FILE* entryPoint = fopen(cwd, "r");
+            if(entryPoint != NULL) {
+                forwardArguments(mrb, argc, argv, 0);
+                loadRubyFile(mrb, fileName, entryPoint);
+                fclose(entryPoint);
+            } else {
+                // Fallback to command line input
+                if(argc > 1) {
+                    FILE* inputFile = fopen(argv[1], "r");
+                    if(inputFile == NULL) {
+                        printf("Path %s is invalid!\n", argv[1]);
+                        return;
+                    }
+                    // Skip an argument since it is the file path
+                    forwardArguments(mrb, argc, argv, 1);
+                    loadRubyFile(mrb, argv[1], inputFile);
 
-            fclose(inputFile);
-        } else {
-            // Load entrypoint file in the current directory
-            char cwd[PATH_MAX];
-            char fileName[] = "entrypoint.rb";
-
-            if(getcwd(cwd, sizeof(cwd)) != NULL) {
-                // Try to open and execute the file
-                FILE* entryPoint = fopen(strcat(cwd, "/entrypoint.rb"), "r");
-                if(entryPoint != NULL) {
-                    loadRubyFile(mrb, fileName, entryPoint);
-                    fclose(entryPoint);
+                    fclose(inputFile);
                 } else {
                     // Print info and usage
-                    printf("Version: %d.%d.%d\n", VERSION_MAJOR, VERSION_MINOR, VERSION_PATCH);
+                    printf("Version: %d.%d.%d (%s)\n",
+                           VERSION_MAJOR, VERSION_MINOR, VERSION_PATCH,
+                           GIT_HASH);
                     printf("Usage: %s [inputfile]\n", path);
                     printf("\n");
                     printf("[inputfile]\tEither a .rb or .mrb file\n");
+                    return;
                 }
             }
         }
@@ -128,7 +140,7 @@ static char* executableDirectory(char* path) {
 int main(int argc, char* argv[]) {
     mrb_state* mrb = mrb_open();
     if(!mrb) {
-        fprintf(stderr, "Couldn't initialize MRuby!\n");
+        fprintf(stderr, "Couldn't initialize MRuby VM!\n");
         return 1;
     }
 
@@ -160,6 +172,8 @@ int main(int argc, char* argv[]) {
         mrb_print_error(mrb);
     }
 
+    free(dirPath);
+    free(path);
     PHYSFS_deinit();
     mrb_close(mrb);
     return 0;
