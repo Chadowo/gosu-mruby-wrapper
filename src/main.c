@@ -94,8 +94,8 @@ static void loadGame(mrb_state* mrb, char* path, int argc, char* argv[]) {
                 char fileSeparator[2] = {FILE_SEPARATOR, '\0'}; // Make a string out of the char
                 strncat(cwd, fileSeparator, 1);
                 strncat(cwd, fileName, sizeof(cwd) - strlen(cwd) - 1);
+
                 FILE* entryPoint = fopen(cwd, "r");
-                printf("%s\n", cwd);
                 if(entryPoint != NULL) {
                     loadRubyFile(mrb, fileName, entryPoint);
                     fclose(entryPoint);
