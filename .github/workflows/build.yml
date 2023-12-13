@@ -88,21 +88,15 @@ jobs:
         cd build/
         cmake -DCMAKE_BUILD_TYPE=Release ..
         make
-        mv libgosu.so ../lib64
-        mv ffi/libgosu-ffi.so ../lib64
-        cd ..
-        cd ..
+        mv libgosu.so $GITHUB_WORKSPACE/vendor/gosu/lib64
+        mv ffi/libgosu-ffi.so $GITHUB_WORKSPACE/vendor/gosu/lib64
 
     - name: Compile wrapper
       run: |
         cd $GITHUB_WORKSPACE
-        mkdir vendor/gosu
-        mkdir vendor/gosu/lib64
-        cp gosu-mruby-wrapper/gosu-mruby-wrapper/gosu/lib64/libgosu.so vendor/gosu/lib64/libgosu.so
-        cp gosu-mruby-wrapper/gosu-mruby-wrapper/gosu/lib64/libgosu-ffi.so vendor/gosu/lib64/libgosu-ffi.so
         mkdir build
         cd build
-        cmake ..
+        cmake -DCMAKE_BUILD_TYPE=Release ..
         make
         mkdir bundle
         mv gosu-mruby bundle/
