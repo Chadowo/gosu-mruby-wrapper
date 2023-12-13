@@ -34,6 +34,7 @@ jobs:
           cmake
           mingw-w64-ucrt-x86_64-gcc
           mingw-w64-ucrt-x86_64-dlfcn
+          mingw-w64-ucrt-x86_64-binutils
 
     - name: Compile Gosu
       run: |
@@ -107,6 +108,8 @@ jobs:
         mv gosu-mruby bundle/
         mv ../vendor/gosu/lib64/libgosu.so bundle/
         mv ../vendor/gosu/lib64/libgosu-ffi.so bundle/
+        mv bundle
+        pwd
 
     - name: Generate final artifact
       uses: actions/upload-artifact@v3
