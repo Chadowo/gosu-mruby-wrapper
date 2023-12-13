@@ -91,6 +91,7 @@ jobs:
         mkdir $GITHUB_WORKSPACE/vendor/gosu/lib64
         mv libgosu.so $GITHUB_WORKSPACE/vendor/gosu/lib64
         mv ffi/libgosu-ffi.so $GITHUB_WORKSPACE/vendor/gosu/lib64
+        mv ../ffi $GITHUB_WORKSPACE/vendor/gosu
 
     - name: Compile wrapper
       run: |

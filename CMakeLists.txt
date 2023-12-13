@@ -48,10 +48,9 @@ ExternalProject_Add(mruby
 
 # The main executable
 add_executable(GosuMRuby ${SOURCE} ${WHEREAMI_SOURCE} ${PHYSFS_SOURCE})
-set_target_properties(${PROJECT_NAME} PROPERTIES OUTPUT_NAME "gosu-mruby")
-
-add_dependencies(GosuMRuby gosu)
 add_dependencies(GosuMRuby mruby)
+
+set_target_properties(${PROJECT_NAME} PROPERTIES OUTPUT_NAME "gosu-mruby")
 
 target_compile_definitions(GosuMRuby PUBLIC ${DEFINES})
 target_compile_options(GosuMRuby PUBLIC -x c++ -O3 ${WARNINGS})
