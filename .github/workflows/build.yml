@@ -112,10 +112,10 @@ jobs:
         mv gosu-mruby bundle/
         mv ../vendor/gosu/lib64/libgosu.so bundle/
         mv ../vendor/gosu/lib64/libgosu-ffi.so bundle/
+        pwd
 
     - name: Verify path
       run: |
-        cd gosu-mruby-wrapper/gosu-mruby-wrapper/build/bundle
         ls
 
     - name: Generate final artifact
