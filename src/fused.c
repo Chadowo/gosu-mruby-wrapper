@@ -20,9 +20,9 @@ bool fileAlreadyLoaded(mrb_state* mrb, mrb_value path, mrb_value loadedFeatures)
 void loadFusedRubyFile(mrb_state* mrb, mrb_value path, bool bytecode);
 void initFused(mrb_state* mrb);
 
-static bool checkValidPath(const char* path) {
+static bool invalidPath(const char* path) {
     // TODO: check the whole path, not only the beginning
-    return(*path == '.');
+    return *path == '.';
 }
 
 static mrb_value mrb_fused_require(mrb_state* mrb, mrb_value self) {
@@ -33,7 +33,7 @@ static mrb_value mrb_fused_require(mrb_state* mrb, mrb_value self) {
     // and inform the programmer
     //
     // https://icculus.org/physfs/docs/html/
-    if(!checkValidPath(file)) {
+    if(invalidPath(file)) {
         mrb_raise(mrb, E_LOAD_ERROR, INVALIDPATH_ERROR_MESSAGE);
     }
 
@@ -101,7 +101,7 @@ static mrb_value mrb_fused_load(mrb_state* mrb, mrb_value self) {
     char* file;
     mrb_get_args(mrb, "z", &file);
 
-    if(!checkValidPath(file)) {
+    if(invalidPath(file)) {
         mrb_raise(mrb, E_LOAD_ERROR, INVALIDPATH_ERROR_MESSAGE);
     }
 

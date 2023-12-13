@@ -12,6 +12,11 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Argument forwarding: now you can pass command line arguments that will be
   forwarded to your script (in `ARGV`).
 
+### Fixed
+
+- Fused `require` and `load` would raise an invalid path error on paths that
+  are valid.
+
 ## [0.0.3] - 2023-12-10
 
 ### Added
