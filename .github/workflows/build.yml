@@ -14,8 +14,6 @@ jobs:
   windows:
     runs-on: windows-2022
 
-    env:
-      MRUBY_CONFIG: ../gosu-mruby-wrapper/scripts/mruby/windows.rb
     steps:
     - uses: actions/checkout@v4
       with:
@@ -38,18 +36,28 @@ jobs:
           mingw-w64-ucrt-x86_64-gcc
           mingw-w64-ucrt-x86_64-dlfcn
 
+    - name: Compile Gosu
+      run: |
+        C:\msys64\usr\bin\wget.exe https://github.com/gosu/gosu/archive/refs/tags/v$env:GOSU_VERSION.tar.gz
+        C:\msys64\usr\bin\tar.exe -xf v$env:GOSU_VERSION.tar.gz
+        ren gosu-$env:GOSU_VERSION\ gosu
+        msbuild gosu\windows\Gosu.sln /p:Configuration=Release
+        ren D:\a\gosu-mruby-wrapper\gosu-mruby-wrapper\gosu\lib64\Gosu.lib D:\a\gosu-mruby-wrapper\gosu-mruby-wrapper\gosu\lib64\gosu.lib
+
     - name: Compile wrapper
       shell: msys2 {0}
       run: |
         cd $GITHUB_WORKSPACE
+        mv D:/a/gosu-mruby-wrapper/gosu-mruby-wrapper/gosu/lib64/gosu.lib vendor/gosu/lib64
+        mv D:/a/gosu-mruby-wrapper/gosu-mruby-wrapper/gosu/windows/x64/Release/gosu-ffi.lib vendor/gosu/lib64
         mkdir build
         cd build/
         cmake ..
         make
         mkdir bundle
         mv gosu-mruby.exe bundle/
-        mv ../vendor/gosu/lib64/gosu-ffi.dll bundle/
-        mv ../vendor/gosu/lib64/SDL2.dlll bundle/
+        mv D:/a/gosu-mruby-wrapper/gosu-mruby-wrapper/gosu/lib64/gosu-ffi.dll bundle
+        mv D:/a/gosu-mruby-wrapper/gosu-mruby-wrapper/gosu/lib64/SDL2.dlll bundle/
         mv /ucrt64/bin/libstdc++-6.dll bundle/
         mv /ucrt64/bin/libgcc_s_seh-1.dll bundle/
         mv /ucrt64/bin/libwinpthread-1.dll bundle/
@@ -70,9 +78,26 @@ jobs:
     - name: Install requirements of Gosu
       run: sudo apt install build-essential libsdl2-dev libgl1-mesa-dev libgmp-dev libfontconfig1-dev
 
+    - name: Compile Gosu
+      run: |
+        wget https://github.com/gosu/gosu/archive/refs/tags/v$GOSU_VERSION.tar.gz
+        tar -xf v$GOSU_VERSION.tar.gz
+        mv gosu-$GOSU_VERSION gosu
+        cd gosu/
+        mkdir build
+        cd build/
+        cmake -DCMAKE_BUILD_TYPE=Release ..
+        make
+        mv libgosu.so ../lib64
+        mv ffi/libgosu-ffi.so ../lib64
+        cd ..
+        cd ..
+
     - name: Compile wrapper
       run: |
         cd $GITHUB_WORKSPACE
+        cp gosu/lib64/libgosu.so gosu-mruby-wrapper/vendor/gosu/lib64/libgosu.so
+        cp gosu/lib64/libgosu-ffi.so gosu-mruby-wrapper/vendor/gosu/lib64/libgosu-ffi.so
         mkdir build
         cd build
         cmake ..
