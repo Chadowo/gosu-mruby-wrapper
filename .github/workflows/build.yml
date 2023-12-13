@@ -51,17 +51,14 @@ jobs:
       shell: msys2 {0}
       run: |
         cd $GITHUB_WORKSPACE
-        mkdir vendor/gosu
-        mkdir vendor/gosu/lib64
+        mkdir vendor/gosu && mkdir vendor/gosu/lib64
         mv D:/a/gosu-mruby-wrapper/gosu-mruby-wrapper/gosu/lib64/gosu.lib vendor/gosu/lib64
         mv D:/a/gosu-mruby-wrapper/gosu-mruby-wrapper/gosu/windows/x64/Release/gosu-ffi.lib vendor/gosu/lib64
         mv D:/a/gosu-mruby-wrapper/gosu-mruby-wrapper/gosu/ffi vendor/gosu/
-        mkdir build
-        cd build/
-        cmake ..
-        make
-        mkdir bundle
-        mv gosu-mruby.exe bundle/
+        cmake -S . -B build -DCMAKE_BUILD_TYPE=Release
+        cmake --build build
+        mkdir bundle/
+        mv build/gosu-mruby.exe bundle/
         mv D:/a/gosu-mruby-wrapper/gosu-mruby-wrapper/gosu/lib64/gosu-ffi.dll bundle/
         mv D:/a/gosu-mruby-wrapper/gosu-mruby-wrapper/gosu/lib64/SDL2.dll bundle/
         mv /ucrt64/bin/libstdc++-6.dll bundle/
@@ -72,7 +69,7 @@ jobs:
       uses: actions/upload-artifact@v3
       with:
         name: build-win64
-        path: build/bundle
+        path: bundle
 
   linux:
     runs-on: ubuntu-latest
@@ -104,12 +101,10 @@ jobs:
     - name: Compile wrapper
       run: |
         cd $GITHUB_WORKSPACE
-        mkdir build
-        cd build
-        cmake -DCMAKE_BUILD_TYPE=Release ..
-        make
-        mkdir bundle
-        mv gosu-mruby bundle/
+        cmake -S . -B build -DCMAKE_BUILD_TYPE=Release
+        cmake --build build
+        mkdir bundle/
+        mv build/gosu-mruby bundle/
         mv ../vendor/gosu/lib64/libgosu.so bundle/
         mv ../vendor/gosu/lib64/libgosu-ffi.so bundle/
 
@@ -117,4 +112,4 @@ jobs:
       uses: actions/upload-artifact@v3
       with:
         name: build-linux64
-        path: build/bundle
+        path: bundle
