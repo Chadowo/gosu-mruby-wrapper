@@ -69,7 +69,7 @@ jobs:
       uses: actions/upload-artifact@v3
       with:
         name: build-win64
-        path: gosu-mruby-wrapper/gosu-mruby-wrapper/build/bundle
+        path: gosu-mruby-wrapper/build/bundle
 
   linux:
     runs-on: ubuntu-latest
@@ -113,4 +113,4 @@ jobs:
       uses: actions/upload-artifact@v3
       with:
         name: build-linux64
-        path: gosu-mruby-wrapper/gosu-mruby-wrapper/build/bundle
+        path: gosu-mruby-wrapper/build/bundle
