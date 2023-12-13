@@ -58,7 +58,7 @@ jobs:
         cmake -S . -B build -DCMAKE_BUILD_TYPE=Release
         cd build/ && make && cd ..
         mkdir bundle/
-        strip gosu-mruby.exe
+        strip build/gosu-mruby.exe
         mv build/gosu-mruby.exe bundle/
         mv D:/a/gosu-mruby-wrapper/gosu-mruby-wrapper/gosu/lib64/gosu-ffi.dll bundle/
         mv D:/a/gosu-mruby-wrapper/gosu-mruby-wrapper/gosu/lib64/SDL2.dll bundle/
