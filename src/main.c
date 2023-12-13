@@ -6,6 +6,7 @@
 #include <limits.h>
 
 #include <mruby.h>
+#include <mruby/array.h>
 #include <mruby/variable.h>
 #include <mruby/irep.h>
 #include <mruby/dump.h>
@@ -28,6 +29,17 @@
 
 static bool isFused(char* executablePath) {
     return(PHYSFS_mount(executablePath, NULL, 1));
+}
+
+static void forwardArguments(mrb_state* mrb, int argc, char** argv, int offset) {
+    mrb_value ARGV = mrb_ary_new_capa(mrb, argc);
+
+    for(int i = 1 + offset; i < argc; i++) {
+        mrb_ary_push(mrb, ARGV, mrb_str_new_cstr(mrb, argv[i]));
+
+    }
+
+    mrb_define_global_const(mrb, "ARGV", ARGV);
 }
 
 static void loadRubyFile(mrb_state* mrb, char* fileName, FILE* fp) {
@@ -70,35 +82,37 @@ static void loadGame(mrb_state* mrb, char* path, int argc, char* argv[]) {
             return;
         }
 
+        forwardArguments(mrb, argc, argv, 0);
         initFused(mrb);
         loadFusedRubyFile(mrb, mrb_str_new_cstr(mrb, "main.rb"), false);
     } else {
-        // Fallback to command line input
-        if(argc > 1) {
-            FILE* inputFile = fopen(argv[1], "r");
-            if(inputFile == NULL) {
-                printf("Path %s is invalid!\n", argv[1]);
-                return;
-            }
+        // Load entrypoint file in the current directory
+        char cwd[PATH_MAX];
+        char fileName[] = "boot.rb";
+        if(getcwd(cwd, sizeof(cwd)) != NULL) {
+            // Try to open and execute the file
+            char fileSeparator[2] = {FILE_SEPARATOR, '\0'}; // Make a string out of the char
+            strncat(cwd, fileSeparator, 1);
+            strncat(cwd, fileName, sizeof(cwd) - strlen(cwd) - 1);
 
-            loadRubyFile(mrb, argv[1], inputFile);
+            FILE* entryPoint = fopen(cwd, "r");
+            if(entryPoint != NULL) {
+                forwardArguments(mrb, argc, argv, 0);
+                loadRubyFile(mrb, fileName, entryPoint);
+                fclose(entryPoint);
+            } else {
+                // Fallback to command line input
+                if(argc > 1) {
+                    FILE* inputFile = fopen(argv[1], "r");
+                    if(inputFile == NULL) {
+                        printf("Path %s is invalid!\n", argv[1]);
+                        return;
+                    }
+                    // Skip an argument since it is the file path
+                    forwardArguments(mrb, argc, argv, 1);
+                    loadRubyFile(mrb, argv[1], inputFile);
 
-            fclose(inputFile);
-        } else {
-            // Load entrypoint file in the current directory
-            char cwd[PATH_MAX];
-            char fileName[] = "boot.rb";
-
-            if(getcwd(cwd, sizeof(cwd)) != NULL) {
-                // Try to open and execute the file
-                char fileSeparator[2] = {FILE_SEPARATOR, '\0'}; // Make a string out of the char
-                strncat(cwd, fileSeparator, 1);
-                strncat(cwd, fileName, sizeof(cwd) - strlen(cwd) - 1);
-
-                FILE* entryPoint = fopen(cwd, "r");
-                if(entryPoint != NULL) {
-                    loadRubyFile(mrb, fileName, entryPoint);
-                    fclose(entryPoint);
+                    fclose(inputFile);
                 } else {
                     // Print info and usage
                     printf("Version: %d.%d.%d (%s)\n",
@@ -107,6 +121,7 @@ static void loadGame(mrb_state* mrb, char* path, int argc, char* argv[]) {
                     printf("Usage: %s [inputfile]\n", path);
                     printf("\n");
                     printf("[inputfile]\tEither a .rb or .mrb file\n");
+                    return;
                 }
             }
         }

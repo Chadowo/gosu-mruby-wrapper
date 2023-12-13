@@ -7,6 +7,11 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+### Added
+
+- Argument forwarding: now you can pass command line arguments that will be
+  forwarded to your script (in `ARGV`).
+
 ## [0.0.3] - 2023-12-10
 
 ### Added
