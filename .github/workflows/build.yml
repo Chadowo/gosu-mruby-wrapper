@@ -51,6 +51,7 @@ jobs:
         mkdir vendor/gosu/lib64
         mv D:/a/gosu-mruby-wrapper/gosu-mruby-wrapper/gosu/lib64/gosu.lib vendor/gosu/lib64
         mv D:/a/gosu-mruby-wrapper/gosu-mruby-wrapper/gosu/windows/x64/Release/gosu-ffi.lib vendor/gosu/lib64
+        mv D:/a/gosu-mruby-wrapper/gosu-mruby-wrapper/gosu/ffi vendor/gosu/
         mkdir build
         cd build/
         cmake ..
