@@ -108,7 +108,7 @@ jobs:
         mv gosu-mruby bundle/
         mv ../vendor/gosu/lib64/libgosu.so bundle/
         mv ../vendor/gosu/lib64/libgosu-ffi.so bundle/
-        mv bundle
+        cd bundle
         pwd
 
     - name: Generate final artifact
