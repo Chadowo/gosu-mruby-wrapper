@@ -59,8 +59,8 @@ jobs:
         cmake --build build
         mkdir bundle/
         mv build/gosu-mruby.exe bundle/
-        mv D:/a/gosu-mruby-wrapper/gosu-mruby-wrapper/gosu/lib64/gosu-ffi.dll bundle/
-        mv D:/a/gosu-mruby-wrapper/gosu-mruby-wrapper/gosu/lib64/SDL2.dll bundle/
+        mv vendor/gosu/lib64/libgosu.so bundle/
+        mv vendor/gosu/lib64/libgosu-ffi.so bundle/
         mv /ucrt64/bin/libstdc++-6.dll bundle/
         mv /ucrt64/bin/libgcc_s_seh-1.dll bundle/
         mv /ucrt64/bin/libwinpthread-1.dll bundle/
@@ -105,8 +105,8 @@ jobs:
         cmake --build build
         mkdir bundle/
         mv build/gosu-mruby bundle/
-        mv ../vendor/gosu/lib64/libgosu.so bundle/
-        mv ../vendor/gosu/lib64/libgosu-ffi.so bundle/
+        mv vendor/gosu/lib64/libgosu.so bundle/
+        mv vendor/gosu/lib64/libgosu-ffi.so bundle/
 
     - name: Generate final artifact
       uses: actions/upload-artifact@v3
