@@ -1,4 +1,5 @@
 cmake_minimum_required(VERSION 3.22.1)
+include(ExternalProject)
 
 project(GosuMRubyWrapper
         VERSION 0.0.3
@@ -33,8 +34,31 @@ set(DEFINES -DMRB_INT64 -DMRB_USE_CXX_EXCEPTION -DMRB_USE_CXX_ABI
             -DMRB_DEBUG -DMRB_USE_RATIONAL -DMRB_USE_COMPLEX
             -DMRB_USE_BIGINT)
 
+# TODO: build Gosu?
+
+# Bulding MRuby
+set(MRUBY_DIR ${CMAKE_SOURCE_DIR}/vendor/mruby)
+set(MRUBY_LIB ${MRUBY_DIR}/build/host/lib/libmruby.a)
+if(UNIX)
+  set(MRUBY_CONFIG ${CMAKE_SOURCE_DIR}/scripts/mruby/linux.rb)
+else()
+  set(MRUBY_CONFIG ${CMAKE_SOURCE_DIR}/scripts/mruby/windows.rb)
+endif()
+ExternalProject_Add(mruby
+                    GIT_REPOSITORY https://github.com/mruby/mruby.git
+                    GIT_TAG 3.2.0
+                    SOURCE_DIR ${MRUBY_DIR}
+                    CONFIGURE_COMMAND ""
+                    BUILD_IN_SOURCE TRUE
+                    BUILD_COMMAND
+                      COMMAND rake MRUBY_CONFIG=${MRUBY_CONFIG}
+                    INSTALL_COMMAND ""
+                    BUILD_BYPRODUCTS ${GOSU_LIB})
+
 # The main executable
 add_executable(GosuMRuby ${SOURCE} ${WHEREAMI_SOURCE} ${PHYSFS_SOURCE})
+add_dependencies(GosuMRuby mruby)
+
 set_target_properties(GosuMRuby PROPERTIES OUTPUT_NAME "gosu-mruby")
 
 target_compile_definitions(GosuMRuby PUBLIC ${DEFINES})
@@ -47,8 +71,8 @@ target_include_directories(GosuMRuby SYSTEM PUBLIC vendor/mruby/include/)
 target_include_directories(GosuMRuby SYSTEM PUBLIC vendor/whereami/include/)
 target_include_directories(GosuMRuby SYSTEM PUBLIC vendor/physfs/src/)
 
-target_link_directories(GosuMRuby PUBLIC vendor/gosu/)
-target_link_directories(GosuMRuby PUBLIC vendor/mruby/)
+target_link_directories(GosuMRuby PUBLIC vendor/gosu/lib64)
+target_link_directories(GosuMRuby PUBLIC vendor/mruby/build/host/lib)
 
 # TODO: specify Linux
 if(UNIX)

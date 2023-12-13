@@ -9,18 +9,23 @@ env:
 permissions:
   contents: read
 
-# FIXME: Automatically get the version, and really don't hardcode everything
 jobs:
   windows:
     runs-on: windows-2022
 
-    env:
-      MRUBY_CONFIG: ../gosu-mruby-wrapper/scripts/mruby/windows.rb
     steps:
-    - uses: actions/checkout@v3
-    - uses: ilammy/msvc-dev-cmd@v1
-    - uses: msys2/setup-msys2@v2
+    - name: Checkout repository
+      uses: actions/checkout@v4
       with:
+        ref: simplify-build
+
+    - name: Setup MSVC
+      uses: ilammy/msvc-dev-cmd@v1
+
+    - name: Setup MSYS2
+      uses: msys2/setup-msys2@v2
+      with:
+        path-type: inherit
         msystem: UCRT64
         install: >-
           ruby
@@ -29,6 +34,7 @@ jobs:
           cmake
           mingw-w64-ucrt-x86_64-gcc
           mingw-w64-ucrt-x86_64-dlfcn
+          mingw-w64-ucrt-x86_64-binutils
 
     - name: Add MSBuild to PATH
       uses: microsoft/setup-msbuild@v1.1
@@ -40,35 +46,21 @@ jobs:
         ren gosu-$env:GOSU_VERSION\ gosu
         msbuild gosu\windows\Gosu.sln /p:Configuration=Release
         ren D:\a\gosu-mruby-wrapper\gosu-mruby-wrapper\gosu\lib64\Gosu.lib D:\a\gosu-mruby-wrapper\gosu-mruby-wrapper\gosu\lib64\gosu.lib
-        move D:\a\gosu-mruby-wrapper\gosu-mruby-wrapper\gosu\lib64\gosu-ffi.dll D:\a\gosu-mruby-wrapper\gosu-mruby-wrapper\gosu # Don't leave the dll in this dir
-        move D:\a\gosu-mruby-wrapper\gosu-mruby-wrapper\gosu\windows\x64\Release\gosu-ffi.lib D:\a\gosu-mruby-wrapper\gosu-mruby-wrapper\gosu\lib64
-
-    - name: Compile MRuby
-      shell: msys2 {0}
-      run: |
-        git clone https://github.com/Chadowo/gosu-mruby-wrapper.git
-        wget https://github.com/mruby/mruby/archive/refs/tags/$MRUBY_VERSION.tar.gz
-        tar -xf $MRUBY_VERSION.tar.gz
-        mv mruby-$MRUBY_VERSION/ mruby/
-        cd mruby/
-        rake
-        cd ..
 
     - name: Compile wrapper
       shell: msys2 {0}
       run: |
-        mkdir D:/a/gosu-mruby-wrapper/gosu-mruby-wrapper/gosu-mruby-wrapper/vendor/gosu
-        cp D:/a/gosu-mruby-wrapper/gosu-mruby-wrapper/gosu/lib64/gosu.lib D:/a/gosu-mruby-wrapper/gosu-mruby-wrapper/gosu-mruby-wrapper/vendor/gosu/libgosu.lib
-        cp D:/a/gosu-mruby-wrapper/gosu-mruby-wrapper/gosu/lib64/gosu-ffi.lib D:/a/gosu-mruby-wrapper/gosu-mruby-wrapper/gosu-mruby-wrapper/vendor/gosu/libgosu-ffi.lib
-        cp D:/a/gosu-mruby-wrapper/gosu-mruby-wrapper/mruby/build/host/lib/libmruby.a D:/a/gosu-mruby-wrapper/gosu-mruby-wrapper/gosu-mruby-wrapper/vendor/mruby/libmruby.a
-        cd gosu-mruby-wrapper/
-        mkdir build
-        cd build/
-        cmake ..
-        make
-        mkdir bundle
-        mv gosu-mruby.exe bundle/
-        mv D:/a/gosu-mruby-wrapper/gosu-mruby-wrapper/gosu/gosu-ffi.dll bundle/
+        cd $GITHUB_WORKSPACE
+        mkdir vendor/gosu && mkdir vendor/gosu/lib64
+        mv D:/a/gosu-mruby-wrapper/gosu-mruby-wrapper/gosu/lib64/gosu.lib vendor/gosu/lib64
+        mv D:/a/gosu-mruby-wrapper/gosu-mruby-wrapper/gosu/windows/x64/Release/gosu-ffi.lib vendor/gosu/lib64
+        mv D:/a/gosu-mruby-wrapper/gosu-mruby-wrapper/gosu/ffi vendor/gosu/
+        cmake -S . -B build -DCMAKE_BUILD_TYPE=Release
+        cd build/ && make && cd ..
+        mkdir bundle/
+        strip build/gosu-mruby.exe
+        mv build/gosu-mruby.exe bundle/
+        mv D:/a/gosu-mruby-wrapper/gosu-mruby-wrapper/gosu/lib64/gosu-ffi.dll bundle/
         mv D:/a/gosu-mruby-wrapper/gosu-mruby-wrapper/gosu/lib64/SDL2.dll bundle/
         mv /ucrt64/bin/libstdc++-6.dll bundle/
         mv /ucrt64/bin/libgcc_s_seh-1.dll bundle/
@@ -78,15 +70,15 @@ jobs:
       uses: actions/upload-artifact@v3
       with:
         name: build-win64
-        path: gosu-mruby-wrapper/build/bundle
+        path: bundle
 
   linux:
-    runs-on: ubuntu-22.04
-
-    env:
-      MRUBY_CONFIG: ../gosu-mruby-wrapper/scripts/mruby/linux.rb
+    runs-on: ubuntu-latest
     steps:
-    - uses: actions/checkout@v3
+    - name: Checkout repository
+      uses: actions/checkout@v4
+      with:
+        ref: simplify-build
 
     - name: Install requirements of Gosu
       run: sudo apt install build-essential libsdl2-dev libgl1-mesa-dev libgmp-dev libfontconfig1-dev
@@ -101,39 +93,25 @@ jobs:
         cd build/
         cmake -DCMAKE_BUILD_TYPE=Release ..
         make
-        mv libgosu.so ../lib64
-        mv ffi/libgosu-ffi.so ../lib64
-        cd ..
-        cd ..
-
-    - name: Compile MRuby
-      run: |
-        git clone https://github.com/Chadowo/gosu-mruby-wrapper.git
-        wget https://github.com/mruby/mruby/archive/refs/tags/$MRUBY_VERSION.tar.gz
-        tar -xf $MRUBY_VERSION.tar.gz
-        mv mruby-$MRUBY_VERSION/ mruby/
-        cd mruby/
-        rake
-        cd ..
+        mkdir $GITHUB_WORKSPACE/vendor/gosu
+        mkdir $GITHUB_WORKSPACE/vendor/gosu/lib64
+        mv libgosu.so $GITHUB_WORKSPACE/vendor/gosu/lib64
+        mv ffi/libgosu-ffi.so $GITHUB_WORKSPACE/vendor/gosu/lib64
+        mv ../ffi $GITHUB_WORKSPACE/vendor/gosu
 
     - name: Compile wrapper
       run: |
-        mkdir gosu-mruby-wrapper/vendor/gosu
-        cp gosu/lib64/libgosu.so gosu-mruby-wrapper/vendor/gosu/libgosu.so
-        cp gosu/lib64/libgosu-ffi.so gosu-mruby-wrapper/vendor/gosu/libgosu-ffi.so
-        cp mruby/build/host/lib/libmruby.a gosu-mruby-wrapper/vendor/mruby/libmruby.a
-        cd gosu-mruby-wrapper
-        mkdir build
-        cd build
-        cmake -DCMAKE_BUILD_TYPE=Release ..
-        make
-        mkdir bundle
-        mv gosu-mruby bundle/
-        mv ../vendor/gosu/libgosu.so bundle/
-        mv ../vendor/gosu/libgosu-ffi.so bundle/
+        cd $GITHUB_WORKSPACE
+        cmake -S . -B build -DCMAKE_BUILD_TYPE=Release
+        cmake --build build
+        mkdir bundle/
+        strip build/gosu-mruby
+        mv build/gosu-mruby bundle/
+        mv vendor/gosu/lib64/libgosu.so bundle/
+        mv vendor/gosu/lib64/libgosu-ffi.so bundle/
 
     - name: Generate final artifact
       uses: actions/upload-artifact@v3
       with:
         name: build-linux64
-        path: gosu-mruby-wrapper/build/bundle
+        path: bundle
