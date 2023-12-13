@@ -19,10 +19,8 @@ jobs:
       with:
         ref: simplify-build
 
-    - uses: ilammy/msvc-dev-cmd@v1
-
-    - name: Add MSBuild to PATH
-      uses: microsoft/setup-msbuild@v1.1
+    - name: Setup MSVC
+      uses: ilammy/msvc-dev-cmd@v1
 
     - name: Setup MSYS2
       uses: msys2/setup-msys2@v2
@@ -37,6 +35,9 @@ jobs:
           mingw-w64-ucrt-x86_64-gcc
           mingw-w64-ucrt-x86_64-dlfcn
           mingw-w64-ucrt-x86_64-binutils
+
+    - name: Add MSBuild to PATH
+      uses: microsoft/setup-msbuild@v1.1
 
     - name: Compile Gosu
       run: |
