@@ -9,7 +9,6 @@ env:
 permissions:
   contents: read
 
-# FIXME: Automatically get the version, and really don't hardcode everything
 jobs:
   windows:
     runs-on: windows-2022
@@ -88,6 +87,8 @@ jobs:
         cd build/
         cmake -DCMAKE_BUILD_TYPE=Release ..
         make
+        mkdir $GITHUB_WORKSPACE/vendor/gosu
+        mkdir $GITHUB_WORKSPACE/vendor/gosu/lib64
         mv libgosu.so $GITHUB_WORKSPACE/vendor/gosu/lib64
         mv ffi/libgosu-ffi.so $GITHUB_WORKSPACE/vendor/gosu/lib64
 
