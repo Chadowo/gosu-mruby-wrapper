@@ -47,6 +47,8 @@ jobs:
       shell: msys2 {0}
       run: |
         cd $GITHUB_WORKSPACE
+        mkdir vendor/gosu
+        mkdir vendor/gosu/lib64
         mv D:/a/gosu-mruby-wrapper/gosu-mruby-wrapper/gosu/lib64/gosu.lib vendor/gosu/lib64
         mv D:/a/gosu-mruby-wrapper/gosu-mruby-wrapper/gosu/windows/x64/Release/gosu-ffi.lib vendor/gosu/lib64
         mkdir build
@@ -55,7 +57,7 @@ jobs:
         make
         mkdir bundle
         mv gosu-mruby.exe bundle/
-        mv D:/a/gosu-mruby-wrapper/gosu-mruby-wrapper/gosu/lib64/gosu-ffi.dll bundle
+        mv D:/a/gosu-mruby-wrapper/gosu-mruby-wrapper/gosu/lib64/gosu-ffi.dll bundle/
         mv D:/a/gosu-mruby-wrapper/gosu-mruby-wrapper/gosu/lib64/SDL2.dlll bundle/
         mv /ucrt64/bin/libstdc++-6.dll bundle/
         mv /ucrt64/bin/libgcc_s_seh-1.dll bundle/
