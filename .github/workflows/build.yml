@@ -14,9 +14,11 @@ jobs:
     runs-on: windows-2022
 
     steps:
+    - name: Checkout repository
     - uses: actions/checkout@v4
       with:
         ref: simplify-build
+
     - uses: ilammy/msvc-dev-cmd@v1
 
     - name: Add MSBuild to PATH
@@ -69,11 +71,12 @@ jobs:
       uses: actions/upload-artifact@v3
       with:
         name: build-win64
-        path: gosu-mruby-wrapper/build/bundle
+        path: gosu-mruby-wrapper/gosu-mruby-wrapper/build/bundle
 
   linux:
     runs-on: ubuntu-latest
     steps:
+    - name: Checkout repository
     - uses: actions/checkout@v4
       with:
         ref: simplify-build
@@ -113,4 +116,4 @@ jobs:
       uses: actions/upload-artifact@v3
       with:
         name: build-linux64
-        path: gosu-mruby-wrapper/build/bundle
+        path: gosu-mruby-wrapper/gosu-mruby-wrapper/build/bundle
