@@ -90,7 +90,6 @@ jobs:
         make
         mv libgosu.so ../lib64
         mv ffi/libgosu-ffi.so ../lib64
-        pwd
         cd ..
         cd ..
 
@@ -98,8 +97,9 @@ jobs:
       run: |
         cd $GITHUB_WORKSPACE
         mkdir vendor/gosu
-        cp gosu/lib64/libgosu.so vendor/gosu/lib64/libgosu.so
-        cp gosu/lib64/libgosu-ffi.so vendor/gosu/lib64/libgosu-ffi.so
+        mkdir vendor/gosu/lib64
+        cp gosu-mruby-wrapper/gosu-mruby-wrapper/gosu/lib64/libgosu.so vendor/gosu/lib64/libgosu.so
+        cp gosu-mruby-wrapper/gosu-mruby-wrapper/gosu/lib64/libgosu-ffi.so vendor/gosu/lib64/libgosu-ffi.so
         mkdir build
         cd build
         cmake ..
