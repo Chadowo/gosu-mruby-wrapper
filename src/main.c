@@ -147,6 +147,7 @@ int main(int argc, char* argv[]) {
     size_t length = wai_getExecutablePath(NULL, 0, NULL);
     char* path = (char *)malloc(length + 1);
     wai_getExecutablePath(path, length, NULL);
+    path[length] = '\0';
 
     // FIXME: Calling PHYSFS_init before we get the path to the executable
     //        will add some garbage at the end of the path, thus rendering
