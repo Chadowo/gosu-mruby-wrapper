@@ -7,6 +7,11 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+### Fixed
+
+- Sometimes the path of the executable would not work, thus fused moded did not.
+  This was because the path string wasn't NULL terminated.
+
 # [0.0.4] - 2023-12-14
 
 ### Added
