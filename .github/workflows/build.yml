@@ -16,8 +16,6 @@ jobs:
     steps:
     - name: Checkout repository
       uses: actions/checkout@v4
-      with:
-        ref: simplify-build
 
     - name: Setup MSVC
       uses: ilammy/msvc-dev-cmd@v1
@@ -77,8 +75,6 @@ jobs:
     steps:
     - name: Checkout repository
       uses: actions/checkout@v4
-      with:
-        ref: simplify-build
 
     - name: Install requirements of Gosu
       run: sudo apt install build-essential libsdl2-dev libgl1-mesa-dev libgmp-dev libfontconfig1-dev
@@ -88,9 +84,8 @@ jobs:
         wget https://github.com/gosu/gosu/archive/refs/tags/v$GOSU_VERSION.tar.gz
         tar -xf v$GOSU_VERSION.tar.gz
         mv gosu-$GOSU_VERSION gosu
-        cd gosu/
-        mkdir build
-        cd build/
+        mkdir gosu/build/
+        cd gosu/build/
         cmake -DCMAKE_BUILD_TYPE=Release ..
         make
         mkdir $GITHUB_WORKSPACE/vendor/gosu
