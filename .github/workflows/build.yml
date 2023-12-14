@@ -100,7 +100,6 @@ jobs:
         cmake -S . -B build -DCMAKE_BUILD_TYPE=Release
         cmake --build build
         mkdir bundle/
-        strip build/gosu-mruby
         mv build/gosu-mruby bundle/
         mv vendor/gosu/lib64/libgosu.so bundle/
         mv vendor/gosu/lib64/libgosu-ffi.so bundle/
