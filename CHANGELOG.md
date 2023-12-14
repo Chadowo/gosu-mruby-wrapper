@@ -12,6 +12,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Argument forwarding: now you can pass command line arguments that will be
   forwarded to your script (in `ARGV`).
 
+### Changed
+
+- MRuby is built with the wrapper, now you only need to build Gosu separately.
+
 ### Fixed
 
 - Fused `require` and `load` would raise an invalid path error on paths that
