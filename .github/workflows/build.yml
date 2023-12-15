@@ -70,6 +70,47 @@ jobs:
         name: build-win64
         path: bundle
 
+  macos:
+    runs-on: macos-latest
+    steps:
+    - name: Checkout repository
+      uses: actions/checkout@v4
+
+    - name: Install requirements of Gosu
+      run: brew install sdl2
+
+    - name: Compile Gosu
+      run: |
+        wget https://github.com/gosu/gosu/archive/refs/tags/v$GOSU_VERSION.tar.gz
+        tar -xf v$GOSU_VERSION.tar.gz
+        mv gosu-$GOSU_VERSION gosu
+        mkdir gosu/build/
+        cd gosu/build/
+        cmake -DCMAKE_BUILD_TYPE=Release ..
+        make
+        mkdir $GITHUB_WORKSPACE/vendor/gosu
+        mkdir $GITHUB_WORKSPACE/vendor/gosu/lib64
+        mv libgosu.dylib $GITHUB_WORKSPACE/vendor/gosu/lib64
+        mv ffi/libgosu-ffi.dylib $GITHUB_WORKSPACE/vendor/gosu/lib64
+        mv ../ffi $GITHUB_WORKSPACE/vendor/gosu
+
+    - name: Compile wrapper
+      run: |
+        cd $GITHUB_WORKSPACE
+        cmake -S . -B build -DCMAKE_BUILD_TYPE=Release
+        cmake --build build
+        mkdir bundle/
+        strip build/gosu-mruby
+        mv build/gosu-mruby bundle/
+        mv vendor/gosu/lib64/libgosu.dylib bundle/
+        mv vendor/gosu/lib64/libgosu-ffi.dylib bundle/
+
+    - name: Generate final artifact
+      uses: actions/upload-artifact@v3
+      with:
+        name: build-macos
+        path: bundle
+
   linux:
     runs-on: ubuntu-latest
     steps:
