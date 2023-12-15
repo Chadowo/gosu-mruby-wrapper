@@ -1,5 +1,5 @@
 MRuby::Build.new do |conf|
-  conf.toolchain
+  conf.toolchain :gcc
 
   # Include gems
   conf.gembox File.expand_path('gosu', File.dirname(__FILE__))
@@ -9,5 +9,5 @@ MRuby::Build.new do |conf|
   conf.cc.flags << '-fpermissive' # Needed for mruby-require
 
   conf.enable_debug
-  #conf.enable_cxx_abi
+  conf.enable_cxx_abi
 end
