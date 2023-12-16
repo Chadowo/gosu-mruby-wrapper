@@ -39,10 +39,10 @@ set(DEFINES -DMRB_INT64 -DMRB_USE_CXX_EXCEPTION -DMRB_USE_CXX_ABI
 # Bulding MRuby
 set(MRUBY_DIR ${CMAKE_SOURCE_DIR}/vendor/mruby)
 set(MRUBY_LIB ${MRUBY_DIR}/build/host/lib/libmruby.a)
-if(UNIX)
-  set(MRUBY_CONFIG ${CMAKE_SOURCE_DIR}/scripts/mruby/linux.rb)
-elseif(APPLE)
+if(APPLE)
   set(MRUBY_CONFIG ${CMAKE_SOURCE_DIR}/scripts/mruby/macos.rb)
+elseif(UNIX)
+  set(MRUBY_CONFIG ${CMAKE_SOURCE_DIR}/scripts/mruby/linux.rb)
 else()
   set(MRUBY_CONFIG ${CMAKE_SOURCE_DIR}/scripts/mruby/windows.rb)
 endif()

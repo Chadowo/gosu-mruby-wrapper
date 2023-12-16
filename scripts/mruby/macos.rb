@@ -9,5 +9,5 @@ MRuby::Build.new do |conf|
   conf.cc.flags << '-fpermissive' # Needed for mruby-require
 
   conf.enable_debug
-  conf.enable_cxx_abi
+  #conf.enable_cxx_abi
 end
