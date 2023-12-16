@@ -1,6 +1,8 @@
 cmake_minimum_required(VERSION 3.22.1)
 include(ExternalProject)
 
+set(CMAKE_OSX_ARCHITECTURES "x86_64" CACHE STRING "" FORCE) # Build for x86_64 on MacOS
+
 project(GosuMRubyWrapper
         VERSION 0.0.4
         LANGUAGES C)
