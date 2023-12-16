@@ -77,7 +77,6 @@ target_link_directories(GosuMRuby PUBLIC vendor/gosu/lib64)
 target_link_directories(GosuMRuby PUBLIC vendor/mruby/build/host/lib)
 
 if(APPLE)
-  set(CMAKE_EXE_LINKER_FLAGS "${CMAKE_EXE_LINKER_FLAGS} -Wl,-rpath='@executable_path'")
   target_link_libraries(GosuMRuby -lmruby)
   target_link_libraries(GosuMRuby -lm)
   target_link_libraries(GosuMRuby -lgosu-ffi)
