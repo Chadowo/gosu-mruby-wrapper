@@ -8,5 +8,5 @@ MRuby::GemBox.new do |conf|
   # line in the mgem spec https://github.com/iij/mruby-regexp-pcre/blob/master/mrbgem.rake#L31C3-L31C69
   # maybe the fact that we're using MSYS2 may not set the correct platform when compiling.
   #conf.gem github: 'iij/mruby-regexp-pcre'
-  conf.gem github: 'mattn/mruby-require'
+  conf.gem github: 'chadowo/mruby-require'
 end
