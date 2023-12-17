@@ -17,9 +17,11 @@ if(GIT_FOUND)
 endif()
 configure_file(include/config.h.in config.h)
 
-enable_language(OBJCXX)
 set(CMAKE_CXX_STANDARD 20)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
+if(APPLE)
+  enable_language(OBJCXX)
+endif()
 
 # Source files
 set(SOURCE src/main.c src/fused.c)
