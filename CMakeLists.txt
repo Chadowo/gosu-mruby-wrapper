@@ -26,6 +26,12 @@ endif()
 # Source files
 set(SOURCE src/main.c src/fused.c)
 set(WHEREAMI_SOURCE vendor/whereami/src/whereami.c)
+file(GLOB PHYSFS_SOURCE vendor/physfs/src/*.c)
+
+# Disable warning for physicsfs source and built it as c source
+set_source_files_properties(${PHYSFS_SOURCE}
+                            PROPERTIES
+                            COMPILE_FLAGS "-x c -w")
 
 set(WARNINGS -pedantic -Wall -Wextra -Wshadow -Wpointer-arith
              -Wcast-qual -Wno-unused-parameter)
@@ -56,24 +62,9 @@ ExternalProject_Add(mruby
                     INSTALL_COMMAND ""
                     BUILD_BYPRODUCTS ${GOSU_LIB})
 
-# Building PhysFS
-set(PHYSFS_DIR ${CMAKE_SOURCE_DIR}/vendor/physfs)
-set(PHYSFS_LIB ${PHYSFS_DIR}/build/libphysfs.a)
-ExternalProject_Add(physfs
-                    GIT_REPOSITORY https://github.com/icculus/physfs.git
-                    GIT_TAG release-3.2.0
-                    SOURCE_DIR ${PHYSFS_DIR}
-                    CONFIGURE_COMMAND ""
-                    BUILD_IN_SOURCE TRUE
-                    BUILD_COMMAND
-                      COMMAND cmake -S . -B build -DCMAKE_BUILD_TYPE=Release
-                      COMMAND cmake --build build
-                    INSTALL_COMMAND ""
-                    BUILD_BYPRODUCTS ${GOSU_LIB})
-
 # The main executable
-add_executable(GosuMRuby ${SOURCE} ${WHEREAMI_SOURCE})
-add_dependencies(GosuMRuby mruby physfs)
+add_executable(GosuMRuby ${SOURCE} ${WHEREAMI_SOURCE} ${PHYSFS_SOURCE})
+add_dependencies(GosuMRuby mruby)
 
 set_target_properties(GosuMRuby PROPERTIES OUTPUT_NAME "gosu-mruby")
 
@@ -91,7 +82,6 @@ target_link_directories(GosuMRuby PUBLIC vendor/gosu/lib64)
 target_link_directories(GosuMRuby PUBLIC vendor/mruby/build/host/lib)
 
 if(APPLE)
-  target_link_libraries(GosuMRuby ${PHYSFS_LIB})
   target_link_libraries(GosuMRuby ${IOKIT})
   target_link_libraries(GosuMRuby ${FOUNDATION})
   target_link_libraries(GosuMRuby -lmruby)
@@ -102,7 +92,6 @@ if(APPLE)
   target_link_libraries(GosuMRuby -ldl)
 elseif(UNIX) # TODO: specify Linux
   set(CMAKE_EXE_LINKER_FLAGS "${CMAKE_EXE_LINKER_FLAGS} -Wl,-rpath='$ORIGIN'")
-  target_link_libraries(GosuMRuby ${PHYSFS_LIB})
   target_link_libraries(GosuMRuby -lmruby)
   target_link_libraries(GosuMRuby -lm)
   target_link_libraries(GosuMRuby -lgosu-ffi)
@@ -110,7 +99,6 @@ elseif(UNIX) # TODO: specify Linux
   target_link_libraries(GosuMRuby -lstdc++)
   target_link_libraries(GosuMRuby -ldl)
 else()
-  target_link_libraries(GosuMRuby ${PHYSFS_LIB})
   target_link_libraries(GosuMRuby -lmruby)
   target_link_libraries(GosuMRuby -lws2_32)
   target_link_libraries(GosuMRuby -lgosu-ffi)
