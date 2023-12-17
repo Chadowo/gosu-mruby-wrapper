@@ -1,8 +1,6 @@
 cmake_minimum_required(VERSION 3.22.1)
 include(ExternalProject)
 
-set(CMAKE_OSX_ARCHITECTURES "x86_64" CACHE STRING "" FORCE) # Build for x86_64 on MacOS
-
 project(GosuMRubyWrapper
         VERSION 0.0.4
         LANGUAGES C)
@@ -19,17 +17,11 @@ configure_file(include/config.h.in config.h)
 
 set(CMAKE_CXX_STANDARD 20)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
-if(APPLE)
-  enable_language(OBJCXX)
-endif()
 
 # Source files
 set(SOURCE src/main.c src/fused.c)
 set(WHEREAMI_SOURCE vendor/whereami/src/whereami.c)
 file(GLOB PHYSFS_SOURCE vendor/physfs/src/*.c)
-if(APPLE)
-  file(GLOB PHYSFS_OBJC_SOURCE vendor/physfs/src/*.m)
-endif()
 
 # Disable warning for physicsfs source and built it as c source
 set_source_files_properties(${PHYSFS_SOURCE}
@@ -66,7 +58,7 @@ ExternalProject_Add(mruby
                     BUILD_BYPRODUCTS ${GOSU_LIB})
 
 # The main executable
-add_executable(GosuMRuby ${SOURCE} ${WHEREAMI_SOURCE} ${PHYSFS_SOURCE} ${PHYSFS_OBJC_SOURCE})
+add_executable(GosuMRuby ${SOURCE} ${WHEREAMI_SOURCE} ${PHYSFS_SOURCE})
 add_dependencies(GosuMRuby mruby)
 
 set_target_properties(GosuMRuby PROPERTIES OUTPUT_NAME "gosu-mruby")
