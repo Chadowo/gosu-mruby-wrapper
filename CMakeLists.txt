@@ -18,6 +18,11 @@ configure_file(include/config.h.in config.h)
 set(CMAKE_CXX_STANDARD 20)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
 
+if(APPLE)
+  find_library(IOKIT IOKit)
+  find_library(FOUNDATION Foundation)
+endif()
+
 # Source files
 set(SOURCE src/main.c src/fused.c)
 set(WHEREAMI_SOURCE vendor/whereami/src/whereami.c)
@@ -87,7 +92,8 @@ target_link_directories(GosuMRuby PUBLIC vendor/mruby/build/host/lib)
 
 if(APPLE)
   target_link_libraries(GosuMRuby ${PHYSFS_LIB})
-  target_link_libraries(GosuMRuby -framework IOKit -framework Foundation)
+  target_link_libraries(GosuMRuby ${IOKIT})
+  target_link_libraries(GosuMRuby ${FOUNDATION})
   target_link_libraries(GosuMRuby -lmruby)
   target_link_libraries(GosuMRuby -lm)
   target_link_libraries(GosuMRuby -lgosu-ffi)
