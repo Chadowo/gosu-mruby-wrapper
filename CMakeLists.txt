@@ -17,6 +17,7 @@ if(GIT_FOUND)
 endif()
 configure_file(include/config.h.in config.h)
 
+enable_language(OBJCXX)
 set(CMAKE_CXX_STANDARD 20)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
 
@@ -24,6 +25,9 @@ set(CMAKE_CXX_STANDARD_REQUIRED ON)
 set(SOURCE src/main.c src/fused.c)
 set(WHEREAMI_SOURCE vendor/whereami/src/whereami.c)
 file(GLOB PHYSFS_SOURCE vendor/physfs/src/*.c)
+if(APPLE)
+  file(GLOB PHYSFS_OBJC_SOURCE vendor/physfs/src/*.m)
+endif()
 
 # Disable warning for physicsfs source and built it as c source
 set_source_files_properties(${PHYSFS_SOURCE}
@@ -60,7 +64,7 @@ ExternalProject_Add(mruby
                     BUILD_BYPRODUCTS ${GOSU_LIB})
 
 # The main executable
-add_executable(GosuMRuby ${SOURCE} ${WHEREAMI_SOURCE} ${PHYSFS_SOURCE})
+add_executable(GosuMRuby ${SOURCE} ${WHEREAMI_SOURCE} ${PHYSFS_SOURCE} ${PHYSFS_OBJC_SOURCE})
 add_dependencies(GosuMRuby mruby)
 
 set_target_properties(GosuMRuby PROPERTIES OUTPUT_NAME "gosu-mruby")
