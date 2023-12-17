@@ -87,7 +87,7 @@ target_link_directories(GosuMRuby PUBLIC vendor/mruby/build/host/lib)
 
 if(APPLE)
   target_link_libraries(GosuMRuby ${PHYSFS_LIB})
-  target_link_libraries(GosuMRuby -framework AppKit)
+  target_link_libraries(GosuMRuby -framework IOKit -framework Foundation)
   target_link_libraries(GosuMRuby -lmruby)
   target_link_libraries(GosuMRuby -lm)
   target_link_libraries(GosuMRuby -lgosu-ffi)
