@@ -86,7 +86,7 @@ jobs:
         mv gosu-$GOSU_VERSION gosu
         mkdir gosu/build/
         cd gosu/build/
-        cmake -DCMAKE_BUILD_TYPE=Release -DCMAKE_C_COMPILER=/usr/local/bin/gcc-11 -DCMAKE_CXX_COMPILER=/usr/local/bin/g++-11 ..
+        cmake -DCMAKE_BUILD_TYPE=Release ..
         make
         mkdir $GITHUB_WORKSPACE/vendor/gosu
         mkdir $GITHUB_WORKSPACE/vendor/gosu/lib64
