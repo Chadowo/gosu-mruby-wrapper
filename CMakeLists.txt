@@ -3,7 +3,7 @@ include(ExternalProject)
 
 project(GosuMRubyWrapper
         VERSION 0.0.4
-        LANGUAGES C)
+        LANGUAGES C CXX)
 # Get the Git hash of the last commit and save it
 set(GIT_HASH "unknown")
 find_package(Git)
@@ -57,9 +57,12 @@ ExternalProject_Add(mruby
                     INSTALL_COMMAND ""
                     BUILD_BYPRODUCTS ${GOSU_LIB})
 
+# PhysFS
+add_library(physfs ${PHYSFS_SOURCE})
+
 # The main executable
 add_executable(GosuMRuby ${SOURCE} ${WHEREAMI_SOURCE} ${PHYSFS_SOURCE})
-add_dependencies(GosuMRuby mruby)
+add_dependencies(GosuMRuby mruby physfs)
 
 set_target_properties(GosuMRuby PROPERTIES OUTPUT_NAME "gosu-mruby")
 
@@ -77,6 +80,7 @@ target_link_directories(GosuMRuby PUBLIC vendor/gosu/lib64)
 target_link_directories(GosuMRuby PUBLIC vendor/mruby/build/host/lib)
 
 if(APPLE)
+  target_link_libraries(GosuMRuby physfs)
   target_link_libraries(GosuMRuby -lmruby)
   target_link_libraries(GosuMRuby -lm)
   target_link_libraries(GosuMRuby -lgosu-ffi)
@@ -85,6 +89,7 @@ if(APPLE)
   target_link_libraries(GosuMRuby -ldl)
 elseif(UNIX) # TODO: specify Linux
   set(CMAKE_EXE_LINKER_FLAGS "${CMAKE_EXE_LINKER_FLAGS} -Wl,-rpath='$ORIGIN'")
+  target_link_libraries(GosuMRuby physfs)
   target_link_libraries(GosuMRuby -lmruby)
   target_link_libraries(GosuMRuby -lm)
   target_link_libraries(GosuMRuby -lgosu-ffi)
@@ -92,6 +97,7 @@ elseif(UNIX) # TODO: specify Linux
   target_link_libraries(GosuMRuby -lstdc++)
   target_link_libraries(GosuMRuby -ldl)
 else()
+  target_link_libraries(GosuMRuby physfs)
   target_link_libraries(GosuMRuby -lmruby)
   target_link_libraries(GosuMRuby -lws2_32)
   target_link_libraries(GosuMRuby -lgosu-ffi)
