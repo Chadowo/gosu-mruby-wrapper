@@ -27,6 +27,9 @@ endif()
 set(SOURCE src/main.c src/fused.c)
 set(WHEREAMI_SOURCE vendor/whereami/src/whereami.c)
 file(GLOB PHYSFS_SOURCE vendor/physfs/src/*.c)
+if(APPLE)
+  set(PHYSFS_M_SRC vendor/physfs/src/physfs_platform_apple.m)
+endif()
 
 # Disable warning for physicsfs source and built it as c source
 set_source_files_properties(${PHYSFS_SOURCE}
@@ -62,9 +65,15 @@ ExternalProject_Add(mruby
                     INSTALL_COMMAND ""
                     BUILD_BYPRODUCTS ${GOSU_LIB})
 
+# PhysFS
+add_library(physfs ${PHYSFS_SOURCE} ${PHYSFS_M_SRC})
+if(APPLE)
+  target_link_libraries(physfs ${IOKIT} ${FOUNDATION})
+endif()
+
 # The main executable
-add_executable(GosuMRuby ${SOURCE} ${WHEREAMI_SOURCE} ${PHYSFS_SOURCE})
-add_dependencies(GosuMRuby mruby)
+add_executable(GosuMRuby ${SOURCE} ${WHEREAMI_SOURCE})
+add_dependencies(GosuMRuby mruby physfs)
 
 set_target_properties(GosuMRuby PROPERTIES OUTPUT_NAME "gosu-mruby")
 
@@ -84,6 +93,7 @@ target_link_directories(GosuMRuby PUBLIC vendor/mruby/build/host/lib)
 if(APPLE)
   target_link_libraries(GosuMRuby ${IOKIT})
   target_link_libraries(GosuMRuby ${FOUNDATION})
+  target_link_libraries(GosuMRuby physfs)
   target_link_libraries(GosuMRuby -lmruby)
   target_link_libraries(GosuMRuby -lm)
   target_link_libraries(GosuMRuby -lgosu-ffi)
@@ -92,6 +102,7 @@ if(APPLE)
   target_link_libraries(GosuMRuby -ldl)
 elseif(UNIX) # TODO: specify Linux
   set(CMAKE_EXE_LINKER_FLAGS "${CMAKE_EXE_LINKER_FLAGS} -Wl,-rpath='$ORIGIN'")
+  target_link_libraries(GosuMRuby physfs)
   target_link_libraries(GosuMRuby -lmruby)
   target_link_libraries(GosuMRuby -lm)
   target_link_libraries(GosuMRuby -lgosu-ffi)
@@ -99,6 +110,7 @@ elseif(UNIX) # TODO: specify Linux
   target_link_libraries(GosuMRuby -lstdc++)
   target_link_libraries(GosuMRuby -ldl)
 else()
+  target_link_libraries(GosuMRuby physfs)
   target_link_libraries(GosuMRuby -lmruby)
   target_link_libraries(GosuMRuby -lws2_32)
   target_link_libraries(GosuMRuby -lgosu-ffi)
