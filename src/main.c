@@ -35,7 +35,6 @@ static void forwardArguments(mrb_state* mrb, int argc, char** argv, int offset) 
     mrb_value ARGV = mrb_ary_new_capa(mrb, argc);
     for(int i = 1 + offset; i < argc; i++) {
         mrb_ary_push(mrb, ARGV, mrb_str_new_cstr(mrb, argv[i]));
-
     }
 
     mrb_define_global_const(mrb, "ARGV", ARGV);
