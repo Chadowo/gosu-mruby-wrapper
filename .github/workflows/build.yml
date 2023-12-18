@@ -105,6 +105,8 @@ jobs:
         mv build/gosu-mruby bundle/
         mv vendor/gosu/lib64/libgosu.dylib bundle/
         mv vendor/gosu/lib64/libgosu-ffi.dylib bundle/
+        install_name_tool -change bundle/libgosu.dylib @executable_path/libgosu.dylib bundle/gosu-mruby
+        install_name_tool -change bundle/libgosu-ffi.dylib @executable_path/libgosu-ffi.dylib bundle/gosu-mruby
         bundle/gosu-mruby
 
     - name: Generate final artifact
