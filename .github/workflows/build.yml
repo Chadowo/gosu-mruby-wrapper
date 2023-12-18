@@ -99,7 +99,6 @@ jobs:
         cd $GITHUB_WORKSPACE
         cmake -S . -B build -DCMAKE_BUILD_TYPE=Release
         cmake --build build
-        #install_name_tool -add_rpath "@executable_path/"
         mkdir bundle/
         strip build/gosu-mruby
         mv build/gosu-mruby bundle/
