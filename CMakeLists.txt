@@ -91,6 +91,7 @@ target_link_directories(GosuMRuby PUBLIC vendor/gosu/lib64)
 target_link_directories(GosuMRuby PUBLIC vendor/mruby/build/host/lib)
 
 if(APPLE)
+  target_link_options(GosuMRuby -rpath "@executable_path")
   target_link_libraries(GosuMRuby ${IOKIT})
   target_link_libraries(GosuMRuby ${FOUNDATION})
   target_link_libraries(GosuMRuby physfs)
