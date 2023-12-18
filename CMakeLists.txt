@@ -79,6 +79,9 @@ set_target_properties(GosuMRuby PROPERTIES OUTPUT_NAME "gosu-mruby")
 
 target_compile_definitions(GosuMRuby PUBLIC ${DEFINES})
 target_compile_options(GosuMRuby PUBLIC -x c++ ${WARNINGS})
+if(APPLE)
+  target_compile_options(GosuMRuby PUBLIC -rpath "@loader_path")
+endif()
 
 target_include_directories(GosuMRuby PUBLIC include/)
 target_include_directories(GosuMRuby PUBLIC "${PROJECT_BINARY_DIR}")
