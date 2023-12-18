@@ -67,7 +67,7 @@ jobs:
     - name: Generate final artifact
       uses: actions/upload-artifact@v3
       with:
-        name: build-win64
+        name: build-win-x86_64
         path: bundle
 
   macos:
@@ -113,7 +113,7 @@ jobs:
     - name: Generate final artifact
       uses: actions/upload-artifact@v3
       with:
-        name: build-macos
+        name: build-macos-x86_64
         path: bundle
 
   linux:
@@ -154,5 +154,5 @@ jobs:
     - name: Generate final artifact
       uses: actions/upload-artifact@v3
       with:
-        name: build-linux64
+        name: build-linux-x86_64
         path: bundle
