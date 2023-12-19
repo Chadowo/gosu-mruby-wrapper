@@ -142,6 +142,10 @@ int main(int argc, char* argv[]) {
         return 1;
     }
 
+    // Clear the load path, since it has the mrbc/lib path of the
+    // builded MRuby by default
+    mrb_load_string(mrb, "$:.clear");
+
     // Get the path to the executable
     size_t length = wai_getExecutablePath(NULL, 0, NULL);
     char* path = (char *)malloc(length + 1);
