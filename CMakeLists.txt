@@ -75,11 +75,6 @@ endif()
 add_executable(GosuMRuby ${SOURCE} ${WHEREAMI_SOURCE})
 add_dependencies(GosuMRuby mruby physfs)
 
-# Don't open a windows console if the build is for release
-if(CMAKE_BUILD_TYPE EQUAL "Release" AND WIN32)
-  target_link_options(GosuMRuby PUBLIC -mwindows)
-endif()
-
 set_target_properties(GosuMRuby PROPERTIES OUTPUT_NAME "gosu-mruby")
 
 target_compile_definitions(GosuMRuby PUBLIC ${DEFINES})
@@ -115,6 +110,7 @@ elseif(UNIX) # TODO: specify Linux
   target_link_libraries(GosuMRuby -lstdc++)
   target_link_libraries(GosuMRuby -ldl)
 else() # Assume Windows
+  target_link_options(GosuMRuby PUBLIC -mwindows) # Hide console
   target_link_libraries(GosuMRuby physfs)
   target_link_libraries(GosuMRuby -lmruby)
   target_link_libraries(GosuMRuby -lws2_32)
