@@ -7,6 +7,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+### Changed
+
+- Console is hidden by default now in Windows.
+
 ### Fixed
 
 - Sometimes the path of the executable would not work, thus fused moded did not.
