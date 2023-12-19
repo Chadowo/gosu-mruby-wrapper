@@ -76,9 +76,6 @@ jobs:
     - name: Checkout repository
       uses: actions/checkout@v4
 
-    - name: System
-      run: uname -m
-
     - name: Install requirements of Gosu
       run: brew install sdl2
 
