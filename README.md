@@ -6,20 +6,16 @@
 
 ![GitHub release (with filter)](https://img.shields.io/github/v/release/chadowo/gosu-mruby-wrapper?style=flat-square) ![GitHub Workflow Status (with event)](https://img.shields.io/github/actions/workflow/status/chadowo/gosu-mruby-wrapper/build.yml?style=flat-square&logo=github) ![GitHub](https://img.shields.io/github/license/chadowo/gosu-mruby-wrapper?style=flat-square)
 
-Wrapper around [Gosu](https://www.libgosu.org/) and [MRuby](https://mruby.org/) to run Gosu games natively on desktop platforms.
+Wrapper around [Gosu](https://www.libgosu.org/) and [MRuby](https://mruby.org/) (and the [mruby-gosu](https://github.com/cyberarm/mruby-gosu) mgem by Cyberarm)
+to run Gosu games natively on desktop platforms.
 
 **NOTE**: This project is really **experimental** and the person behind it (me) isn't
 all that great in C, so don't expect that much. having said that feel free
 to try it out, and report any problems or things that should be nice to have.
 
-## Summary
-
-This wrapper makes use of MRuby and the [mruby-gosu](https://github.com/cyberarm/mruby-gosu) mgem (by Cyberarm) to create
-a simple executable that can run Gosu games easily and painlessly on desktop platforms.
-
 ## Building
 
-See instructions for [Windows](https://github.com/Chadowo/gosu-mruby-wrapper/wiki/Compiling-On-Windows) and [Linux](https://github.com/Chadowo/gosu-mruby-wrapper/wiki/Compiling-On-Linux) on the wiki.
+See instructions for [Windows](https://github.com/Chadowo/gosu-mruby-wrapper/wiki/Compiling-On-Windows), [MacOS](https://github.com/Chadowo/gosu-mruby-wrapper/wiki/Compiling-On-MacOS) and [Linux](https://github.com/Chadowo/gosu-mruby-wrapper/wiki/Compiling-On-Linux) on the wiki.
 
 ## Usage
 
@@ -28,7 +24,7 @@ wiki page.
 
 ## Features
 
-- Targets desktop platforms, like Windows, and Linux.  
+- Targets desktop platforms, like Windows, MacOS-Intel (**experimental**, contributions appreciated!) and Linux.  
   **NOTE**: The Windows binary's MRuby is linked with the [UCRT](https://devblogs.microsoft.com/cppblog/introducing-the-universal-crt/) (Universal C Runtime),
             the which is bundled by default only on Windows 10 and higher, for older systems
             it eithers needs to be installed or provided with the executable.
@@ -37,8 +33,6 @@ wiki page.
 
 ## Limitations
 
-- No MacOS builds, this could *definitively* be added, it's just that I don't have a MacOS machine to develop it.
-  Contributions would be highly appreciated!
 - No 32 bit builds, Gosu does support it though, so it's possible.
 - No gems, this means that if your game uses CRuby gems it **will not work**.
   However you can use gems made in plain Ruby by bundling them with your source code,
