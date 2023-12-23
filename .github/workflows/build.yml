@@ -26,7 +26,7 @@ jobs:
         path-type: inherit
         msystem: UCRT64
         install: >-
-          ruby
+          mingw-w64-ucrt-x86_64-ruby
           git
           make
           cmake
