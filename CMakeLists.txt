@@ -4,9 +4,12 @@ include(ExternalProject)
 project(GosuMRubyWrapper
         VERSION 0.0.5
         LANGUAGES C CXX)
+
+find_package(Ruby REQUIRED)
+find_package(Git REQUIRED)
+
 # Get the Git hash of the last commit and save it
 set(GIT_HASH "unknown")
-find_package(Git)
 if(GIT_FOUND)
   execute_process(COMMAND git log -1 --pretty=format:%h
                   OUTPUT_VARIABLE GIT_HASH
