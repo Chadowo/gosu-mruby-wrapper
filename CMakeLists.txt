@@ -5,7 +5,10 @@ project(GosuMRubyWrapper
         VERSION 0.0.5
         LANGUAGES C CXX)
 
-find_package(Ruby REQUIRED)
+# FIXME: CMake can't find the Ruby library on MSYS2 it seems,
+#        I'll need to test this out later. For now let's disable
+#        this check
+#find_package(Ruby REQUIRED)
 find_package(Git REQUIRED)
 
 # Get the Git hash of the last commit and save it
