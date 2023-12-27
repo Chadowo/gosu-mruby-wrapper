@@ -23,10 +23,10 @@ jobs:
     - name: Setup MSYS2
       uses: msys2/setup-msys2@v2
       with:
-        path-type: inherit
+        #path-type: inherit
         msystem: UCRT64
         install: >-
-          mingw-w64-ucrt-x86_64-ruby
+          ruby
           git
           make
           cmake

@@ -5,7 +5,6 @@ project(GosuMRubyWrapper
         VERSION 0.0.5
         LANGUAGES C CXX)
 
-set(_RUBY_DEBUG_OUTPUT TRUE)
 find_package(Ruby REQUIRED)
 find_package(Git REQUIRED)
 
