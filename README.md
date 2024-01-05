@@ -24,10 +24,11 @@ wiki page.
 
 ## Features
 
-- Targets desktop platforms, like Windows, MacOS-Intel (**experimental**, contributions appreciated!) and Linux.  
+- Targets major desktop platforms: Windows, MacOS-Intel (**experimental**, contributions appreciated!) and Linux.  
   **NOTE**: The Windows binary's MRuby is linked with the [UCRT](https://devblogs.microsoft.com/cppblog/introducing-the-universal-crt/) (Universal C Runtime),
             the which is bundled by default only on Windows 10 and higher, for older systems
             it eithers needs to be installed or provided with the executable.
+- Lightweight. The Windows binary is smaller than 8MB!
 - Exporting a game should be as easily as bundling the assets and nothing
   more, there's no need for Ruby to be installed in the target systems.
 
