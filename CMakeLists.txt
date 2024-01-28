@@ -116,7 +116,7 @@ elseif(UNIX) # TODO: specify Linux
   target_link_libraries(GosuMRuby -lstdc++)
   target_link_libraries(GosuMRuby -ldl)
 else() # Assume Windows
-  target_sources(GosuMRuby PUBLIC ${CMAKE_SOURCE_DIR}/assets/gosu_mruby_wrapper)
+  target_sources(GosuMRuby PUBLIC ${CMAKE_SOURCE_DIR}/assets/gosu_mruby_wrapper.res)
   target_link_options(GosuMRuby PUBLIC -mwindows) # Hide console
   target_link_libraries(GosuMRuby physfs)
   target_link_libraries(GosuMRuby -lmruby)
