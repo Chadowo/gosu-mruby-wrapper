@@ -116,6 +116,7 @@ elseif(UNIX) # TODO: specify Linux
   target_link_libraries(GosuMRuby -lstdc++)
   target_link_libraries(GosuMRuby -ldl)
 else() # Assume Windows
+  target_sources(GosuMRuby PRIVATE foobar.rc)
   target_link_options(GosuMRuby PUBLIC -mwindows) # Hide console
   target_link_libraries(GosuMRuby physfs)
   target_link_libraries(GosuMRuby -lmruby)
