@@ -7,6 +7,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+### Added
+
+- Windows executable now has the project's logo as icon.
+
 ## [0.0.5] - 2023-12-19
 
 ### Added
