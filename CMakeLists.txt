@@ -42,6 +42,11 @@ set_source_files_properties(${PHYSFS_SOURCE}
                             PROPERTIES
                             COMPILE_FLAGS "-x c -w")
 
+# Windows resource file
+if(NOT APPLE AND NOT UNIX)
+  set(RESOURCE_FILE ${CMAKE_SOURCE_DIR}/assets/gosu_mruby_wrapper.rc)
+endif()
+
 set(WARNINGS -pedantic -Wall -Wextra -Wshadow -Wpointer-arith
              -Wcast-qual -Wno-unused-parameter)
 set(DEFINES -DMRB_INT64 -DMRB_USE_CXX_EXCEPTION -DMRB_USE_CXX_ABI
@@ -77,13 +82,8 @@ if(APPLE)
   target_link_libraries(physfs ${IOKIT} ${FOUNDATION})
 endif()
 
-# Resource file (for Windows)
-if(NOT APPLE AND NOT UNIX)
-  add_library(res OBJECT ${CMAKE_SOURCE_DIR}/assets/gosu_mruby_wrapper.rc)
-endif()
-
 # The main executable
-add_executable(GosuMRuby ${SOURCE} ${WHEREAMI_SOURCE})
+add_executable(GosuMRuby ${SOURCE} ${WHEREAMI_SOURCE} ${RESOURCE_FILE})
 add_dependencies(GosuMRuby mruby physfs)
 
 set_target_properties(GosuMRuby PROPERTIES OUTPUT_NAME "gosu-mruby")
@@ -121,11 +121,7 @@ elseif(UNIX) # TODO: specify Linux
   target_link_libraries(GosuMRuby -lstdc++)
   target_link_libraries(GosuMRuby -ldl)
 else() # Assume Windows
-  # Resource file
-  #target_sources(GosuMRuby PUBLIC ${CMAKE_SOURCE_DIR}/assets/gosu_mruby_wrapper.rc)
   target_link_options(GosuMRuby PUBLIC -mwindows) # Hide console
-  #target_link_libraries(GosuMRuby ${CMAKE_SOURCE_DIR}/assets/gosu_mruby_wrapper.o)
-  target_link_libraries(GosuMRuby res)
   target_link_libraries(GosuMRuby physfs)
   target_link_libraries(GosuMRuby -lmruby)
   target_link_libraries(GosuMRuby -lws2_32)
