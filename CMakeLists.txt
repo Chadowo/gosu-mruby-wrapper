@@ -44,13 +44,14 @@ set_source_files_properties(${PHYSFS_SOURCE}
 
 # Windows resource file
 if(NOT APPLE AND NOT UNIX)
-  message("Running on Windows, setting up resource file...")
   # Set RC as language so it is seen as a resource file and compiled as such
   set_source_files_properties(${CMAKE_SOURCE_DIR}/assets/gosu_mruby_wrapper.rc LANGUAGE RC)
-  set(RESOURCE_FILE ${CMAKE_SOURCE_DIR}/assets/gosu_mruby_wrapper.rc)
+  list(APPEND SOURCE ${CMAKE_SOURCE_DIR}/assets/gosu_mruby_wrapper.rc)
 
   # We have to enable compile flags for MinGW
-  message("Using MinGW, doing special setup...")
+  # FIXME: This should be probably in an if(MINGW) however the check fails on MSYS2 for some reason,
+  #        once I come around to fixing other compilation caveats on MSYS2 I'll get around to fixing
+  #        this
   set(CMAKE_RC_COMPILER_INIT windres)
   enable_language(RC)
   set(CMAKE_RC_COMPILE_OBJECT
