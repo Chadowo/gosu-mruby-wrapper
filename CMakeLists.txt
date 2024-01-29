@@ -77,6 +77,11 @@ if(APPLE)
   target_link_libraries(physfs ${IOKIT} ${FOUNDATION})
 endif()
 
+# Resource file (for Windows)
+if(NOT APPLE AND NOT UNIX)
+  add_library(res OBJECT ${CMAKE_SOURCE_DIR}/assets/gosu_mruby_wrapper.rc)
+endif
+
 # The main executable
 add_executable(GosuMRuby ${SOURCE} ${WHEREAMI_SOURCE})
 add_dependencies(GosuMRuby mruby physfs)
@@ -116,9 +121,11 @@ elseif(UNIX) # TODO: specify Linux
   target_link_libraries(GosuMRuby -lstdc++)
   target_link_libraries(GosuMRuby -ldl)
 else() # Assume Windows
-  target_sources(GosuMRuby PUBLIC ${CMAKE_SOURCE_DIR}/assets/gosu_mruby_wrapper.rc)
+  # Resource file
+  #target_sources(GosuMRuby PUBLIC ${CMAKE_SOURCE_DIR}/assets/gosu_mruby_wrapper.rc)
   target_link_options(GosuMRuby PUBLIC -mwindows) # Hide console
   #target_link_libraries(GosuMRuby ${CMAKE_SOURCE_DIR}/assets/gosu_mruby_wrapper.o)
+  target_link_libraries(GosuMRuby res)
   target_link_libraries(GosuMRuby physfs)
   target_link_libraries(GosuMRuby -lmruby)
   target_link_libraries(GosuMRuby -lws2_32)
