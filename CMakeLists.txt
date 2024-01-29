@@ -44,6 +44,8 @@ set_source_files_properties(${PHYSFS_SOURCE}
 
 # Windows resource file
 if(NOT APPLE AND NOT UNIX)
+  # Set RC as language so it is seen as a resource file and compiled as such
+  set_source_files_properties(${CMAKE_SOURCE_DIR}/assets/gosu_mruby_wrapper.rc LANGUAGE RC)
   set(RESOURCE_FILE ${CMAKE_SOURCE_DIR}/assets/gosu_mruby_wrapper.rc)
 endif()
 
@@ -83,7 +85,7 @@ if(APPLE)
 endif()
 
 # The main executable
-add_executable(GosuMRuby ${SOURCE} ${WHEREAMI_SOURCE} ${RESOURCE_FILE})
+add_executable(GosuMRuby ${SOURCE} ${RESOURCE_FILE} ${WHEREAMI_SOURCE})
 add_dependencies(GosuMRuby mruby physfs)
 
 set_target_properties(GosuMRuby PROPERTIES OUTPUT_NAME "gosu-mruby")
