@@ -80,7 +80,7 @@ endif()
 # Resource file (for Windows)
 if(NOT APPLE AND NOT UNIX)
   add_library(res OBJECT ${CMAKE_SOURCE_DIR}/assets/gosu_mruby_wrapper.rc)
-endif
+endif()
 
 # The main executable
 add_executable(GosuMRuby ${SOURCE} ${WHEREAMI_SOURCE})
