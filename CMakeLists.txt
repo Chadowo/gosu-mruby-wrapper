@@ -50,13 +50,11 @@ if(NOT APPLE AND NOT UNIX)
   set(RESOURCE_FILE ${CMAKE_SOURCE_DIR}/assets/gosu_mruby_wrapper.rc)
 
   # We have to enable compile flags for MinGW
-  if(MING)
-      message("Using MinGW, doing special setup...")
-      set(CMAKE_RC_COMPILER_INIT windres)
-      enable_language(RC)
-      set(CMAKE_RC_COMPILE_OBJECT
-            "<CMAKE_RC_COMPILER> <FLAGS> -O coff <DEFINES> -i <SOURCE> -o <OBJECT>")
-  endif()
+  message("Using MinGW, doing special setup...")
+  set(CMAKE_RC_COMPILER_INIT windres)
+  enable_language(RC)
+  set(CMAKE_RC_COMPILE_OBJECT
+        "<CMAKE_RC_COMPILER> <FLAGS> -O coff <DEFINES> -i <SOURCE> -o <OBJECT>")
 endif()
 
 set(WARNINGS -pedantic -Wall -Wextra -Wshadow -Wpointer-arith
