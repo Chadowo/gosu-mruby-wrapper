@@ -94,7 +94,7 @@ if(APPLE)
 endif()
 
 # The main executable
-add_executable(GosuMRuby ${SOURCE} ${RESOURCE_FILE} ${WHEREAMI_SOURCE})
+add_executable(GosuMRuby ${SOURCE} ${WHEREAMI_SOURCE})
 add_dependencies(GosuMRuby mruby physfs)
 
 set_target_properties(GosuMRuby PROPERTIES OUTPUT_NAME "gosu-mruby")
