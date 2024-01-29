@@ -47,6 +47,14 @@ if(NOT APPLE AND NOT UNIX)
   # Set RC as language so it is seen as a resource file and compiled as such
   set_source_files_properties(${CMAKE_SOURCE_DIR}/assets/gosu_mruby_wrapper.rc LANGUAGE RC)
   set(RESOURCE_FILE ${CMAKE_SOURCE_DIR}/assets/gosu_mruby_wrapper.rc)
+
+  # We have to enable compile flags for MinGW
+  if(MING)
+      set(CMAKE_RC_COMPILER_INIT windres)
+      enable_language(RC)
+      set(CMAKE_RC_COMPILE_OBJECT
+            "<CMAKE_RC_COMPILER> <FLAGS> -O coff <DEFINES> -i <SOURCE> -o <OBJECT>")
+  endif()
 endif()
 
 set(WARNINGS -pedantic -Wall -Wextra -Wshadow -Wpointer-arith
