@@ -68,7 +68,7 @@ static void loadGame(mrb_state* mrb, char* path, int argc, char* argv[]) {
     if(isFused(path)) {
         // Load the Ruby code with PhysFS
         if(!PHYSFS_exists("main.rb")) {
-            fprintf(stderr, "There's no main.rb in the fused archive!\n");
+            printf("There's no main.rb in the fused archive!\n");
             return;
         }
 
@@ -95,7 +95,7 @@ static void loadGame(mrb_state* mrb, char* path, int argc, char* argv[]) {
                 if(argc > 1) {
                     FILE* inputFile = fopen(argv[1], "r");
                     if(inputFile == NULL) {
-                        fprintf(stderr, "Path %s is invalid!\n", argv[1]);
+                        printf("Path %s is invalid!\n", argv[1]);
                         return;
                     }
                     // Skip an argument since it is the file path
