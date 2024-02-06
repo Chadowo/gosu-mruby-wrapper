@@ -58,8 +58,6 @@ static void loadRubyFile(mrb_state* mrb, char* fileName, FILE* fp) {
 }
 
 static void loadGame(mrb_state* mrb, char* path, int argc, char* argv[]) {
-    bool fused = isFused(path);
-
     // FIXME: Currently PhysFS will return a PHYSFS_ERR_NOT_FOUND error when
     //        mounting the executable as it is, however the zip file at the
     //        end will be correctly mounted, I'm not sure why that's it
@@ -73,10 +71,10 @@ static void loadGame(mrb_state* mrb, char* path, int argc, char* argv[]) {
     //    return;
     //}
 
-    if(fused) {
+    if(isFused(path)) {
         // Load the Ruby code with PhysFS
         if(!PHYSFS_exists("main.rb")) {
-            printf("There's no main.rb in the fused files!\n");
+            fprintf(stderr, "There's no main.rb in the fused files!\n");
             return;
         }
 
@@ -103,7 +101,7 @@ static void loadGame(mrb_state* mrb, char* path, int argc, char* argv[]) {
                 if(argc > 1) {
                     FILE* inputFile = fopen(argv[1], "r");
                     if(inputFile == NULL) {
-                        printf("Path %s is invalid!\n", argv[1]);
+                        fprintf(stderr, "Path %s is invalid!\n", argv[1]);
                         return;
                     }
                     // Skip an argument since it is the file path
