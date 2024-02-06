@@ -174,16 +174,16 @@ int main(int argc, char* argv[]) {
     if(chdir(dirPath) != 0) {
         mrb_warn(mrb, "Couldn't change working directory to %s", dirPath);
     }
-    free(dirPath);
 
     int exitCode = loadGame(mrb, path, argc, argv);
-    free(path);
 
     if(mrb->exc) {
         mrb_print_error(mrb);
         exitCode = 1;
     }
 
+    free(dirPath);
+    free(path);
     PHYSFS_deinit();
     mrb_close(mrb);
     return exitCode;
