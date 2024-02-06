@@ -74,7 +74,7 @@ static void loadGame(mrb_state* mrb, char* path, int argc, char* argv[]) {
     if(isFused(path)) {
         // Load the Ruby code with PhysFS
         if(!PHYSFS_exists("main.rb")) {
-            fprintf(stderr, "There's no main.rb in the fused files!\n");
+            fprintf(stderr, "There's no main.rb in the fused archive!\n");
             return;
         }
 
