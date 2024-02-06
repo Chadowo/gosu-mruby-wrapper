@@ -64,12 +64,6 @@ static void loadGame(mrb_state* mrb, char* path, int argc, char* argv[]) {
     //        but also not knowledgeable enough to find a solution, I think
     //        manually writing a PhysFS_Io that points to the zip at the end
     //        should work, see https://icculus.org/physfs/docs/html/structPHYSFS__Io.html
-    //
-    //PHYSFS_ErrorCode err = PHYSFS_getLastErrorCode();
-    //if(err != PHYSFS_ERR_OK) {
-    //    printf("Couldn't load file!\n");
-    //    return;
-    //}
 
     if(isFused(path)) {
         // Load the Ruby code with PhysFS
