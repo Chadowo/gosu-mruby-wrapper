@@ -161,7 +161,7 @@ int main(int argc, char* argv[]) {
         mrb_warn(mrb, "Couldn't change working directory to %s", dirPath);
     }
 
-    int exitCode = loadGame(mrb, path, argc, argv);
+    loadGame(mrb, path, argc, argv);
 
     if(mrb->exc) {
         mrb_print_error(mrb);
