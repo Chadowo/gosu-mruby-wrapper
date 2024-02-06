@@ -1,18 +1,18 @@
+#include <fused.h>
+
 #include <stdio.h>
 #include <stdbool.h>
 #include <string.h>
 #include <stdlib.h>
 
 #include <mruby.h>
-#include <mruby/irep.h>
 #include <mruby/array.h>
+#include <mruby/compile.h>
+#include <mruby/irep.h>
 #include <mruby/string.h>
 #include <mruby/variable.h>
-#include <mruby/compile.h>
 
 #include <physfs.h>
-
-#include <fused.h>
 
 static bool invalidPath(const char* path) {
     // TODO: check the whole path, not only the beginning
