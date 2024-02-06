@@ -122,7 +122,7 @@ if(APPLE)
   target_link_libraries(GosuMRuby -lgosu)
   target_link_libraries(GosuMRuby -lstdc++)
   target_link_libraries(GosuMRuby -ldl)
-elseif(UNIX) # TODO: specify Linux
+elseif(UNIX)
   set(CMAKE_EXE_LINKER_FLAGS "${CMAKE_EXE_LINKER_FLAGS} -Wl,-rpath='$ORIGIN'")
   target_link_libraries(GosuMRuby physfs)
   target_link_libraries(GosuMRuby -lmruby)
