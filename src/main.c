@@ -7,10 +7,10 @@
 
 #include <mruby.h>
 #include <mruby/array.h>
-#include <mruby/variable.h>
-#include <mruby/irep.h>
-#include <mruby/dump.h>
 #include <mruby/compile.h>
+#include <mruby/dump.h>
+#include <mruby/irep.h>
+#include <mruby/variable.h>
 
 #include <whereami.h>
 
