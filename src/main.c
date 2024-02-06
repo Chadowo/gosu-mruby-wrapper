@@ -110,7 +110,7 @@ static int loadGame(mrb_state* mrb, char* path, int argc, char* argv[]) {
     if(argc > 1) {
         FILE* inputFile = fopen(argv[1], "r");
         if(inputFile == NULL) {
-            fprintf(stderr, "Path %s is invalid!\n", argv[1]);
+            printf("Path %s is invalid!\n", argv[1]);
             return 1;
         }
 
