@@ -2,7 +2,7 @@ cmake_minimum_required(VERSION 3.22.1)
 include(ExternalProject)
 
 project(GosuMRubyWrapper
-        VERSION 0.0.6
+        VERSION 0.0.7
         LANGUAGES C CXX)
 
 # FIXME: CMake can't find the Ruby library on MSYS2 it seems,
