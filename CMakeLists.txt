@@ -76,7 +76,7 @@ elseif(UNIX)
 else()
   set(MRUBY_CONFIG ${CMAKE_SOURCE_DIR}/scripts/mruby/windows.rb)
 endif()
-ExternalProject_Add(mruby
+ExternalProject_Add(MRuby
                     GIT_REPOSITORY https://github.com/mruby/mruby.git
                     GIT_TAG 3.2.0
                     SOURCE_DIR ${MRUBY_DIR}
@@ -88,14 +88,14 @@ ExternalProject_Add(mruby
                     BUILD_BYPRODUCTS ${GOSU_LIB})
 
 # PhysFS
-add_library(physfs ${PHYSFS_SOURCE} ${PHYSFS_M_SRC})
+add_library(PhysFS ${PHYSFS_SOURCE} ${PHYSFS_M_SRC})
 if(APPLE)
-  target_link_libraries(physfs ${IOKIT} ${FOUNDATION})
+  target_link_libraries(PhysFS ${IOKIT} ${FOUNDATION})
 endif()
 
 # The main executable
 add_executable(GosuMRuby ${SOURCE} ${WHEREAMI_SOURCE})
-add_dependencies(GosuMRuby mruby physfs)
+add_dependencies(GosuMRuby MRuby PhysFS)
 
 set_target_properties(GosuMRuby PROPERTIES OUTPUT_NAME "gosu-mruby")
 
@@ -112,33 +112,24 @@ target_include_directories(GosuMRuby SYSTEM PUBLIC vendor/physfs/src/)
 target_link_directories(GosuMRuby PUBLIC vendor/gosu/lib64)
 target_link_directories(GosuMRuby PUBLIC vendor/mruby/build/host/lib)
 
+target_link_libraries(GosuMRuby PhysFS)
+target_link_libraries(GosuMRuby ${MRUBY_LIB})
+target_link_libraries(GosuMRuby -lgosu-ffi)
+target_link_libraries(GosuMRuby -lgosu)
+target_link_libraries(GosuMRuby -lstdc++)
+
 if(APPLE)
   target_link_libraries(GosuMRuby ${IOKIT})
   target_link_libraries(GosuMRuby ${FOUNDATION})
-  target_link_libraries(GosuMRuby physfs)
-  target_link_libraries(GosuMRuby -lmruby)
   target_link_libraries(GosuMRuby -lm)
-  target_link_libraries(GosuMRuby -lgosu-ffi)
-  target_link_libraries(GosuMRuby -lgosu)
-  target_link_libraries(GosuMRuby -lstdc++)
   target_link_libraries(GosuMRuby -ldl)
 elseif(UNIX)
   set(CMAKE_EXE_LINKER_FLAGS "${CMAKE_EXE_LINKER_FLAGS} -Wl,-rpath='$ORIGIN'")
-  target_link_libraries(GosuMRuby physfs)
-  target_link_libraries(GosuMRuby -lmruby)
   target_link_libraries(GosuMRuby -lm)
-  target_link_libraries(GosuMRuby -lgosu-ffi)
-  target_link_libraries(GosuMRuby -lgosu)
-  target_link_libraries(GosuMRuby -lstdc++)
   target_link_libraries(GosuMRuby -ldl)
 else() # Assume Windows
   target_link_options(GosuMRuby PUBLIC -mwindows) # Hide console
-  target_link_libraries(GosuMRuby physfs)
-  target_link_libraries(GosuMRuby -lmruby)
   target_link_libraries(GosuMRuby -lws2_32)
-  target_link_libraries(GosuMRuby -lgosu-ffi)
-  target_link_libraries(GosuMRuby -lgosu)
   target_link_libraries(GosuMRuby -lwsock32)
-  target_link_libraries(GosuMRuby -lstdc++)
   target_link_libraries(GosuMRuby -lgcc)
 endif()
