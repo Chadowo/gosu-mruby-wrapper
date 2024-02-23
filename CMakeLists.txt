@@ -66,7 +66,7 @@ set(DEFINES -DMRB_INT64 -DMRB_USE_CXX_EXCEPTION -DMRB_USE_CXX_ABI
 
 # TODO: build Gosu?
 
-# Bulding MRuby
+# Building MRuby
 set(MRUBY_DIR ${CMAKE_SOURCE_DIR}/vendor/mruby)
 set(MRUBY_LIB ${MRUBY_DIR}/build/host/lib/libmruby.a)
 if(APPLE)
