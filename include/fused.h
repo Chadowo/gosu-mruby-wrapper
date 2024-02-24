@@ -1,5 +1,6 @@
 #pragma once
 
+#include <stdbool.h>
 #include <mruby.h>
 
 #define NOTFOUND_ERROR_MESSAGE "cannot load such file -- %s"
