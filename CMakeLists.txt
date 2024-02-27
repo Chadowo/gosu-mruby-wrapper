@@ -78,7 +78,7 @@ else()
 endif()
 ExternalProject_Add(MRuby
                     GIT_REPOSITORY https://github.com/mruby/mruby.git
-                    GIT_TAG 3.2.0
+                    GIT_TAG 3.3.0
                     SOURCE_DIR ${MRUBY_DIR}
                     CONFIGURE_COMMAND ""
                     BUILD_IN_SOURCE TRUE

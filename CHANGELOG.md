@@ -7,6 +7,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+### Changed
+
+- Upgraded to [MRuby 3.3.0](https://mruby.org/releases/2024/02/14/mruby-3.3.0-released.html)
+
 ## [0.0.6] - 2024-02-08
 
 ### Added
