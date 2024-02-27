@@ -126,9 +126,11 @@ static int loadGame(mrb_state* mrb, char* path, int argc, char* argv[]) {
     printf("Version: %d.%d.%d (%s)\n",
            VERSION_MAJOR, VERSION_MINOR, VERSION_PATCH,
            GIT_HASH);
+    printf("\n");
     printf("Usage: %s [inputfile]\n", path);
     printf("\n");
-    printf("[inputfile]\tEither a .rb or .mrb file\n");
+    printf("Arguments:\n");
+    printf("  [inputfile]\tEither a .rb or .mrb file\n");
     return 0;
 }
 
