@@ -166,11 +166,11 @@ void loadFusedRubyFile(mrb_state* mrb, mrb_value path, bool bytecode) {
     if(filename != NULL) filename++; // To remove the first /
 
     // Proceed to load the file
-    mrbc_context* cxt = mrbc_context_new(mrb);
+    mrb_ccontext* cxt = mrb_ccontext_new(mrb);
     if(filename != NULL) {
-        mrbc_filename(mrb, cxt, filename);
+        mrb_ccontext_filename(mrb, cxt, filename);
     } else {
-        mrbc_filename(mrb, cxt, mrb_str_to_cstr(mrb, path));
+        mrb_ccontext_filename(mrb, cxt, mrb_str_to_cstr(mrb, path));
     }
 
     int ai = mrb_gc_arena_save(mrb);
@@ -194,7 +194,7 @@ void loadFusedRubyFile(mrb_state* mrb, mrb_value path, bool bytecode) {
     free(contents);
     PHYSFS_close(fp);
 
-    mrbc_context_free(mrb, cxt);
+    mrb_ccontext_free(mrb, cxt);
     mrb_gc_arena_restore(mrb, ai);
 }
 

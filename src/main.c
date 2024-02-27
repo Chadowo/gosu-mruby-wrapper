@@ -41,20 +41,20 @@ static void forwardArguments(mrb_state* mrb, int argc, char** argv, int offset) 
 }
 
 static void loadRubyFile(mrb_state* mrb, char* fileName, FILE* fp) {
-    mrbc_context* cxt = mrbc_context_new(mrb);
+    mrb_ccontext* cxt = mrb_ccontext_new(mrb);
 
     // Check if the file is bytecode
     char* ext = strchr(fileName, '.');
     if(strcmp(ext, ".mrb") == 0) {
-        mrbc_filename(mrb, cxt, fileName);
+        mrb_ccontext_filename(mrb, cxt, fileName);
         mrb_load_irep_file_cxt(mrb, fp, cxt);
     } else {
-        mrbc_filename(mrb, cxt, fileName);
+        mrb_ccontext_filename(mrb, cxt, fileName);
         mrb_load_file_cxt(mrb, fp, cxt);
     }
 
     // Cleaning up
-    mrbc_context_free(mrb, cxt);
+    mrb_ccontext_free(mrb, cxt);
 }
 
 // Returns true if loaded correctly
