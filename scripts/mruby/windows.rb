@@ -10,6 +10,5 @@ MRuby::Build.new do |conf|
 
   linker.libraries.push('ws2_32')
 
-  conf.enable_debug
   conf.enable_cxx_abi
 end
