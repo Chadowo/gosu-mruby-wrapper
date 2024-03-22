@@ -119,6 +119,6 @@ elseif(UNIX)
   set(CMAKE_EXE_LINKER_FLAGS "${CMAKE_EXE_LINKER_FLAGS} -Wl,-rpath='$ORIGIN'")
   target_link_libraries(GosuMRuby m dl)
 else() # Assume Windows
-  target_link_options(GosuMRuby PUBLIC mwindows) # Hide console
+  target_link_options(GosuMRuby PUBLIC -mwindows) # Hide console
   target_link_libraries(GosuMRuby ws2_32 wsock32 gcc)
 endif()
