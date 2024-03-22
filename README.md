@@ -19,8 +19,7 @@ See instructions for [Windows](https://github.com/Chadowo/gosu-mruby-wrapper/wik
 
 ## Usage
 
-Currently there are 3 ways to use this utility, please take a look at the [Getting Started](https://github.com/Chadowo/gosu-mruby-wrapper/wiki/Getting-Started)
-wiki page.
+Take a look at the [Getting Started](https://github.com/Chadowo/gosu-mruby-wrapper/wiki/Getting-Started) wiki page.
 
 ## Features
 
