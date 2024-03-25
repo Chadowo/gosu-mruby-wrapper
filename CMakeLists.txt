@@ -42,7 +42,7 @@ endif()
 # Disable warning for physicsfs source and built it as c source
 set_source_files_properties(${PHYSFS_SOURCE}
                             PROPERTIES
-                            COMPILE_FLAGS "-x c -w")
+                            COMPILE_FLAGS "-w")
 
 # Windows resource file
 if(NOT APPLE AND NOT UNIX)
