@@ -87,7 +87,7 @@ ExternalProject_Add(MRuby
                     BUILD_BYPRODUCTS ${GOSU_LIB})
 
 # PhysFS
-add_library(PhysFS ${PHYSFS_SOURCE} ${PHYSFS_M_SRC})
+add_library(PhysFS ${PHYSFS_SOURCE})
 if(APPLE)
   target_link_libraries(PhysFS ${IOKIT} ${FOUNDATION})
 endif()
