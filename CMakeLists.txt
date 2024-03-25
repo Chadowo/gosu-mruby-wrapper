@@ -9,6 +9,8 @@ configure_file(include/config.h.in config.h)
 set(CMAKE_CXX_STANDARD 20)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
 
+enable_language(OBJCXX)
+
 # FIXME: CMake can't find the Ruby library on MSYS2 it seems,
 #        I'll need to test this out later. For now let's disable
 #        this check
