@@ -10,7 +10,7 @@ Wrapper around [Gosu](https://www.libgosu.org/) and [MRuby](https://mruby.org/) 
 to run Gosu games natively on desktop platforms.
 
 **NOTE**: This project is really **experimental** and the person behind it (me) isn't
-all that great in C, so don't expect that much. having said that feel free
+all that great in C, so don't expect that much. Having said that feel free
 to try it out, and report any problems or things that should be nice to have.
 
 ## Building
