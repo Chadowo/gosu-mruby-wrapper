@@ -46,7 +46,7 @@ if(APPLE)
   list(APPEND PHYSFS_SOURCE vendor/physfs/src/physfs_platform_apple.m)
 endif()
 
-# Disable warning for physicsfs source and built it as c source
+# Disable warning for PhysFS
 set_source_files_properties(${PHYSFS_SOURCE}
                             PROPERTIES
                             COMPILE_FLAGS "-w")
