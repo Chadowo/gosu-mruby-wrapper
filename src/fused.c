@@ -23,7 +23,7 @@ static mrb_value mrb_fused_require(mrb_state* mrb, mrb_value self) {
     char* file;
     mrb_get_args(mrb, "z", &file);
 
-    // both "." and ".." are invalid in PhysFS, so it's better to error out
+    // Both "." and ".." are invalid in PhysFS, so it's better to error out
     // and inform the programmer
     //
     // https://icculus.org/physfs/docs/html/
