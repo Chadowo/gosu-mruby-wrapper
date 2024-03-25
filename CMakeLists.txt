@@ -4,12 +4,21 @@ include(ExternalProject)
 project(GosuMRubyWrapper
         VERSION 0.0.7
         LANGUAGES C CXX)
+configure_file(include/config.h.in config.h)
+
+set(CMAKE_CXX_STANDARD 20)
+set(CMAKE_CXX_STANDARD_REQUIRED ON)
 
 # FIXME: CMake can't find the Ruby library on MSYS2 it seems,
 #        I'll need to test this out later. For now let's disable
 #        this check
 #find_package(Ruby REQUIRED)
 find_package(Git REQUIRED)
+
+if(APPLE)
+  find_library(IOKIT IOKit)
+  find_library(FOUNDATION Foundation)
+endif()
 
 # Get the Git hash of the last commit and save it
 set(GIT_HASH "unknown")
@@ -19,22 +28,13 @@ if(GIT_FOUND)
                   OUTPUT_STRIP_TRAILING_WHITESPACE
                   ERROR_QUIET)
 endif()
-configure_file(include/config.h.in config.h)
-
-set(CMAKE_CXX_STANDARD 20)
-set(CMAKE_CXX_STANDARD_REQUIRED ON)
-
-if(APPLE)
-  find_library(IOKIT IOKit)
-  find_library(FOUNDATION Foundation)
-endif()
 
 # Source files
 set(SOURCE src/main.c src/fused.c)
 set(WHEREAMI_SOURCE vendor/whereami/src/whereami.c)
 file(GLOB PHYSFS_SOURCE vendor/physfs/src/*.c)
 if(APPLE)
-  set(PHYSFS_M_SRC vendor/physfs/src/physfs_platform_apple.m)
+  list(APPEND PHYSFS_SOURCE vendor/physfs/src/physfs_platform_apple.m)
 endif()
 
 # Disable warning for physicsfs source and built it as c source
@@ -114,10 +114,10 @@ target_link_directories(GosuMRuby PUBLIC vendor/mruby/build/host/lib)
 target_link_libraries(GosuMRuby PhysFS ${MRUBY_LIB} gosu-ffi gosu stdc++)
 
 if(APPLE)
-  target_link_libraries(GosuMRuby ${IOKIT} ${FOUNDATION} m dl)
+  target_link_libraries(GosuMRuby ${IOKIT} ${FOUNDATION} m ${CMAKE_DL_LIBS})
 elseif(UNIX)
   set(CMAKE_EXE_LINKER_FLAGS "${CMAKE_EXE_LINKER_FLAGS} -Wl,-rpath='$ORIGIN'")
-  target_link_libraries(GosuMRuby m dl)
+  target_link_libraries(GosuMRuby m ${CMAKE_DL_LIBS})
 else() # Assume Windows
   target_link_options(GosuMRuby PUBLIC -mwindows) # Hide console
   target_link_libraries(GosuMRuby ws2_32 wsock32 gcc)
