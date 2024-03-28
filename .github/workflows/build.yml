@@ -118,7 +118,7 @@ jobs:
       uses: actions/checkout@v4
 
     - name: Install requirements of Gosu
-      run: sudo apt install build-essential libsdl2-dev libgl1-mesa-dev libgmp-dev libfontconfig1-dev
+      run: sudo apt-get update && sudo apt-get install -y libsdl2-dev libgl1-mesa-dev libfontconfig1-dev xvfb
 
     - name: Compile Gosu
       run: |
