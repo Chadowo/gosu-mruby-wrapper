@@ -19,6 +19,47 @@ static bool invalidPath(const char* path) {
     return *path == '.';
 }
 
+bool fileAlreadyLoaded(mrb_state* mrb, mrb_value path, mrb_value loadedFeatures) {
+    for(int i = 0; i < RARRAY_LEN(loadedFeatures); i++) {
+        mrb_value e = mrb_ary_entry(loadedFeatures, i);
+        if(mrb_str_cmp(mrb, e, path) == 0) {
+            return true;
+        }
+    }
+
+    // No file was found
+    return false;
+}
+
+void loadFusedRubyFile(mrb_state* mrb, mrb_value path, bool bytecode) {
+    mrb_ccontext* cxt = mrb_ccontext_new(mrb);
+    mrb_ccontext_filename(mrb, cxt, mrb_str_to_cstr(mrb, path));
+
+    int ai = mrb_gc_arena_save(mrb);
+
+    PHYSFS_file* fp = PHYSFS_openRead(mrb_str_to_cstr(mrb, path));
+    if(fp == NULL) {
+        PHYSFS_ErrorCode err = PHYSFS_getLastErrorCode();
+        mrb_raise(mrb, E_RUNTIME_ERROR, PHYSFS_getErrorByCode(err));
+    }
+
+    char* contents = (char *)malloc(PHYSFS_fileLength(fp) * sizeof(char));
+    size_t length = PHYSFS_readBytes(fp, contents, PHYSFS_fileLength(fp));
+
+    // If the file is bytecode, load it as so
+    if(bytecode) {
+        mrb_load_irep_buf_cxt(mrb, contents, length, cxt);
+    } else {
+        mrb_load_nstring_cxt(mrb, contents, length, cxt);
+    }
+
+    free(contents);
+    PHYSFS_close(fp);
+
+    mrb_ccontext_free(mrb, cxt);
+    mrb_gc_arena_restore(mrb, ai);
+}
+
 static mrb_value mrb_fused_require(mrb_state* mrb, mrb_value self) {
     char* file;
     mrb_get_args(mrb, "z", &file);
@@ -145,47 +186,6 @@ static mrb_value mrb_fused_load(mrb_state* mrb, mrb_value self) {
     mrb_raisef(mrb, E_LOAD_ERROR, NOTFOUND_ERROR_MESSAGE, file);
 
     return mrb_undef_value();
-}
-
-bool fileAlreadyLoaded(mrb_state* mrb, mrb_value path, mrb_value loadedFeatures) {
-    for(int i = 0; i < RARRAY_LEN(loadedFeatures); i++) {
-        mrb_value e = mrb_ary_entry(loadedFeatures, i);
-        if(mrb_str_cmp(mrb, e, path) == 0) {
-            return true;
-        }
-    }
-
-    // No file was found
-    return false;
-}
-
-void loadFusedRubyFile(mrb_state* mrb, mrb_value path, bool bytecode) {
-    mrb_ccontext* cxt = mrb_ccontext_new(mrb);
-    mrb_ccontext_filename(mrb, cxt, mrb_str_to_cstr(mrb, path));
-
-    int ai = mrb_gc_arena_save(mrb);
-
-    PHYSFS_file* fp = PHYSFS_openRead(mrb_str_to_cstr(mrb, path));
-    if(fp == NULL) {
-        PHYSFS_ErrorCode err = PHYSFS_getLastErrorCode();
-        mrb_raise(mrb, E_RUNTIME_ERROR, PHYSFS_getErrorByCode(err));
-    }
-
-    char* contents = (char *)malloc(PHYSFS_fileLength(fp) * sizeof(char));
-    size_t length = PHYSFS_readBytes(fp, contents, PHYSFS_fileLength(fp));
-
-    // If the file is bytecode, load it as so
-    if(bytecode) {
-        mrb_load_irep_buf_cxt(mrb, contents, length, cxt);
-    } else {
-        mrb_load_nstring_cxt(mrb, contents, length, cxt);
-    }
-
-    free(contents);
-    PHYSFS_close(fp);
-
-    mrb_ccontext_free(mrb, cxt);
-    mrb_gc_arena_restore(mrb, ai);
 }
 
 void initFused(mrb_state* mrb) {
