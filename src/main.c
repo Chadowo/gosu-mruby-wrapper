@@ -12,9 +12,9 @@
 #include <mruby/irep.h>
 #include <mruby/variable.h>
 
-#include <whereami.h>
-
 #include <physfs.h>
+
+#include <whereami.h>
 
 #include <fused.h>
 #include <config.h>
@@ -60,11 +60,13 @@ static void loadRubyFile(mrb_state* mrb, char* fileName, FILE* fp) {
 // Returns true if loaded correctly
 static bool loadBootFile(mrb_state* mrb, int argc, char* argv[]) {
     char cwd[PATH_MAX];
-    char fileName[] = "boot.rb";
+    char fileName[] = BOOT_FILENAME;
+    char fileSeparator[2] = {FILE_SEPARATOR, '\0'};
     if(getcwd(cwd, sizeof(cwd)) != NULL) {
-        // Try to open and execute the file
-        char fileSeparator[2] = {FILE_SEPARATOR, '\0'}; // Make a string out of the char
-        strncat(cwd, fileSeparator, 1);
+        // Here we'll mutate the cwd string to create a valid path
+        // for testing if the boot file is available
+        // TODO: Don't mutate cwd
+        strncat(cwd, fileSeparator, sizeof(cwd) - strlen(cwd) - 1);
         strncat(cwd, fileName, sizeof(cwd) - strlen(cwd) - 1);
 
         FILE* entryPoint = fopen(cwd, "r");
@@ -176,16 +178,16 @@ int main(int argc, char* argv[]) {
     if(chdir(dirPath) != 0) {
         mrb_warn(mrb, "Couldn't change working directory to %s", dirPath);
     }
+    free(dirPath);
 
     int exitCode = loadGame(mrb, path, argc, argv);
+    free(path);
 
     if(mrb->exc) {
         mrb_print_error(mrb);
         exitCode = 1;
     }
 
-    free(dirPath);
-    free(path);
     PHYSFS_deinit();
     mrb_close(mrb);
     return exitCode;
