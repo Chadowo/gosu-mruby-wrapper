@@ -125,7 +125,7 @@ static mrb_value mrb_fused_load(mrb_state* mrb, mrb_value self) {
             mrb_str_cat_cstr(mrb, absolutePath, "/");
             mrb_str_cat_cstr(mrb, absolutePath, file);
 
-            // Append the current extensions if the path has none
+            // Append the current extension if the path has none
             if(ext == NULL) {
                 mrb_str_cat_str(mrb, absolutePath, mrb_ary_entry(exts, j));
             }
@@ -160,18 +160,8 @@ bool fileAlreadyLoaded(mrb_state* mrb, mrb_value path, mrb_value loadedFeatures)
 }
 
 void loadFusedRubyFile(mrb_state* mrb, mrb_value path, bool bytecode) {
-    // First, we'll assemble a file name in the form of
-    // FILE.ext for mrbc_filename()
-    char* filename = strchr(mrb_str_to_cstr(mrb, path), '/');
-    if(filename != NULL) filename++; // To remove the first /
-
-    // Proceed to load the file
     mrb_ccontext* cxt = mrb_ccontext_new(mrb);
-    if(filename != NULL) {
-        mrb_ccontext_filename(mrb, cxt, filename);
-    } else {
-        mrb_ccontext_filename(mrb, cxt, mrb_str_to_cstr(mrb, path));
-    }
+    mrb_ccontext_filename(mrb, cxt, mrb_str_to_cstr(mrb, path));
 
     int ai = mrb_gc_arena_save(mrb);
 
