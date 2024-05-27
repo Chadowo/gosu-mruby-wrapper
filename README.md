@@ -13,14 +13,6 @@ to run Gosu games natively on desktop platforms.
 all that great in C, so don't expect that much. Having said that feel free
 to try it out, and report any problems or things that should be nice to have.
 
-## Building
-
-See instructions for [Windows](https://github.com/Chadowo/gosu-mruby-wrapper/wiki/Compiling-On-Windows), [MacOS](https://github.com/Chadowo/gosu-mruby-wrapper/wiki/Compiling-On-MacOS) and [Linux](https://github.com/Chadowo/gosu-mruby-wrapper/wiki/Compiling-On-Linux) on the wiki.
-
-## Usage
-
-Take a look at the [Getting Started](https://github.com/Chadowo/gosu-mruby-wrapper/wiki/Getting-Started) wiki page.
-
 ## Features
 
 - Targets major desktop platforms: Windows, MacOS-Intel (**experimental**, contributions appreciated!) and Linux.  
@@ -38,6 +30,14 @@ Take a look at the [Getting Started](https://github.com/Chadowo/gosu-mruby-wrapp
   However you can use gems made in plain Ruby by bundling them with your source code,
   similar to how Love2D libraries are used.
 
+## Usage
+
+Take a look at the [Getting Started](https://github.com/Chadowo/gosu-mruby-wrapper/wiki/Getting-Started) wiki page.
+
+## Building
+
+See instructions for [Windows](https://github.com/Chadowo/gosu-mruby-wrapper/wiki/Compiling-On-Windows), [MacOS](https://github.com/Chadowo/gosu-mruby-wrapper/wiki/Compiling-On-MacOS) and [Linux](https://github.com/Chadowo/gosu-mruby-wrapper/wiki/Compiling-On-Linux) on the wiki.
+
 ## License
 
 This project is licensed under the [MIT license](https://github.com/Chadowo/gosu-mruby-wrapper/blob/main/LICENSE).
@@ -48,5 +48,5 @@ This project was possible thanks to the following libraries.
 
 - Gosu - [MIT license](https://github.com/gosu/gosu/blob/master/COPYING)  
 - MRuby - [MIT license](https://github.com/mruby/mruby/blob/master/LICENSE)  
-- Whereami - [MIT license](https://github.com/gpakosz/whereami/blob/master/LICENSE.MIT) and [WTFPLv2 license](https://github.com/gpakosz/whereami/blob/master/LICENSE.WTFPLv2) 
+- Whereami - [MIT license](https://github.com/gpakosz/whereami/blob/master/LICENSE.MIT) and [WTFPLv2 license](https://github.com/gpakosz/whereami/blob/master/LICENSE.WTFPLv2)
 - PhysFS - [zlib license](https://github.com/icculus/physfs/blob/main/LICENSE.txt)
