@@ -16,7 +16,7 @@ find_package(Git REQUIRED)
 
 # Libraries
 if(APPLE OR UNIX)
-  find_library(MATH_LIBRARY m)
+  find_library(MATH_LIBRARY m REQUIRED)
 endif()
 
 if(APPLE)
