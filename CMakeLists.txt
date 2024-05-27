@@ -15,7 +15,7 @@ set(CMAKE_CXX_STANDARD_REQUIRED ON)
 find_package(Git REQUIRED)
 
 # Libraries
-if(NOT WINDOWS)
+if(APPLE OR UNIX)
   find_library(MATH_LIBRARY m)
 endif()
 
