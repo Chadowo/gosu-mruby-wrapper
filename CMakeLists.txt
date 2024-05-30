@@ -15,10 +15,6 @@ set(CMAKE_CXX_STANDARD_REQUIRED ON)
 find_package(Git REQUIRED)
 
 # Libraries
-if(APPLE OR UNIX)
-  find_library(MATH_LIBRARY m REQUIRED)
-endif()
-
 if(APPLE)
   enable_language(OBJC)
 
@@ -122,10 +118,10 @@ target_link_libraries(GosuMRuby PhysFS ${MRUBY_LIB} gosu-ffi gosu stdc++)
 
 if(APPLE)
   target_link_libraries(GosuMRuby ${IOKIT_LIBRARY} ${FOUNDATION_LIBRARY}
-                                  ${MATH_LIBRARY} ${CMAKE_DL_LIBS})
+                                  m ${CMAKE_DL_LIBS})
 elseif(UNIX)
   set(CMAKE_EXE_LINKER_FLAGS "${CMAKE_EXE_LINKER_FLAGS} -Wl,-rpath='$ORIGIN'")
-  target_link_libraries(GosuMRuby ${MATH_LIBRARY} ${CMAKE_DL_LIBS})
+  target_link_libraries(GosuMRuby m ${CMAKE_DL_LIBS})
 else() # Assume Windows
   target_link_options(GosuMRuby PRIVATE -mwindows) # Hide console
   target_link_libraries(GosuMRuby ws2_32 wsock32 gcc)
