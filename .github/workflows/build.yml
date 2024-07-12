@@ -3,7 +3,7 @@ name: Build and Deploy
 on: [push]
 
 env:
-  GOSU_VERSION: 1.4.3
+  GOSU_VERSION: 1.4.4
   MRUBY_VERSION: 3.2.0
 
 permissions:
