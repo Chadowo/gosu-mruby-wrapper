@@ -124,8 +124,8 @@ jobs:
         wget https://github.com/gosu/gosu/archive/refs/tags/v$GOSU_VERSION.tar.gz
         tar -xf v$GOSU_VERSION.tar.gz
         mv gosu-$GOSU_VERSION gosu
-        cd gosu/
-        cmake -S . -B build -DCMAKE_BUILD_TYPE=Release ..
+        cd gosu
+        cmake -S . -B build -DCMAKE_BUILD_TYPE=Release
         cmake --build build
         mkdir $GITHUB_WORKSPACE/vendor/gosu
         mkdir $GITHUB_WORKSPACE/vendor/gosu/lib64
