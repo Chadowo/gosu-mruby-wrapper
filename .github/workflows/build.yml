@@ -53,7 +53,7 @@ jobs:
         mv D:/a/gosu-mruby-wrapper/gosu-mruby-wrapper/gosu/windows/x64/Release/gosu-ffi.lib vendor/gosu/lib64
         mv D:/a/gosu-mruby-wrapper/gosu-mruby-wrapper/gosu/ffi vendor/gosu/
         cmake -S . -B build -DCMAKE_BUILD_TYPE=Release
-        cd build/ && make && cd ..
+        cmake --build build
         mkdir bundle/
         strip build/gosu-mruby.exe
         mv build/gosu-mruby.exe bundle/
@@ -83,15 +83,14 @@ jobs:
         wget https://github.com/gosu/gosu/archive/refs/tags/v$GOSU_VERSION.tar.gz
         tar -xf v$GOSU_VERSION.tar.gz
         mv gosu-$GOSU_VERSION gosu
-        mkdir gosu/build/
-        cd gosu/build/
-        cmake -DCMAKE_BUILD_TYPE=Release ..
-        make
+        cd gosu
+        cmake -S . -B build -DCMAKE_BUILD_TYPE=Release
+        cmake --build build
         mkdir $GITHUB_WORKSPACE/vendor/gosu
         mkdir $GITHUB_WORKSPACE/vendor/gosu/lib64
-        mv libgosu.dylib $GITHUB_WORKSPACE/vendor/gosu/lib64
-        mv ffi/libgosu-ffi.dylib $GITHUB_WORKSPACE/vendor/gosu/lib64
-        mv ../ffi $GITHUB_WORKSPACE/vendor/gosu
+        mv build/libgosu.dylib $GITHUB_WORKSPACE/vendor/gosu/lib64
+        mv build/ffi/libgosu-ffi.dylib $GITHUB_WORKSPACE/vendor/gosu/lib64
+        mv ffi/ $GITHUB_WORKSPACE/vendor/gosu
 
     - name: Compile wrapper
       run: |
@@ -125,15 +124,14 @@ jobs:
         wget https://github.com/gosu/gosu/archive/refs/tags/v$GOSU_VERSION.tar.gz
         tar -xf v$GOSU_VERSION.tar.gz
         mv gosu-$GOSU_VERSION gosu
-        mkdir gosu/build/
-        cd gosu/build/
-        cmake -DCMAKE_BUILD_TYPE=Release ..
-        make
+        cd gosu/
+        cmake -S . -B build -DCMAKE_BUILD_TYPE=Release ..
+        cmake --build build
         mkdir $GITHUB_WORKSPACE/vendor/gosu
         mkdir $GITHUB_WORKSPACE/vendor/gosu/lib64
-        mv libgosu.so $GITHUB_WORKSPACE/vendor/gosu/lib64
-        mv ffi/libgosu-ffi.so $GITHUB_WORKSPACE/vendor/gosu/lib64
-        mv ../ffi $GITHUB_WORKSPACE/vendor/gosu
+        mv build/libgosu.so $GITHUB_WORKSPACE/vendor/gosu/lib64
+        mv build/ffi/libgosu-ffi.so $GITHUB_WORKSPACE/vendor/gosu/lib64
+        mv ffi/ $GITHUB_WORKSPACE/vendor/gosu
 
     - name: Compile wrapper
       run: |
