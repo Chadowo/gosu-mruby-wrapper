@@ -15,8 +15,8 @@ target_include_directories(gosu_mruby_bin SYSTEM PRIVATE ../vendor/mruby/include
 target_include_directories(gosu_mruby_bin SYSTEM PRIVATE ../vendor/whereami/include/)
 target_include_directories(gosu_mruby_bin SYSTEM PRIVATE ../vendor/physfs/src/)
 
-target_link_directories(gosu_mruby_bin PRIVATE vendor/gosu/lib64)
-target_link_directories(gosu_mruby_bin PRIVATE vendor/mruby/build/host/lib)
+target_link_directories(gosu_mruby_bin PRIVATE ../vendor/gosu/lib64)
+target_link_directories(gosu_mruby_bin PRIVATE ../vendor/mruby/build/host/lib)
 
 target_compile_options(gosu_mruby_bin PRIVATE -x c++ ${WARNINGS})
 target_compile_definitions(gosu_mruby_bin PRIVATE ${DEFINES})
