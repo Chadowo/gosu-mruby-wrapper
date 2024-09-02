@@ -32,14 +32,6 @@ if(GIT_FOUND)
 endif()
 configure_file(include/config.h.in config.h)
 
-set(WARNINGS -pedantic -Wall -Wextra -Wshadow -Wpointer-arith
-             -Wcast-qual -Wno-unused-parameter)
-set(DEFINES MRB_INT64 MRB_USE_CXX_EXCEPTION MRB_USE_CXX_ABI
-            MRB_USE_BIGINT)
-
-# Source files
-set(SOURCE src/main.c src/fused.c)
-set(WHEREAMI_SOURCE vendor/whereami/src/whereami.c)
 file(GLOB PHYSFS_SOURCE vendor/physfs/src/*.c)
 if(APPLE)
   list(APPEND PHYSFS_SOURCE vendor/physfs/src/physfs_platform_apple.m)
@@ -95,34 +87,4 @@ ExternalProject_Add(MRuby
                     INSTALL_COMMAND ""
                     BUILD_BYPRODUCTS ${MRUBY_LIB})
 
-# The main executable
-add_executable(GosuMRuby ${SOURCE} ${WHEREAMI_SOURCE})
-add_dependencies(GosuMRuby MRuby PhysFS)
-
-set_target_properties(GosuMRuby PROPERTIES OUTPUT_NAME "gosu-mruby")
-
-target_compile_definitions(GosuMRuby PRIVATE ${DEFINES})
-target_compile_options(GosuMRuby PRIVATE -x c++ ${WARNINGS})
-
-target_include_directories(GosuMRuby PRIVATE include/)
-target_include_directories(GosuMRuby PRIVATE "${PROJECT_BINARY_DIR}")
-
-target_include_directories(GosuMRuby SYSTEM PRIVATE vendor/mruby/include/)
-target_include_directories(GosuMRuby SYSTEM PRIVATE vendor/whereami/include/)
-target_include_directories(GosuMRuby SYSTEM PRIVATE vendor/physfs/src/)
-
-target_link_directories(GosuMRuby PRIVATE vendor/gosu/lib64)
-target_link_directories(GosuMRuby PRIVATE vendor/mruby/build/host/lib)
-
-target_link_libraries(GosuMRuby PhysFS ${MRUBY_LIB} gosu-ffi gosu stdc++)
-
-if(APPLE)
-  target_link_libraries(GosuMRuby ${IOKIT_LIBRARY} ${FOUNDATION_LIBRARY}
-                                  m ${CMAKE_DL_LIBS})
-elseif(UNIX)
-  set(CMAKE_EXE_LINKER_FLAGS "${CMAKE_EXE_LINKER_FLAGS} -Wl,-rpath='$ORIGIN'")
-  target_link_libraries(GosuMRuby m ${CMAKE_DL_LIBS})
-else() # Assume Windows
-  target_link_options(GosuMRuby PRIVATE -mwindows) # Hide console
-  target_link_libraries(GosuMRuby ws2_32 wsock32 gcc)
-endif()
+add_subdirectory(src/)

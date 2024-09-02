@@ -2,6 +2,7 @@ MRuby::GemBox.new do |conf|
   conf.gembox 'default'
 
   conf.gem github: 'chadowo/mruby-gosu'
+
   conf.gem github: 'katzer/mruby-logger'
   conf.gem github: 'iij/mruby-env'
   # FIXME: Fails to compile on Windows, I assume it's got to do with this line
