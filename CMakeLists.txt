@@ -32,22 +32,6 @@ if(GIT_FOUND)
 endif()
 configure_file(include/config.h.in config.h)
 
-# Windows resource file
-if(NOT APPLE AND NOT UNIX)
-  # Set RC as language so it is seen and compiled as a resource file
-  set_source_files_properties(${CMAKE_SOURCE_DIR}/assets/gosu_mruby_wrapper.rc LANGUAGE RC)
-  list(APPEND SOURCE ${CMAKE_SOURCE_DIR}/assets/gosu_mruby_wrapper.rc)
-
-  # We have to enable compile flags for MinGW
-  # FIXME: This should be probably in an if(MINGW) however the check fails on MSYS2 for some reason,
-  #        once I come around to fixing other compilation caveats on MSYS2 I'll get around to fixing
-  #        this
-  set(CMAKE_RC_COMPILER_INIT windres)
-  enable_language(RC)
-  set(CMAKE_RC_COMPILE_OBJECT
-        "<CMAKE_RC_COMPILER> <FLAGS> -O coff <DEFINES> -i <SOURCE> -o <OBJECT>")
-endif()
-
 add_subdirectory(extern/physfs)
 
 # TODO: Build Gosu?
