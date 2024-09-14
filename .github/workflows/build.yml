@@ -63,7 +63,7 @@ jobs:
 
     - name: Compile wrapper
       run: |
-        cmake -s . -B build
+        cmake -S . -B build
 
     - name: Generate final artifact
       uses: actions/upload-artifact@v4
