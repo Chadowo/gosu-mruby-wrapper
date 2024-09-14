@@ -46,7 +46,7 @@ jobs:
         msbuild gosu\windows\Gosu.sln /p:Configuration=Release
         ren D:\a\gosu-mruby-wrapper\gosu-mruby-wrapper\gosu\lib64\Gosu.lib D:\a\gosu-mruby-wrapper\gosu-mruby-wrapper\gosu\lib64\gosu.lib
 
-    - name: Compile wrapper
+    - name: Move libraries
       shell: msys2 {0}
       run: |
         cd $GITHUB_WORKSPACE
@@ -54,16 +54,16 @@ jobs:
         mv D:/a/gosu-mruby-wrapper/gosu-mruby-wrapper/gosu/lib64/gosu.lib vendor/gosu/lib64
         mv D:/a/gosu-mruby-wrapper/gosu-mruby-wrapper/gosu/windows/x64/Release/gosu-ffi.lib vendor/gosu/lib64
         mv D:/a/gosu-mruby-wrapper/gosu-mruby-wrapper/gosu/ffi vendor/gosu/
-        cmake -S . -B build -DCMAKE_BUILD_TYPE=Release
-        cmake --build build
         mkdir bundle/
-        strip build/src/gosu-mruby.exe
-        mv build/src/gosu-mruby.exe bundle/
         mv D:/a/gosu-mruby-wrapper/gosu-mruby-wrapper/gosu/lib64/gosu-ffi.dll bundle/
         mv D:/a/gosu-mruby-wrapper/gosu-mruby-wrapper/gosu/lib64/SDL2.dll bundle/
         mv /ucrt64/bin/libstdc++-6.dll bundle/
         mv /ucrt64/bin/libgcc_s_seh-1.dll bundle/
         mv /ucrt64/bin/libwinpthread-1.dll bundle/
+
+    - name: Compile wrapper
+      run: |
+        cmake -s . -B build
 
     - name: Generate final artifact
       uses: actions/upload-artifact@v4
