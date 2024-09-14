@@ -1,4 +1,4 @@
-cmake_minimum_required(VERSION 3.22.1)
+cmake_minimum_required(VERSION 3.22.1...3.26.4 FATAL_ERROR) # Same as Gosu's
 
 project(GosuMRubyWrapper
         VERSION 0.0.7
@@ -32,47 +32,9 @@ if(GIT_FOUND)
 endif()
 configure_file(include/config.h.in config.h)
 
-set(WARNINGS -pedantic -Wall -Wextra -Wshadow -Wpointer-arith
-             -Wcast-qual -Wno-unused-parameter)
-set(DEFINES MRB_INT64 MRB_USE_CXX_EXCEPTION MRB_USE_CXX_ABI
-            MRB_USE_BIGINT)
-
-# Source files
-set(SOURCE src/main.c src/fused.c)
-set(WHEREAMI_SOURCE vendor/whereami/src/whereami.c)
-file(GLOB PHYSFS_SOURCE vendor/physfs/src/*.c)
-if(APPLE)
-  list(APPEND PHYSFS_SOURCE vendor/physfs/src/physfs_platform_apple.m)
-endif()
-
-# Disable warning for PhysFS
-set_source_files_properties(${PHYSFS_SOURCE}
-                            PROPERTIES
-                            COMPILE_FLAGS "-w")
-
-# Windows resource file
-if(NOT APPLE AND NOT UNIX)
-  # Set RC as language so it is seen and compiled as a resource file
-  set_source_files_properties(${CMAKE_SOURCE_DIR}/assets/gosu_mruby_wrapper.rc LANGUAGE RC)
-  list(APPEND SOURCE ${CMAKE_SOURCE_DIR}/assets/gosu_mruby_wrapper.rc)
-
-  # We have to enable compile flags for MinGW
-  # FIXME: This should be probably in an if(MINGW) however the check fails on MSYS2 for some reason,
-  #        once I come around to fixing other compilation caveats on MSYS2 I'll get around to fixing
-  #        this
-  set(CMAKE_RC_COMPILER_INIT windres)
-  enable_language(RC)
-  set(CMAKE_RC_COMPILE_OBJECT
-        "<CMAKE_RC_COMPILER> <FLAGS> -O coff <DEFINES> -i <SOURCE> -o <OBJECT>")
-endif()
+add_subdirectory(extern/physfs)
 
 # TODO: Build Gosu?
-
-# Building PhysFS
-add_library(PhysFS ${PHYSFS_SOURCE})
-if(APPLE)
-  target_link_libraries(PhysFS ${IOKIT_LIBRARY} ${FOUNDATION_LIBRARY})
-endif()
 
 # Building MRuby
 set(MRUBY_DIR ${CMAKE_SOURCE_DIR}/vendor/mruby)
@@ -95,34 +57,4 @@ ExternalProject_Add(MRuby
                     INSTALL_COMMAND ""
                     BUILD_BYPRODUCTS ${MRUBY_LIB})
 
-# The main executable
-add_executable(GosuMRuby ${SOURCE} ${WHEREAMI_SOURCE})
-add_dependencies(GosuMRuby MRuby PhysFS)
-
-set_target_properties(GosuMRuby PROPERTIES OUTPUT_NAME "gosu-mruby")
-
-target_compile_definitions(GosuMRuby PRIVATE ${DEFINES})
-target_compile_options(GosuMRuby PRIVATE -x c++ ${WARNINGS})
-
-target_include_directories(GosuMRuby PRIVATE include/)
-target_include_directories(GosuMRuby PRIVATE "${PROJECT_BINARY_DIR}")
-
-target_include_directories(GosuMRuby SYSTEM PRIVATE vendor/mruby/include/)
-target_include_directories(GosuMRuby SYSTEM PRIVATE vendor/whereami/include/)
-target_include_directories(GosuMRuby SYSTEM PRIVATE vendor/physfs/src/)
-
-target_link_directories(GosuMRuby PRIVATE vendor/gosu/lib64)
-target_link_directories(GosuMRuby PRIVATE vendor/mruby/build/host/lib)
-
-target_link_libraries(GosuMRuby PhysFS ${MRUBY_LIB} gosu-ffi gosu stdc++)
-
-if(APPLE)
-  target_link_libraries(GosuMRuby ${IOKIT_LIBRARY} ${FOUNDATION_LIBRARY}
-                                  m ${CMAKE_DL_LIBS})
-elseif(UNIX)
-  set(CMAKE_EXE_LINKER_FLAGS "${CMAKE_EXE_LINKER_FLAGS} -Wl,-rpath='$ORIGIN'")
-  target_link_libraries(GosuMRuby m ${CMAKE_DL_LIBS})
-else() # Assume Windows
-  target_link_options(GosuMRuby PRIVATE -mwindows) # Hide console
-  target_link_libraries(GosuMRuby ws2_32 wsock32 gcc)
-endif()
+add_subdirectory(src/)
