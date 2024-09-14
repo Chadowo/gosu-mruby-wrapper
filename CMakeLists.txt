@@ -32,16 +32,6 @@ if(GIT_FOUND)
 endif()
 configure_file(include/config.h.in config.h)
 
-file(GLOB PHYSFS_SOURCE vendor/physfs/src/*.c)
-if(APPLE)
-  list(APPEND PHYSFS_SOURCE vendor/physfs/src/physfs_platform_apple.m)
-endif()
-
-# Disable warning for PhysFS
-set_source_files_properties(${PHYSFS_SOURCE}
-                            PROPERTIES
-                            COMPILE_FLAGS "-w")
-
 # Windows resource file
 if(NOT APPLE AND NOT UNIX)
   # Set RC as language so it is seen and compiled as a resource file
@@ -58,13 +48,9 @@ if(NOT APPLE AND NOT UNIX)
         "<CMAKE_RC_COMPILER> <FLAGS> -O coff <DEFINES> -i <SOURCE> -o <OBJECT>")
 endif()
 
-# TODO: Build Gosu?
+add_subdirectory(extern/physfs)
 
-# Building PhysFS
-add_library(PhysFS ${PHYSFS_SOURCE})
-if(APPLE)
-  target_link_libraries(PhysFS ${IOKIT_LIBRARY} ${FOUNDATION_LIBRARY})
-endif()
+# TODO: Build Gosu?
 
 # Building MRuby
 set(MRUBY_DIR ${CMAKE_SOURCE_DIR}/vendor/mruby)
